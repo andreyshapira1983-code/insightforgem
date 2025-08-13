@@ -465,18 +465,10 @@ html, body {
 }
 
 /* Info panel */
-/*
- * Right-hand info panel styling.  Previously we added a 1px solid border on
- * the left edge of the info panel, which showed up as an unwanted vertical
- * "white bar" on the page (especially noticeable at high zoom levels).  The
- * user wants the layout clean and seamless, so we remove the left border
- * entirely.  The remaining properties ensure the panel still uses a blurred
- * background and occupies the full height of the viewport.
- */
 .info-panel {
     background: var(--panel);
     backdrop-filter: blur(10px);
-    /* Removed border-left to eliminate the stray vertical line */
+    border-left: 1px solid var(--border);
     padding: 20px;
     overflow-y: visible;
     height: 100vh;

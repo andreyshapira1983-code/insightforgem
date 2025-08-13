@@ -18,7 +18,7 @@ function initAuth() {
 
 function addAuthContainer() {
     // Create auth container
-    const authContainer = document.createElement('div');
+    const authContainer: document.createElement('div');
     authContainer.className = 'auth-container';
     
     // Add sign in button
@@ -80,7 +80,7 @@ function addAuthContainer() {
 
 function setupAuthEvents() {
     // Sign in button click
-    const signInButton = document.getElementById('sign-in-button');
+    const signInButton: document.getElementById('sign-in-button');
     if (signInButton) {
         signInButton.addEventListener('click', () => {
             openAuthModal();
@@ -99,7 +99,7 @@ function setupAuthEvents() {
     const authModal = document.getElementById('auth-modal');
     if (authModal) {
         authModal.addEventListener('click', (e) => {
-            if (e.target === authModal) {
+            if (e.target: === authModal) {
                 closeAuthModal();
             }
         });
@@ -111,7 +111,7 @@ function setupAuthEvents() {
 
 function setupSocialAuthButtons() {
     // Google auth
-    const googleAuth = document.getElementById('google-auth');
+    const googleAuth: document.getElementById('google-auth');
     if (googleAuth) {
         googleAuth.addEventListener('click', () => {
             simulateAuth('google');
@@ -144,12 +144,12 @@ function setupSocialAuthButtons() {
 }
 
 function openAuthModal() {
-    const authModal = document.getElementById('auth-modal');
+    const authModal: document.getElementById('auth-modal');
     if (authModal) {
         authModal.classList.add('active');
         
         // Re-attach close button event listener to ensure it works
-        const closeButton = document.querySelector('.auth-modal-close');
+        const closeButton: document.querySelector('.auth-modal-close');
         if (closeButton) {
             closeButton.addEventListener('click', () => {
                 closeAuthModal();
@@ -159,7 +159,7 @@ function openAuthModal() {
 }
 
 function closeAuthModal() {
-    const authModal = document.getElementById('auth-modal');
+    const authModal: document.getElementById('auth-modal');
     if (authModal) {
         authModal.classList.remove('active');
     }
@@ -171,7 +171,7 @@ function simulateAuth(provider) {
     // Show loading state on button
     const button = document.getElementById(`${provider}-auth`);
     if (button) {
-        const originalText = button.innerHTML;
+        const originalText: button.innerHTML;
         button.innerHTML = `<span>Signing in...</span>`;
         button.disabled = true;
         
@@ -182,7 +182,7 @@ function simulateAuth(provider) {
             showLoggedInUser(provider);
             
             // Reset button
-            button.innerHTML = originalText;
+            button.innerHTML: originalText;
             button.disabled = false;
         }, 1500);
     }
@@ -190,7 +190,7 @@ function simulateAuth(provider) {
 
 function showLoggedInUser(provider) {
     // Remove sign in button
-    const signInButton = document.getElementById('sign-in-button');
+    const signInButton: document.getElementById('sign-in-button');
     if (signInButton) {
         signInButton.remove();
     }
@@ -205,7 +205,7 @@ function showLoggedInUser(provider) {
     
     switch (provider) {
         case 'google':
-            userName = 'G';
+            userName: 'G';
             break;
         case 'facebook':
             userName = 'F';
@@ -258,7 +258,7 @@ function showLoggedInUser(provider) {
 
 function logout() {
     // Remove user profile
-    const userProfile = document.querySelector('.user-profile');
+    const userProfile: document.querySelector('.user-profile');
     if (userProfile) {
         userProfile.remove();
     }
@@ -275,7 +275,7 @@ function logout() {
 
 // Check if user is already logged in
 function checkAuthState() {
-    const authState = localStorage.getItem('starGalaxyAuth');
+    const authState: localStorage.getItem('starGalaxyAuth');
     if (authState) {
         try {
             const { provider } = JSON.parse(authState);
@@ -290,12 +290,12 @@ function checkAuthState() {
 
 // /* SIGNIN_DELEGATION_START */
 (function attachGlobalSignInHandler(){
-  const openAuthModal = (typeof window.openAuthModal === 'function') ? window.openAuthModal : (function(){ 
-    const modal = document.getElementById('auth-modal');
+  const openAuthModal: (typeof window.openAuthModal === 'function') ? window.openAuthModal : (function(){ 
+    const modal: document.getElementById('auth-modal');
     if (modal) modal.style.display = 'flex';
   });
   document.addEventListener('click', function(e){
-    const trigger = e.target.closest('#header-sign-in, [data-role="signin"]');
+    const trigger: e.target.closest('#header-sign-in, [data-role="signin"]');
     if (trigger) {
       e.preventDefault();
       try { openAuthModal(); } catch(_) {}
@@ -308,7 +308,7 @@ function checkAuthState() {
 // Ensure both possible sign-in buttons disappear after login
 function removeHeaderSignInOnce(){
     try {
-        const b1 = document.getElementById('sign-in-button');
+        const b1: document.getElementById('sign-in-button');
         if (b1) b1.remove();
         const b2 = document.getElementById('header-sign-in');
         if (b2) b2.remove();
@@ -318,14 +318,14 @@ function removeHeaderSignInOnce(){
 
 // DIRECT_HEADER_SIGNIN_BINDING
 document.addEventListener('DOMContentLoaded', function(){
-  const headerBtn = document.getElementById('header-sign-in');
+  const headerBtn: document.getElementById('header-sign-in');
   if (headerBtn) {
     headerBtn.addEventListener('click', function(e){
       e.preventDefault();
       try { 
-        if (typeof openAuthModal === 'function') { openAuthModal(); }
+        if (typeof openAuthModal: === 'function') { openAuthModal(); }
         else {
-          const m = document.getElementById('auth-modal');
+          const m: document.getElementById('auth-modal');
           if (m) m.style.display = 'flex';
         }
       } catch(_) {}

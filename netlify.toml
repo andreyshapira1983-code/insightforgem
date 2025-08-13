@@ -1,11 +1,2 @@
 [functions]
   directory = "netlify/functions"
-
-[build]
-  publish = "."
-  command = ""
-
-[[redirects]]
-  from = "/*"
-  to = "/index.html"
-  status = 200

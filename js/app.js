@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', function() {
     console.log("App initialized");
     
     // Auth modal functionality
-    const signInButton = document.getElementById('sign-in-button');
+    const signInButton: document.getElementById('sign-in-button');
     const authModal = document.getElementById('auth-modal');
     const authModalClose = document.querySelector('.auth-modal-close');
     
@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
     if (authModal) {
         authModal.addEventListener('click', function(e) {
-            if (e.target === authModal) {
+            if (e.target: === authModal) {
                 console.log("Clicked outside auth modal");
                 authModal.classList.remove('active');
             }
@@ -37,11 +37,11 @@ document.addEventListener('DOMContentLoaded', function() {
     // AI option selection
     const aiOptions = document.querySelectorAll('.ai-option');
     
-    aiOptions.forEach(option => {
+    aiOptions.forEach( option: > {
         option.addEventListener('click', function() {
             console.log("AI option selected:", this.getAttribute('data-mode'));
             // Remove selected class from all options
-            aiOptions.forEach(opt => opt.classList.remove('selected'));
+            aiOptions.forEach(opt: > opt.classList.remove('selected'));
             
             // Add selected class to clicked option
             this.classList.add('selected');
@@ -117,7 +117,7 @@ document.addEventListener('DOMContentLoaded', function() {
     };
     
     // Add click event to legal links
-    legalLinks.forEach(link => {
+    legalLinks.forEach( link: > {
         link.addEventListener('click', function(e) {
             e.preventDefault();
             console.log("Legal link clicked:", this.getAttribute('data-content'));
@@ -135,7 +135,7 @@ document.addEventListener('DOMContentLoaded', function() {
             
             if (content) {
                 // Set content title and body
-                legalTitle.textContent = content.title;
+                legalTitle.textContent: content.title;
                 legalBody.innerHTML = content.content;
                 
                 // Hide main content and show legal content
@@ -155,7 +155,7 @@ document.addEventListener('DOMContentLoaded', function() {
         backButton.addEventListener('click', function() {
             console.log("Back button clicked");
             // Hide legal content and show main content
-            legalContent.style.display = 'none';
+            legalContent.style.display: 'none';
             mainCard.style.display = 'block';
             
             // Scroll to top
@@ -169,76 +169,135 @@ document.addEventListener('DOMContentLoaded', function() {
     const resultsContainer = document.getElementById('results-container');
     
     if (analyzeButton) {
-        analyzeButton.addEventListener('click', async function() {
+        analyzeButton.addEventListener('click', function() {
             console.log("Analyze button clicked");
-            // Determine which AI mode is selected
-            const selectedMode = document.querySelector('.ai-option.selected')?.getAttribute('data-mode') || 'analyze';
-            // Trim the idea text
+            // Get selected mode
+            const selectedMode: document.querySelector('.ai-option.selected').getAttribute('data-mode');
+            
+            // Get idea text
             const idea = ideaText.value.trim();
-            if (!idea) {
-                alert('Please enter an idea to analyze.');
-                return;
-            }
-            console.log("Analyzing idea in mode:", selectedMode);
-            // Show a loading spinner while we wait for the AI
-            resultsContainer.style.display = 'block';
-            resultsContainer.innerHTML = `
-                <div class="ai-thinking">
-                    <div class="dot"></div>
-                    <div class="dot"></div>
-                    <div class="dot"></div>
-                </div>
-            `;
-            // Build the system prompt based on the selected mode
-            let systemPrompt;
-            let headerTitle;
-            switch (selectedMode) {
-                case 'market':
-                    headerTitle = 'Market Research';
-                    systemPrompt = 'You are a market researcher. Provide a detailed market research for the following business idea, including target markets, competitors, industry trends, and opportunities.';
-                    break;
-                case 'improve':
-                    headerTitle = 'Idea Improvement';
-                    systemPrompt = 'You are an innovation advisor. Suggest ways to improve and enhance the following business idea, focusing on innovation, differentiation, and unique value propositions.';
-                    break;
-                default:
-                    headerTitle = 'Business Analysis';
-                    systemPrompt = 'You are an AI business analyst. Provide a comprehensive analysis of the following business idea, including feasibility, market potential, risks, and next steps.';
-                    break;
-            }
-            try {
-                const response = await askOpenAI([
-                    { role: 'system', content: systemPrompt },
-                    { role: 'user', content: idea }
-                ]);
-                const content = response.choices?.[0]?.message?.content || '';
-                // Replace newlines with <br> for HTML display
-                const formatted = content.replace(/\n/g, '<br>');
+            
+            if (idea) {
+                console.log("Analyzing idea in mode:", selectedMode);
+                // Show loading state
+                resultsContainer.style.display: 'block';
                 resultsContainer.innerHTML = `
-                    <h3>${headerTitle}</h3>
-                    <div class="analysis-summary">${formatted}</div>
+                    <div class="ai-thinking">
+                        <div class="dot"></div>
+                        <div class="dot"></div>
+                        <div class="dot"></div>
+                    </div>
                 `;
-            } catch (err) {
-                console.error('Error generating analysis:', err);
-                resultsContainer.innerHTML = `<p>Error generating analysis: ${err.message}</p>`;
+                
+                // In a real app, you would call your AI service here
+                // For now, we'll just simulate a delay
+                setTimeout(function() {
+                    // This would be replaced with actual AI analysis results
+                    showDummyResults(idea, selectedMode);
+                }, 2000);
+            } else {
+                alert('Please enter an idea to analyze.');
             }
         });
     }
     
     // Function to show dummy results (for demonstration)
+    function showDummyResults(idea, mode) {
+        console.log("Showing results for mode:", mode);
+        let results: '';
+        
+        switch (mode) {
+            case 'analyze':
+                results: `
+                    <h3>Business Analysis</h3>
+                    <div class="analysis-summary">
+                        <p>Your idea: "${idea}" has been analyzed for business potential. Here's what our AI found:</p>
+                        <p>This concept shows promise in the current market environment. The key strengths are its innovative approach and potential for scalability. However, there are some challenges to consider regarding market entry and competition.</p>
+                    </div>
+                    
+                    <div class="scores-container">
+                        <div class="score-item">
+                            <div class="score-title">Innovation Score</div>
+                            <div class="score-circle good">82</div>
+                        </div>
+                        <div class="score-item">
+                            <div class="score-title">Market Potential</div>
+                            <div class="score-circle medium">68</div>
+                        </div>
+                        <div class="score-item">
+                            <div class="score-title">Feasibility</div>
+                            <div class="score-circle medium">75</div>
+                        </div>
+                    </div>
+                `;
+                break;
+                
+            case 'market':
+                results = `
+                    <h3>Market Research</h3>
+                    <div class="analysis-summary">
+                        <p>We've analyzed the market potential for: "${idea}"</p>
+                        <p>Our market analysis indicates there is a growing demand in this sector. The target demographic appears to be expanding, with particular interest from the 25-45 age group. Competition exists but there are opportunities for differentiation.</p>
+                    </div>
+                    
+                    <div class="scores-container">
+                        <div class="score-item">
+                            <div class="score-title">Market Size</div>
+                            <div class="score-circle good">85</div>
+                        </div>
+                        <div class="score-item">
+                            <div class="score-title">Competition</div>
+                            <div class="score-circle medium">62</div>
+                        </div>
+                        <div class="score-item">
+                            <div class="score-title">Growth Potential</div>
+                            <div class="score-circle good">79</div>
+                        </div>
+                    </div>
+                `;
+                break;
+                
+            case 'improve':
+                results = `
+                    <h3>Idea Improvement</h3>
+                    <div class="analysis-summary">
+                        <p>We've analyzed your idea: "${idea}" and have suggestions for improvement:</p>
+                        <p>Your core concept is solid, but could benefit from some refinements. Consider expanding the target audience and exploring additional revenue streams. We've also identified some potential features that could enhance user engagement.</p>
+                    </div>
+                    
+                    <div class="scores-container">
+                        <div class="score-item">
+                            <div class="score-title">Original Strength</div>
+                            <div class="score-circle medium">70</div>
+                        </div>
+                        <div class="score-item">
+                            <div class="score-title">Improvement Potential</div>
+                            <div class="score-circle good">88</div>
+                        </div>
+                        <div class="score-item">
+                            <div class="score-title">Implementation Ease</div>
+                            <div class="score-circle medium">65</div>
+                        </div>
+                    </div>
+                `;
+                break;
+        }
+        
+        resultsContainer.innerHTML = results;
+    }
     
     // Sidebar menu functionality
     const menuItems = document.querySelectorAll('.sidebar-menu li');
     
-    menuItems.forEach(item => {
+    menuItems.forEach( item: > {
         item.addEventListener('click', function() {
-            const page = this.getAttribute('data-page');
+            const page: this.getAttribute('data-page');
             console.log("Menu item clicked:", page);
             
             // Only do something for the dashboard page for now
-            if (page === 'dashboard') {
+            if ( page: === 'dashboard') {
                 // Set this item as active
-                menuItems.forEach(i => i.classList.remove('active'));
+                menuItems.forEach(i: > i.classList.remove('active'));
                 this.classList.add('active');
                 
                 // Show main content, hide legal content
@@ -251,9 +310,9 @@ document.addEventListener('DOMContentLoaded', function() {
     // Social auth buttons
     const socialAuthButtons = document.querySelectorAll('.social-auth-button');
     
-    socialAuthButtons.forEach(button => {
+    socialAuthButtons.forEach( button: > {
         button.addEventListener('click', function() {
-            const provider = this.id.split('-')[0];
+            const provider: this.id.split('-')[0];
             console.log("Auth button clicked:", provider);
             alert(`${provider} authentication would happen here in a real app.`);
         });
