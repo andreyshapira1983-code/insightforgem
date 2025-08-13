@@ -1,11 +1,22 @@
+async function askOpenAI(messages, { model = "gpt-4o-mini", temperature = 0.7 } = {}) {
+  const res = await fetch("/.netlify/functions/openai", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ messages, model, temperature })
+  });
+  if (!res.ok) {
+    const err = await res.text();
+    throw new Error(`OpenAI proxy error: ${res.status} ${err}`);
+  }
+  return res.json();
+}
+
 async function analyzeIdeaForPatents(idea) {
-  const openaiApiKey = localStorage.getItem('openai_api_key'); // ключ берём из localStorage
-  const apiUrl = 'https://api.openai.com/v1/chat/completions';
+  const /* removed_key_var */ = localStorage.getItem('openai_api_key'); // ключ берём из localStorage
+  const apiUrl = '/.netlify/functions/openai';
 
   const headers = {
-    'Content-Type': 'application/json',
-    'Authorization': `Bearer ${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}`
-  };
+    'Content-Type': 'application/json'};
 
   const data = {
     model: 'gpt-4o-mini',
