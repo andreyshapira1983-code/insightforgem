@@ -13,6 +13,8 @@
   <canvas id="galaxy-bg" aria-hidden="true"></canvas>
   <header class="header">
     <div class="logo">Star Galaxy</div>
+    <!-- Mobile menu toggle shown on small screens -->
+    <button id="mobile-menu-toggle" class="mobile-menu-toggle" aria-label="Open menu">☰</button>
     <nav class="nav">
       <a href="index.html">Home</a>
       <a href="generator.html">Generator</a>
@@ -25,10 +27,14 @@
     <div class="header-actions">
       <!-- Theme toggle button; icon is set via theme.js -->
       <button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme">☾</button>
+      <!-- Global search toggle -->
+      <button id="global-search-button" class="search-toggle" aria-label="Search">🔍</button>
       <button id="sign-in-button" class="auth-button">Sign In</button>
       <div id="user-profile" class="user-profile" style="display:none;"></div>
     </div>
   </header>
+  <!-- Overlay for dimming page when mobile menu is open -->
+  <div id="nav-overlay" class="nav-overlay"></div>
   <main class="generator-main">
     <h1>AI Idea Generator</h1>
     <div class="generator-card">
@@ -46,6 +52,13 @@
     <a href="legal/terms.html">Terms</a>
     <a href="legal/privacy.html">Privacy</a>
   </footer>
+  <!-- Global search overlay -->
+  <div id="global-search-overlay" class="search-overlay" aria-hidden="true">
+    <div class="search-modal">
+      <input type="text" id="global-search-input" placeholder="Search..." aria-label="Global search" />
+      <div id="global-search-results" class="search-results"></div>
+    </div>
+  </div>
   <!-- Auth modal duplicated on each page -->
   <div class="auth-modal" id="auth-modal">
     <div class="auth-modal-content">
@@ -66,5 +79,7 @@
   <script src="js/theme.js"></script>
   <script src="js/main.js"></script>
   <script src="js/generator.js"></script>
+  <script src="js/navigation.js"></script>
+  <script src="js/search.js"></script>
 </body>
 </html>

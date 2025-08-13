@@ -13,6 +13,8 @@
   <canvas id="galaxy-bg" aria-hidden="true"></canvas>
   <header class="header">
     <div class="logo">Star Galaxy</div>
+    <!-- Mobile menu toggle shown on small screens -->
+    <button id="mobile-menu-toggle" class="mobile-menu-toggle" aria-label="Open menu">☰</button>
     <nav class="nav">
       <a href="index.html">Home</a>
       <a href="generator.html">Generator</a>
@@ -24,10 +26,14 @@
     </nav>
     <div class="header-actions">
       <button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme">☾</button>
+      <!-- Global search toggle -->
+      <button id="global-search-button" class="search-toggle" aria-label="Search">🔍</button>
       <button id="sign-in-button" class="auth-button">Sign In</button>
       <div id="user-profile" class="user-profile" style="display:none;"></div>
     </div>
   </header>
+  <!-- Overlay for dimming page when mobile menu is open -->
+  <div id="nav-overlay" class="nav-overlay"></div>
   <main class="resources-main">
     <h1>Resources</h1>
     <p>Useful guides, patent links, templates and AI tools to help you develop your ideas:</p>
@@ -35,12 +41,19 @@
     <div class="resources-search-bar">
       <input type="text" id="resources-search" placeholder="Search resources..." aria-label="Search resources" />
     </div>
+    <!-- Filter controls for resource categories -->
+    <div class="resource-filters">
+      <label class="resource-filter"><input type="checkbox" value="patent" /> Patents</label>
+      <label class="resource-filter"><input type="checkbox" value="template" /> Templates</label>
+      <label class="resource-filter"><input type="checkbox" value="guide" /> Guides</label>
+      <label class="resource-filter"><input type="checkbox" value="tool" /> Tools</label>
+    </div>
     <ul id="resources-list">
-      <li data-text="uspto patent search">USPTO Patent Search — <a href="https://www.uspto.gov/patents/search" target="_blank">search the US patent database</a></li>
-      <li data-text="wipo patentscope international">WIPO PATENTSCOPE — <a href="https://patentscope.wipo.int" target="_blank">international patent search</a></li>
-      <li data-text="lean canvas template">Lean Canvas Template — <a href="https://leanstack.com/leancanvas" target="_blank">structure your idea on one page</a></li>
-      <li data-text="pitch deck guide y combinator">Pitch Deck Guide — <a href="https://www.ycombinator.com/library" target="_blank">resources from Y Combinator</a></li>
-      <li data-text="openai api">OpenAI API — <a href="https://platform.openai.com/docs" target="_blank">build AI‑powered features</a></li>
+      <li data-text="uspto patent search" data-category="patent">USPTO Patent Search — <a href="https://www.uspto.gov/patents/search" target="_blank">search the US patent database</a></li>
+      <li data-text="wipo patentscope international" data-category="patent">WIPO PATENTSCOPE — <a href="https://patentscope.wipo.int" target="_blank">international patent search</a></li>
+      <li data-text="lean canvas template" data-category="template">Lean Canvas Template — <a href="https://leanstack.com/leancanvas" target="_blank">structure your idea on one page</a></li>
+      <li data-text="pitch deck guide y combinator" data-category="guide">Pitch Deck Guide — <a href="https://www.ycombinator.com/library" target="_blank">resources from Y Combinator</a></li>
+      <li data-text="openai api" data-category="tool">OpenAI API — <a href="https://platform.openai.com/docs" target="_blank">build AI‑powered features</a></li>
     </ul>
   </main>
   <footer id="site-legal" class="legal-footer-center">
@@ -48,6 +61,13 @@
     <a href="legal/terms.html">Terms</a>
     <a href="legal/privacy.html">Privacy</a>
   </footer>
+  <!-- Global search overlay -->
+  <div id="global-search-overlay" class="search-overlay" aria-hidden="true">
+    <div class="search-modal">
+      <input type="text" id="global-search-input" placeholder="Search..." aria-label="Global search" />
+      <div id="global-search-results" class="search-results"></div>
+    </div>
+  </div>
   <div class="auth-modal" id="auth-modal">
     <div class="auth-modal-content">
       <button class="auth-modal-close">×</button>
@@ -67,5 +87,7 @@
   <script src="js/theme.js"></script>
   <script src="js/main.js"></script>
   <script src="js/resources.js"></script>
+  <script src="js/navigation.js"></script>
+  <script src="js/search.js"></script>
 </body>
 </html>

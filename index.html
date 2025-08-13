@@ -18,6 +18,8 @@
   <!-- Site header with navigation and auth controls -->
   <header class="header">
     <div class="logo">Star Galaxy</div>
+    <!-- Mobile menu toggle shown on small screens -->
+    <button id="mobile-menu-toggle" class="mobile-menu-toggle" aria-label="Open menu">☰</button>
     <nav class="nav">
       <a href="index.html">Home</a>
       <a href="generator.html">Generator</a>
@@ -30,12 +32,17 @@
     <div class="header-actions">
       <!-- Theme toggle button; icon is set via theme.js -->
       <button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme">☾</button>
+      <!-- Global search toggle -->
+      <button id="global-search-button" class="search-toggle" aria-label="Search">🔍</button>
       <!-- Sign in button shown when user not authenticated -->
       <button id="sign-in-button" class="auth-button">Sign In</button>
       <!-- User profile placeholder (filled when logged in) -->
       <div id="user-profile" class="user-profile" style="display:none;"></div>
     </div>
   </header>
+
+  <!-- Overlay for dimming page when mobile menu is open -->
+  <div id="nav-overlay" class="nav-overlay"></div>
 
   <!-- Main home page content -->
   <main class="home-main">
@@ -72,6 +79,14 @@
     <a href="legal/privacy.html">Privacy</a>
   </footer>
 
+  <!-- Global search overlay -->
+  <div id="global-search-overlay" class="search-overlay" aria-hidden="true">
+    <div class="search-modal">
+      <input type="text" id="global-search-input" placeholder="Search..." aria-label="Global search" />
+      <div id="global-search-results" class="search-results"></div>
+    </div>
+  </div>
+
   <!-- Authentication modal (hidden until triggered) -->
   <div class="auth-modal" id="auth-modal">
     <div class="auth-modal-content">
@@ -106,5 +121,7 @@
   <!-- Theme toggle script (must be loaded before main.js) -->
   <script src="js/theme.js"></script>
   <script src="js/main.js"></script>
+  <script src="js/navigation.js"></script>
+  <script src="js/search.js"></script>
 </body>
 </html>
