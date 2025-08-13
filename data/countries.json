@@ -1,0 +1,159 @@
+{
+  "countries": [
+    {
+      "code": "US",
+      "name": "Соединённые Штаты",
+      "system": "first_to_file",
+      "software_patentability": "частично",
+      "business_methods": "частично",
+      "ai_algorithms": "ограниченно",
+      "summary": "ПО и бизнес‑методы возможны при соблюдении критериев (Alice/Mayo и пр.).",
+      "procedures": {
+        "office": "USPTO",
+        "filing_options": ["provisional", "non-provisional", "PCT"],
+        "timeline_hint": "1–3 года"
+      },
+      "fees_hint": "от сотен до тысяч USD — зависит от типа заявителя",
+      "contacts": [
+        {
+          "agency": "USPTO",
+          "phone": "+1-571-272-1000",
+          "email": "usptoinfo@uspto.gov",
+          "website": "https://www.uspto.gov",
+          "address": "Alexandria, VA, USA",
+          "hours": "8:30–17:00"
+        }
+      ],
+      "official_links": [
+        {
+          "title": "MPEP",
+          "url": "https://www.uspto.gov/web/offices/pac/mpep/"
+        }
+      ]
+    },
+    {
+      "code": "CA",
+      "name": "Канада",
+      "system": "first_to_file",
+      "software_patentability": "частично",
+      "business_methods": "нет",
+      "ai_algorithms": "ограниченно",
+      "summary": "Канада разрешает патентовать некоторые ПО при условии технического вклада.",
+      "procedures": {
+        "office": "CIPO",
+        "filing_options": ["direct", "PCT"],
+        "timeline_hint": "2–4 года"
+      },
+      "fees_hint": "пошлины начинаются от 400 CAD",
+      "contacts": [
+        {
+          "agency": "Canadian Intellectual Property Office",
+          "phone": "+1-819-994-5000",
+          "email": "ic.contact-contact.ic@canada.ca",
+          "website": "https://www.ic.gc.ca/cipo",
+          "address": "Gatineau, QC, Canada",
+          "hours": "8:30–16:30"
+        }
+      ],
+      "official_links": [
+        {
+          "title": "Manual of Patent Office Practice",
+          "url": "https://www.ic.gc.ca/eic/site/cipointernet-internetopic.nsf/eng/home"
+        }
+      ]
+    },
+    {
+      "code": "DE",
+      "name": "Германия",
+      "system": "first_to_file",
+      "software_patentability": "частично",
+      "business_methods": "нет",
+      "ai_algorithms": "ограниченно",
+      "summary": "В Германии патентуются лишь программы с техническим эффектом.",
+      "procedures": {
+        "office": "DPMA",
+        "filing_options": ["direct", "EPO", "PCT"],
+        "timeline_hint": "2–5 лет"
+      },
+      "fees_hint": "от 60 EUR (заявка) + ежегодные сборы",
+      "contacts": [
+        {
+          "agency": "Deutsches Patent- und Markenamt",
+          "phone": "+49 89 2195-0",
+          "email": "info@dpma.de",
+          "website": "https://www.dpma.de",
+          "address": "Munich, Germany",
+          "hours": "8:00–16:00"
+        }
+      ],
+      "official_links": [
+        {
+          "title": "Patent Guidelines",
+          "url": "https://www.dpma.de/english/services/patents"
+        }
+      ]
+    },
+    {
+      "code": "JP",
+      "name": "Япония",
+      "system": "first_to_file",
+      "software_patentability": "да",
+      "business_methods": "нет",
+      "ai_algorithms": "да",
+      "summary": "Япония активно патентует ПО и ИИ при техническом характере.",
+      "procedures": {
+        "office": "JPO",
+        "filing_options": ["direct", "PCT"],
+        "timeline_hint": "1–2 года"
+      },
+      "fees_hint": "начальные сборы около 15 000 JPY",
+      "contacts": [
+        {
+          "agency": "Japan Patent Office",
+          "phone": "+81-3-3581-1101",
+          "email": "jpo@jpo.go.jp",
+          "website": "https://www.jpo.go.jp",
+          "address": "Tokyo, Japan",
+          "hours": "9:00–17:00"
+        }
+      ],
+      "official_links": [
+        {
+          "title": "JPO Patent Examination Handbook",
+          "url": "https://www.jpo.go.jp/e/system/patent/gaiyo/gijutsu_kansatu_handbook/index.html"
+        }
+      ]
+    },
+    {
+      "code": "IL",
+      "name": "Израиль",
+      "system": "first_to_file",
+      "software_patentability": "частично",
+      "business_methods": "нет",
+      "ai_algorithms": "ограниченно",
+      "summary": "Патенты предоставляются программам с техническим эффектом.",
+      "procedures": {
+        "office": "ILPO",
+        "filing_options": ["direct", "PCT"],
+        "timeline_hint": "2–3 года"
+      },
+      "fees_hint": "заявка от 900 NIS",
+      "contacts": [
+        {
+          "agency": "Israel Patent Office",
+          "phone": "+972-73-3531400",
+          "email": "inbox@justice.gov.il",
+          "website": "https://www.justice.gov.il",
+          "address": "Jerusalem, Israel",
+          "hours": "8:30–16:00"
+        }
+      ],
+      "official_links": [
+        {
+          "title": "Patent Guidelines",
+          "url": "https://www.gov.il/en/departments/units/israel_patent_office"
+        }
+      ]
+    }
+  ]
+}

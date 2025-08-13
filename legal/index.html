@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Юридическая справка — Звёздная Галактика</title>
+  <link rel="stylesheet" href="../css/styles.css" />
+  <!-- Не трогать: внешний скрипт для анализа идей (ключ скрыт) -->
+  <script src="../analyzeIdeaForPatents.js" defer></script>
+</head>
+<body>
+  <canvas id="starfield"></canvas>
+  <header>
+    <h1>Звёздная Галактика</h1>
+    <nav>
+      <a href="/">Главная</a>
+      <a href="/generator">Генератор</a>
+      <a href="/legal">Справка</a>
+      <a class="login-btn" href="/account">Войти</a>
+    </nav>
+  </header>
+  <main>
+    <h2>Юридическая справка</h2>
+    <div class="filters">
+      <input type="text" id="search" placeholder="Поиск по названию или коду" />
+      <select id="filter-system">
+        <option value="">Система: любая</option>
+        <option value="first_to_file">first‑to‑file</option>
+        <option value="first_to_invent">first‑to‑invent</option>
+      </select>
+      <select id="filter-software">
+        <option value="">Патентуемость ПО: любая</option>
+        <option value="да">да</option>
+        <option value="нет">нет</option>
+        <option value="частично">частично</option>
+      </select>
+      <select id="filter-business">
+        <option value="">Бизнес‑методы: любая</option>
+        <option value="да">да</option>
+        <option value="нет">нет</option>
+        <option value="частично">частично</option>
+      </select>
+      <select id="filter-ai">
+        <option value="">Алгоритмы/ИИ: любая</option>
+        <option value="да">да</option>
+        <option value="нет">нет</option>
+        <option value="частично">частично</option>
+        <option value="ограниченно">ограниченно</option>
+      </select>
+    </div>
+    <div class="table-wrapper">
+      <table id="countries-table">
+        <thead>
+          <tr>
+            <th>Код</th>
+            <th>Страна</th>
+            <th>Система</th>
+            <th>ПО</th>
+            <th>Бизнес‑методы</th>
+            <th>ИИ</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </main>
+  <footer>
+    <a href="#">Правовая оговорка</a>
+    <a href="#">Условия обслуживания</a>
+    <a href="#">Политика конфиденциальности</a>
+  </footer>
+  <!-- Модалка для профиля страны -->
+  <div id="modal" class="modal hidden">
+    <div class="modal-content">
+      <button class="close" aria-label="Закрыть">×</button>
+      <h2 class="modal-title">Страна</h2>
+      <p class="modal-summary"></p>
+      <h3>Патентуемость</h3>
+      <ul class="modal-patentability"></ul>
+      <h3>Процедуры</h3>
+      <p class="modal-procedures"></p>
+      <h3>Пошлины</h3>
+      <p class="modal-fees"></p>
+      <h3>Контакты</h3>
+      <ul class="modal-contacts"></ul>
+      <h3>Официальные ссылки</h3>
+      <ul class="modal-links"></ul>
+      <p class="disclaimer">Данные предоставлены для ознакомления и не являются юридической консультацией.</p>
+    </div>
+  </div>
+  <script src="../js/starfield.js"></script>
+  <script src="../js/common.js"></script>
+  <script src="../js/legal.js"></script>
+</body>
+</html>
