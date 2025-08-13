@@ -10,5 +10,5 @@ async function getIdea(prompt) {
   });
 
   const data = await response.json();
-  return data.choices?.[0]?.message?.content || "Ошибка генерации идеи.";
+  return data.choices?.[0]?.message?.content || "Idea generation error.";
 }
