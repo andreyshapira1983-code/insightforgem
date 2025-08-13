@@ -1,0 +1,260 @@
+/*
+ * Basic styling for the Star Galaxy single‑page application.
+ * The design follows a clean, modern aesthetic with responsive layouts and
+ * accessible colour contrasts. Feel free to adjust the CSS variables
+ * below to better suit your brand colours.
+ */
+
+:root {
+  --bg: #f7f9fc;
+  --panel: #ffffff;
+  --primary: #3b82f6;
+  --secondary: #6366f1;
+  --text: #1f2937;
+  --text-muted: #4b5563;
+  --border: #e5e7eb;
+  --card-bg: #ffffff;
+  --card-border: #e5e7eb;
+  --footer-bg: #f0f4f8;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: 'Inter', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+}
+
+/* Header */
+.site-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: var(--panel);
+  border-bottom: 1px solid var(--border);
+  padding: 1rem 1.5rem;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.logo h1 {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--primary);
+}
+
+.logo .subtitle {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  display: block;
+}
+
+.main-nav {
+  margin-top: 0.5rem;
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.main-nav a {
+  color: var(--secondary);
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s ease-in-out;
+}
+
+.main-nav a:hover {
+  color: var(--primary);
+}
+
+/* Sections */
+.section {
+  padding: 2rem 1.5rem;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.section h2 {
+  font-size: 1.75rem;
+  margin-bottom: 0.75rem;
+  color: var(--primary);
+}
+
+.section-intro {
+  margin-bottom: 1.25rem;
+  color: var(--text-muted);
+}
+
+/* Generator */
+.generator-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+#idea-input {
+  min-height: 120px;
+  padding: 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  font-size: 1rem;
+  resize: vertical;
+}
+
+#generate-btn {
+  padding: 0.6rem 1.2rem;
+  border: none;
+  border-radius: 4px;
+  background: var(--primary);
+  color: #fff;
+  font-size: 1rem;
+  cursor: pointer;
+  width: max-content;
+  align-self: flex-start;
+  transition: background 0.2s ease-in-out;
+}
+
+#generate-btn:hover {
+  background: var(--secondary);
+}
+
+/* Results */
+.results.hidden {
+  display: none;
+}
+
+.results {
+  margin-top: 1.5rem;
+}
+
+.result-cards {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.card {
+  flex: 1 1 260px;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 8px;
+  padding: 1rem;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.card h4 {
+  margin-top: 0;
+  margin-bottom: 0.5rem;
+  color: var(--secondary);
+  font-size: 1.1rem;
+}
+
+/* Lists */
+.list {
+  list-style: none;
+  padding-left: 0;
+}
+
+.list li {
+  margin-bottom: 0.6rem;
+  position: relative;
+  padding-left: 1.25rem;
+}
+
+.list li::before {
+  content: "•";
+  position: absolute;
+  left: 0;
+  top: 0;
+  color: var(--secondary);
+  font-weight: 700;
+}
+
+/* Table */
+.table-wrapper {
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+}
+
+th,
+td {
+  padding: 0.75rem;
+  border: 1px solid var(--border);
+  text-align: left;
+}
+
+th {
+  background: #eff6ff;
+  color: var(--text);
+  font-weight: 600;
+}
+
+/* Legal */
+.legal-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 1rem 0;
+  font-size: 0.9rem;
+}
+
+.legal-nav a {
+  color: var(--secondary);
+  text-decoration: none;
+}
+
+.legal-nav a:hover {
+  text-decoration: underline;
+}
+
+.legal-nav .divider {
+  color: var(--text-muted);
+}
+
+.legal-section {
+  margin-bottom: 1.5rem;
+}
+
+.legal-section h3 {
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
+  font-size: 1.3rem;
+  color: var(--primary);
+}
+
+/* Footer */
+.site-footer {
+  background: var(--footer-bg);
+  padding: 1rem;
+  text-align: center;
+  border-top: 1px solid var(--border);
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+  .result-cards {
+    flex-direction: column;
+  }
+  .main-nav {
+    gap: 0.5rem;
+  }
+  .section {
+    padding: 1.5rem 1rem;
+  }
+}

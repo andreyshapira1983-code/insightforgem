@@ -1,174 +1,148 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Star Galaxy — AI Business Idea Analyzer</title>
-  <meta name="description" content="Analyze and refine business ideas with AI: feasibility, market, risks, next steps."/>
-  <link rel="canonical" href="https://insightforgem.netlify.app/"/>
-  <link rel="icon" type="image/x-icon" href="/favicon.ico"/>
-  <link rel="stylesheet" href="css/styles.css"/>
-  <!-- Include authentication modal styles -->
-  <link rel="stylesheet" href="css/auth.css"/>
-  <!-- Global fixes to eliminate nested scrollbars and other UI quirks -->
-  <link rel="stylesheet" href="css/global-fixes.css"/>
-  <!-- Optional security overrides -->
-  <link rel="stylesheet" href="css/security.css"/>
+  <!-- Link to the dedicated stylesheet -->
+  <link rel="stylesheet" href="style.css">
+  <!-- Preload the main font for performance -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-  <canvas id="galaxy-bg" aria-hidden="true"></canvas>
-  <div class="app-container">
-    <!-- Sidebar navigation -->
-    <div class="sidebar">
-      <div class="sidebar-header">
-        <div class="galaxy-logo">
-          <div class="logo-planet"></div>
-          <div class="logo-ring"></div>
-        </div>
-        <span>Star Galaxy</span>
+  <header class="site-header">
+    <div class="logo">
+      <h1>Star&nbsp;Galaxy</h1>
+      <span class="subtitle">AI Business Idea Analyzer</span>
+    </div>
+    <nav class="main-nav">
+      <a href="#generator">Generator</a>
+      <a href="#trends">Trends</a>
+      <a href="#tips">Tips</a>
+      <a href="#global">Global</a>
+      <a href="#legal">Legal</a>
+    </nav>
+  </header>
+
+  <main>
+    <!-- Idea generator section -->
+    <section id="generator" class="section">
+      <h2>Idea Generator</h2>
+      <p class="section-intro">Enter your business idea and click&nbsp;<strong>Generate</strong> to receive high‑level insights, market research and improvement suggestions.</p>
+      <div class="generator-form">
+        <textarea id="idea-input" placeholder="Describe your business idea…"></textarea>
+        <button id="generate-btn">Generate</button>
       </div>
-      <ul class="sidebar-menu">
-        <li class="active" data-page="dashboard">
-          <a href="#">
-            <div class="galaxy-icon dashboard-icon">
-              <div class="planet"></div>
-              <div class="orbit"></div>
-            </div>
-            <span>Dashboard</span>
-          </a>
-        </li>
-        <li data-page="myIdeas">
-          <a href="#">
-            <div class="galaxy-icon idea-icon">
-              <div class="star-burst"></div>
-            </div>
-            <span>My Ideas</span>
-            <span class="coming-soon">Soon</span>
-          </a>
-        </li>
-        <li data-page="trending">
-          <a href="#">
-            <div class="galaxy-icon trend-icon">
-              <div class="comet"></div>
-            </div>
-            <span>Trending</span>
-            <span class="coming-soon">Soon</span>
-          </a>
-        </li>
-        <li data-page="resources">
-          <a href="#">
-            <div class="galaxy-icon resource-icon">
-              <div class="galaxy-spiral"></div>
-            </div>
-            <span>Resources</span>
-            <span class="coming-soon">Soon</span>
-          </a>
-        </li>
-        <li data-page="community">
-          <a href="#">
-            <div class="galaxy-icon community-icon">
-              <div class="stars-group"></div>
-            </div>
-            <span>Community</span>
-            <span class="coming-soon">Soon</span>
-          </a>
-        </li>
+      <div id="results" class="results hidden">
+        <h3>Analysis Results</h3>
+        <div class="result-cards">
+          <div class="card" id="analysis-section">
+            <h4>Business Analysis</h4>
+            <p id="analysis-content">Your analysis will appear here.</p>
+          </div>
+          <div class="card" id="research-section">
+            <h4>Market Research</h4>
+            <p id="research-content">Market research will appear here.</p>
+          </div>
+          <div class="card" id="improvement-section">
+            <h4>Idea Improvement</h4>
+            <p id="improvement-content">Improvement suggestions will appear here.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Market trends section -->
+    <section id="trends" class="section">
+      <h2>Market Trends</h2>
+      <ul class="list">
+        <li><strong>AI &amp; Machine Learning:</strong> Growing at 38&nbsp;percent annually with applications in healthcare, finance and education.</li>
+        <li><strong>Sustainable Products:</strong> Eco‑friendly solutions seeing 25&nbsp;percent growth as consumer awareness increases.</li>
+        <li><strong>Remote Work Tools:</strong> Collaboration platforms continue strong growth post‑pandemic.</li>
       </ul>
-      <div class="sidebar-footer legal-footer-center"></div>
-    </div>
+    </section>
 
-    <!-- Main content area -->
-    <div class="main-content" id="main-content">
-      <h1 id="main-title"><span class="title-text">Star Galaxy — AI Business Idea Analyzer</span></h1>
-      <div class="card" id="main-card">
-        <p id="instruction-text">Enter your idea below and click "Generate" to get detailed feedback, patent analysis, and legal considerations worldwide.</p>
-        <textarea id="idea-text" placeholder="Enter your idea here..."></textarea>
-        <div class="ai-options">
-          <div class="ai-option selected" data-mode="analyze">
-            <div class="galaxy-icon analyze-icon">
-              <div class="analyze-beam"></div>
-            </div>
-            Business Analysis
-          </div>
-          <div class="ai-option" data-mode="market">
-            <div class="galaxy-icon market-icon">
-              <div class="market-graph"></div>
-            </div>
-            Market Research
-          </div>
-          <div class="ai-option" data-mode="improve">
-            <div class="galaxy-icon improve-icon">
-              <div class="improve-spark"></div>
-            </div>
-            Idea Improvement
-          </div>
-        </div>
-        <button class="cosmic-button" id="analyze-button">
-          <div class="button-stars"></div>
-          <span>Generate</span>
-        </button>
-        <div id="results-container" style="display: none;"></div>
-      </div>
-      <!-- Hidden legal content container that can be shown when needed -->
-      <div class="card" id="legal-content" style="display: none;">
-        <button class="cosmic-button" id="back-to-main" style="margin-bottom: 20px;">
-          <span>← Back to Generator</span>
-        </button>
-        <h3 id="legal-title">Legal Information</h3>
-        <div id="legal-body"></div>
-      </div>
-    </div>
+    <!-- Tips section -->
+    <section id="tips" class="section">
+      <h2>Tips</h2>
+      <ul class="list">
+        <li>Be specific about your target market when describing your idea.</li>
+        <li>Consider how your idea solves a real problem for users.</li>
+        <li>Protect sensitive information before sharing it publicly.</li>
+      </ul>
+    </section>
 
-    <!-- Info panel (right side) -->
-    <div class="info-panel">
-      <div class="info-panel-header market-trend-absolute market-trend-flex" id="market-trend-header">
-        Market Trends
-        <span class="login-btn">
-          <button class="auth-button" data-role="signin" id="header-sign-in">Sign in</button>
-        </span>
+    <!-- Global considerations section -->
+    <section id="global" class="section">
+      <h2>Global Considerations</h2>
+      <p>Different countries have varying patent laws and intellectual property protections. Our analysis includes legal considerations for major global markets. Use the table below as a quick reference.</p>
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr><th>Country/Region</th><th>Key patent considerations</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>United States</td><td>First‑to‑file system; software and business methods may be patentable under certain conditions.</td></tr>
+            <tr><td>European Union</td><td>First‑to‑file system; stricter requirements for software and business method patents.</td></tr>
+            <tr><td>China</td><td>First‑to‑file system; increasing protection for software patents.</td></tr>
+            <tr><td>Russia</td><td>First‑to‑file system; software generally protected by copyright rather than patents.</td></tr>
+            <tr><td>Japan</td><td>First‑to‑file system; software patentable if it has technical characteristics.</td></tr>
+          </tbody>
+        </table>
       </div>
-      <div class="trend-item">
-        <div class="trend-title">AI &amp; Machine Learning</div>
-        <div class="trend-description">Growing at 38% annually with applications in healthcare, finance, and education.</div>
-      </div>
-      <div class="trend-item">
-        <div class="trend-title">Sustainable Products</div>
-        <div class="trend-description">Eco-friendly solutions seeing 25% growth as consumer awareness increases.</div>
-      </div>
-      <div class="trend-item">
-        <div class="trend-title">Remote Work Tools</div>
-        <div class="trend-description">Collaboration platforms continue strong growth post-pandemic.</div>
-      </div>
-      <div class="info-panel-header">Tips</div>
-      <div class="trend-item">
-        <div class="trend-description">Be specific about your target market when describing your idea.</div>
-      </div>
-      <div class="trend-item">
-        <div class="trend-description">Consider how your idea solves a real problem for users.</div>
-      </div>
-      <div class="info-panel-header">Global Considerations</div>
-      <div class="trend-item">
-        <div class="trend-description">Different countries have different patent laws and intellectual property protections.</div>
-      </div>
-      <div class="trend-item">
-        <div class="trend-description">Our analysis includes legal considerations for major global markets.</div>
-      </div>
-    </div>
-  </div>
+    </section>
 
-  <!-- Scripts -->
-  <script src="js/galaxy-bg.js"></script>
-  <script src="js/star-galaxy-core.js"></script>
-  <script src="js/ui-hardening.js"></script>
-  <script src="js/auth.js"></script>
-  <script src="js/auth-fix.js"></script>
-  <script src="js/askOpenAI.js"></script>
-  <script src="js/app.js"></script>
-  <!-- Footer with legal links -->
-  <footer class="site-legal legal-footer-center" id="site-legal">
-    <a href="legal/disclaimer.html">Disclaimer</a>
-    <a href="legal/terms.html">Terms of Service</a>
-    <a href="legal/privacy.html">Privacy Policy</a>
+    <!-- Legal information -->
+    <section id="legal" class="section">
+      <h2>Legal Information</h2>
+      <p class="section-intro">The following summaries outline our Terms of Service, Privacy Policy and Disclaimer. For full details please contact us.</p>
+      <div class="legal-nav">
+        <a href="#terms">Terms&nbsp;of&nbsp;Service</a>
+        <span class="divider">|</span>
+        <a href="#privacy">Privacy&nbsp;Policy</a>
+        <span class="divider">|</span>
+        <a href="#disclaimer">Disclaimer</a>
+      </div>
+      <article id="terms" class="legal-section">
+        <h3>Terms of Service</h3>
+        <p>By accessing or using Star&nbsp;Galaxy you agree to be bound by these Terms. We provide a platform for idea analysis and evaluation. You agree not to violate laws, infringe upon rights, submit unlawful content, interfere with our services or attempt unauthorized access. You retain all rights to the ideas you submit; we retain rights to the Star&nbsp;Galaxy name, logo and design.</p>
+        <p>Detailed provisions cover user conduct, intellectual property, limitations of liability, indemnification, international use and governing law.</p>
+      </article>
+      <article id="privacy" class="legal-section">
+        <h3>Privacy Policy</h3>
+        <p>We respect your privacy and are committed to protecting your personal data and ideas. We collect only what is necessary to deliver our services: the content you submit, basic usage data and device information. We use this information to provide and improve our services, respond to your inquiries, analyse usage patterns, prevent fraud and comply with legal obligations. Technical and organisational measures help protect your data, though absolute security cannot be guaranteed.</p>
+        <p>You have rights to access, rectify or delete your information, restrict or object to processing, request data portability and withdraw consent at any time.</p>
+      </article>
+      <article id="disclaimer" class="legal-section">
+        <h3>Disclaimer</h3>
+        <p>The information provided by Star&nbsp;Galaxy is for general informational purposes only and does not constitute legal, financial or professional advice. Always consult qualified professionals before making decisions based on our analysis.</p>
+        <p>Our AI analysis may not account for recent market changes, local regulations or other factors beyond our control. A positive analysis does not guarantee the success of your business idea. We cannot guarantee absolute confidentiality; for highly sensitive ideas, consider obtaining legal protection before sharing details.</p>
+      </article>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p>&copy; 2025 Star&nbsp;Galaxy. All rights reserved.</p>
   </footer>
+
+  <script>
+    // JavaScript to handle the generator button click. This is a simple placeholder to demonstrate functionality.
+    document.getElementById('generate-btn').addEventListener('click', function () {
+      const input = document.getElementById('idea-input').value.trim();
+      if (!input) {
+        alert('Please enter your business idea before generating.');
+        return;
+      }
+      // In a production environment, you would send the idea to a backend or AI service using
+      // an API key stored securely on the server (e.g., process.env.OPEN_API_KEY). Here we
+      // simply display placeholder text containing the user input to show the data flow.
+      document.getElementById('analysis-content').textContent = `Our algorithms analyse "${input}" to identify strengths, weaknesses and potential opportunities.`;
+      document.getElementById('research-content').textContent = `We gather market research related to "${input}" including growth rates, key competitors and emerging trends.`;
+      document.getElementById('improvement-content').textContent = `Suggestions for improving "${input}" may include niche targeting, feature enhancements or alternative revenue models.`;
+      document.getElementById('results').classList.remove('hidden');
+    });
+  </script>
 </body>
 </html>
