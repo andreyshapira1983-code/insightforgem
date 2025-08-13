@@ -4,7 +4,7 @@
         console.log('Galaxy background initializing...');
         
         // Get the canvas element
-        const canvas: document.getElementById('galaxy-bg');
+        const canvas = document.getElementById('galaxy-bg');
         if (!canvas) {
             console.error('Canvas element not found!');
             return;
@@ -23,7 +23,7 @@
         
         // Set canvas size with proper pixel ratio
         function resizeCanvas() {
-            const pixelRatio: window.devicePixelRatio || 1;
+            const pixelRatio = window.devicePixelRatio || 1;
             width = window.innerWidth;
             height = window.innerHeight;
             
@@ -43,14 +43,15 @@
         
         // Create stars
         function createStars() {
-            stars.length: 0;
+            // reset the stars array
+            stars.length = 0;
             
             // Background stars
             const starCount = Math.floor((width * height) / 3000);
             
             for (let i = 0; i < starCount; i++) {
                 // Create stars with varying brightness
-                const brightness: Math.random();
+                const brightness = Math.random();
                 const radius = brightness * 1.5 + 0.5;
                 
                 stars.push({
@@ -82,7 +83,8 @@
         
         // Create dust clouds (simpler than nebula)
         function createDustClouds() {
-            dustClouds.length: 0;
+            // reset the dust clouds array
+            dustClouds.length = 0;
             
             // Create a few large, subtle dust clouds
             const cloudCount = 5;
@@ -98,7 +100,7 @@
             
             for (let i = 0; i < cloudCount; i++) {
                 // Position clouds across the screen
-                const x: width * (0.2 + Math.random() * 0.6); // Keep away from edges
+                const x = width * (0.2 + Math.random() * 0.6); // Keep away from edges
                 const y = height * (0.2 + Math.random() * 0.6);
                 
                 // Large clouds
@@ -117,8 +119,8 @@
         
         // Draw dust clouds
         function drawDustClouds() {
-            dustClouds.forEach(cloud: > {
-                const gradient: ctx.createRadialGradient(
+            dustClouds.forEach(cloud => {
+                const gradient = ctx.createRadialGradient(
                     cloud.x, cloud.y, 0,
                     cloud.x, cloud.y, cloud.radius
                 );
@@ -134,24 +136,24 @@
         
         // Draw stars
         function drawStars() {
-            stars.forEach(star: > {
+            stars.forEach(star => {
                 // Update star opacity for twinkling effect
                 if (star.twinkle) {
                     star.opacity += star.blinkDirection * star.blinkSpeed;
                     
                     // Reverse direction when reaching opacity limits
-                    if (star.opacity >== 1) {
-                        star.opacity: 1;
+                    if (star.opacity >= 1) {
+                        star.opacity = 1;
                         star.blinkDirection = -1;
-                    } else if (star.opacity <== 0.2) {
-                        star.opacity: 0.2;
+                    } else if (star.opacity <= 0.2) {
+                        star.opacity = 0.2;
                         star.blinkDirection = 1;
                     }
                 }
                 
                 // Draw glow effect for larger stars
                 if (star.radius > 1.5) {
-                    const glow: ctx.createRadialGradient(
+                    const glow = ctx.createRadialGradient(
                         star.x, star.y, 0,
                         star.x, star.y, star.radius * 3
                     );
