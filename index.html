@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Star Galaxy - AI Business Idea Analyzer</title>
+    <link rel="canonical" href="https://stargalaxy.com/index.html" />
+    <link href="css/styles.css" rel="stylesheet"/>
+    <meta content="Star Galaxy - Generate, analyze and evaluate business ideas with AI. Check patent similarities and legal considerations worldwide." name="description"/>
+    <link href="css/global-fixes.css" rel="stylesheet"/>
+</head>
+<body>
+    <canvas aria-hidden="true" id="galaxy-bg"></canvas>
+    <div class="app-container">
+        <!-- Auth container for login/register -->
+        <div class="auth-container">
+        </div>
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <div class="galaxy-logo">
+                    <div class="logo-planet"></div>
+                    <div class="logo-ring"></div>
+                </div>
+                <h2>Star Galaxy</h2>
+            </div>
+            <ul class="sidebar-menu">
+                <li class="active" data-page="dashboard">
+                    <a href="#">
+                        <div class="galaxy-icon dashboard-icon">
+                            <div class="planet"></div>
+                            <div class="orbit"></div>
+                        </div>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                <li data-page="myIdeas">
+                    <a href="#">
+                        <div class="galaxy-icon idea-icon">
+                            <div class="star-burst"></div>
+                        </div>
+                        <span>My Ideas</span>
+                        <span class="coming-soon">Soon</span>
+                    </a>
+                </li>
+                <li data-page="trending">
+                    <a href="#">
+                        <div class="galaxy-icon trend-icon">
+                            <div class="comet"></div>
+                        </div>
+                        <span>Trending</span>
+                        <span class="coming-soon">Soon</span>
+                    </a>
+                </li>
+                <li data-page="resources">
+                    <a href="#">
+                        <div class="galaxy-icon resource-icon">
+                            <div class="galaxy-spiral"></div>
+                        </div>
+                        <span>Resources</span>
+                        <span class="coming-soon">Soon</span>
+                    </a>
+                </li>
+                <li data-page="community">
+                    <a href="#">
+                        <div class="galaxy-icon community-icon">
+                            <div class="stars-group"></div>
+                        </div>
+                        <span>Community</span>
+                        <span class="coming-soon">Soon</span>
+                    </a>
+                </li>
+            </ul>
+            <div class="sidebar-footer legal-footer-center">
+                <!-- Empty footer -->
+            </div>
+        </div>
+        <div class="main-content" id="main-content">
+            <h1 id="main-title">
+                <span class="title-text">Star Galaxy - Idea Generator</span>
+            </h1>
+            <div class="card" id="main-card">
+                <p id="instruction-text">Enter your idea below and click "Generate" to get detailed feedback, patent analysis, and legal considerations worldwide.</p>
+                <textarea id="idea-text" placeholder="Enter your idea here..."></textarea>
+                <div class="ai-options">
+                    <div class="ai-option selected" data-mode="analyze">
+                        <div class="galaxy-icon analyze-icon">
+                            <div class="analyze-beam"></div>
+                        </div>
+                        Business Analysis
+                    </div>
+                    <div class="ai-option" data-mode="market">
+                        <div class="galaxy-icon market-icon">
+                            <div class="market-graph"></div>
+                        </div>
+                        Market Research
+                    </div>
+                    <div class="ai-option" data-mode="improve">
+                        <div class="galaxy-icon improve-icon">
+                            <div class="improve-spark"></div>
+                        </div>
+                        Idea Improvement
+                    </div>
+                </div>
+                <button class="cosmic-button" id="analyze-button">
+                    <div class="button-stars"></div>
+                    <span>Generate</span>
+                </button>
+                <div id="results-container" style="display: none;">
+                    <!-- Results will appear here -->
+                </div>
+            </div>
+            <!-- Legal content container (hidden by default) -->
+            <div class="card" id="legal-content" style="display: none;">
+                <button class="cosmic-button" id="back-to-main" style="margin-bottom: 20px;">
+                    <span>← Back to Generator</span>
+                </button>
+                <h2 id="legal-title">Legal Information</h2>
+                <div id="legal-body">
+                    <!-- Legal content will be loaded here -->
+                </div>
+            </div>
+        </div>
+        <div class="info-panel">
+            <div class="info-panel-header market-trend-absolute market-trend-flex" id="market-trend-header">
+                Market Trends
+                <div class="login-btn"></div>
+                <span class="login-btn">
+                    <button class="auth-button" data-role="signin" id="header-sign-in">
+                        Sign in
+                    </button>
+                </span>
+            </div>
+            <div class="trend-item">
+                <div class="trend-title">AI & Machine Learning</div>
+                <div class="trend-description">Growing at 38% annually with applications in healthcare, finance, and education.</div>
+            </div>
+            <div class="trend-item">
+                <div class="trend-title">Sustainable Products</div>
+                <div class="trend-description">Eco-friendly solutions seeing 25% growth as consumer awareness increases.</div>
+            </div>
+            <div class="trend-item">
+                <div class="trend-title">Remote Work Tools</div>
+                <div class="trend-description">Collaboration platforms continue strong growth post-pandemic.</div>
+            </div>
+            <div class="info-panel-header">
+                Tips
+            </div>
+            <div class="trend-item">
+                <div class="trend-description">Be specific about your target market when describing your idea.</div>
+            </div>
+            <div class="trend-item">
+                <div class="trend-description">Consider how your idea solves a real problem for users.</div>
+            </div>
+            <div class="info-panel-header">
+                Global Considerations
+            </div>
+            <div class="trend-item">
+                <div class="trend-description">Different countries have different patent laws and intellectual property protections.</div>
+            </div>
+            <div class="trend-item">
+                <div class="trend-description">Our analysis includes legal considerations for major global markets.</div>
+            </div>
+        </div>
+    </div>
+    <!-- Auth Modal -->
+    <div class="auth-modal" id="auth-modal">
+        <div class="auth-modal-content">
+            <button class="auth-modal-close">×</button>
+            <h2 class="auth-modal-title">Sign in</h2>
+            <p class="auth-modal-subtitle">Choose how you'd like to sign in</p>
+            <div class="social-auth-buttons">
+                <button class="social-auth-button" id="google-auth">
+                    <img alt="Google" src="https://cdn-icons-png.flaticon.com/512/2991/2991148.png"/>
+                    <span>Google</span>
+                </button>
+                <button class="social-auth-button" id="facebook-auth">
+                    <img alt="Facebook" src="https://cdn-icons-png.flaticon.com/512/5968/5968764.png"/>
+                    <span>Facebook</span>
+                </button>
+                <button class="social-auth-button" id="github-auth">
+                    <img alt="GitHub" src="https://cdn-icons-png.flaticon.com/512/25/25231.png"/>
+                    <span>GitHub</span>
+                </button>
+                <button class="social-auth-button" id="apple-auth">
+                    <img alt="Apple" src="https://cdn-icons-png.flaticon.com/512/0/747.png"/>
+                    <span>Apple</span>
+                </button>
+            </div>
+        </div>
+    </div>
+    <!-- Footer with English links -->
+    <footer class="site-legal legal-footer-center" id="site-legal">
+        <a href="#legal">Legal Disclaimer</a>
+        <a href="#terms">Terms of Service</a>
+        <a href="#privacy">Privacy Policy</a>
+    </footer>
+    <!-- Scripts -->
+    <script src="js/galaxy-bg.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/analyzeIdeaForPatents.js"></script>
+    <script src="js/auth.js"></script>
+    <script id="signin-dedupper">
+        document.addEventListener('DOMContentLoaded', function(){
+          try {
+            const header = document.querySelector('.info-panel-header');
+            if (!header) return;
+            const btns = header.querySelectorAll('.auth-button');
+            if (btns.length > 1) {
+              let keep = header.querySelector('#header-sign-in') || btns[btns.length-1];
+              btns.forEach(b => { if (b !== keep) b.remove(); });
+            }
+          } catch(e){}
+        });
+    </script>
+    <script src="js/ui-hardening.js"></script>
+    <script src="js/auth-fix.js"></script>
+</body>
+</html>
+
+
