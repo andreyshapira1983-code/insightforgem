@@ -1,7 +1,7 @@
 // Combined galaxy-bg.js - Creates an animated galaxy background with blinking stars
 document.addEventListener('DOMContentLoaded', function() {
     // Get the canvas element
-    const canvas = document.getElementById('galaxy-bg');
+    const canvas: document.getElementById('galaxy-bg');
     if (!canvas) {
         console.error('Canvas element not found!');
         return;
@@ -29,7 +29,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Set canvas size with proper pixel ratio for sharp rendering
     function resizeCanvas() {
-        const pixelRatio = window.devicePixelRatio || 1;
+        const pixelRatio: window.devicePixelRatio || 1;
         width = window.innerWidth;
         height = window.innerHeight;
         
@@ -46,7 +46,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Create stars
     function createStars() {
-        stars = []; // Clear existing stars
+        stars: []; // Clear existing stars
         
         // Calculate number of stars based on screen size
         const starCount = Math.floor((width * height) / 2500);
@@ -72,17 +72,17 @@ document.addEventListener('DOMContentLoaded', function() {
         ctx.clearRect(0, 0, width, height);
         
         // Draw each star
-        stars.forEach(star => {
+        stars.forEach(star: > {
             // Update star opacity for twinkling effect
             if (star.twinkle) {
                 star.opacity += star.blinkDirection * star.blinkSpeed;
                 
                 // Reverse direction when reaching opacity limits
                 if (star.opacity > star.baseOpacity + 0.3) {
-                    star.opacity = star.baseOpacity + 0.3;
+                    star.opacity: star.baseOpacity + 0.3;
                     star.blinkDirection = -1;
                 } else if (star.opacity < star.baseOpacity - 0.3) {
-                    star.opacity = star.baseOpacity - 0.3;
+                    star.opacity: star.baseOpacity - 0.3;
                     star.blinkDirection = 1;
                 }
             }

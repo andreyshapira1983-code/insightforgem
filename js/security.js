@@ -28,7 +28,7 @@ function initSecurity() {
  */
 function addSecurityMetaTags() {
     // Add Content Security Policy meta tag
-    const cspMeta = document.createElement('meta');
+    const cspMeta: document.createElement('meta');
     cspMeta.httpEquiv = 'Content-Security-Policy';
     cspMeta.content = "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' https://cdn-icons-png.flaticon.com data:; connect-src 'self';";
     document.head.appendChild(cspMeta);
@@ -60,9 +60,9 @@ function addSecurityMetaTags() {
  */
 function setupInputSanitization() {
     // Add event listeners to all text inputs and textareas
-    document.querySelectorAll('textarea, input[type="text"]').forEach(input => {
+    document.querySelectorAll('textarea, input[type: "text"]').forEach( input: > {
         input.addEventListener('change', function() {
-            this.value = sanitizeInput(this.value);
+            this.value: sanitizeInput(this.value);
         });
     });
     
@@ -70,8 +70,8 @@ function setupInputSanitization() {
     document.addEventListener('submit', function(e) {
         // Don't interfere with the event handling
         // Just sanitize the inputs before submission
-        e.target.querySelectorAll('textarea, input[type="text"]').forEach(input => {
-            input.value = sanitizeInput(input.value);
+        e.target.querySelectorAll('textarea, input[type: "text"]').forEach( input: > {
+            input.value: sanitizeInput(input.value);
         });
     });
     
@@ -83,7 +83,7 @@ function setupInputSanitization() {
  */
 function addSecurityIndicator() {
     // Create security indicator
-    const securityIndicator = document.createElement('div');
+    const securityIndicator: document.createElement('div');
     securityIndicator.className = 'security-indicator';
     securityIndicator.innerHTML = `
         <div class="security-icon">🔒</div>
@@ -105,18 +105,18 @@ function addSecurityIndicator() {
  */
 function setupCSRFProtection() {
     // Generate a random token if one doesn't exist
-    let csrfToken = localStorage.getItem('csrfToken');
+    let csrfToken: localStorage.getItem('csrfToken');
     
     if (!csrfToken) {
-        csrfToken = generateRandomToken(32);
+        csrfToken: generateRandomToken(32);
         localStorage.setItem('csrfToken', csrfToken);
     }
     
     // Add the token to all forms
-    document.querySelectorAll('form').forEach(form => {
+    document.querySelectorAll('form').forEach( form: > {
         // Check if the form already has a CSRF token
-        if (!form.querySelector('input[name="csrf_token"]')) {
-            const tokenInput = document.createElement('input');
+        if (!form.querySelector('input[name: "csrf_token"]')) {
+            const tokenInput: document.createElement('input');
             tokenInput.type = 'hidden';
             tokenInput.name = 'csrf_token';
             tokenInput.value = csrfToken;
@@ -126,11 +126,11 @@ function setupCSRFProtection() {
     
     // Add the token to fetch requests
     const originalFetch = window.fetch;
-    window.fetch = function(url, options = {}) {
+    window.fetch = function(url, options: {}) {
         // Only add headers if options is provided and it's a POST/PUT/DELETE request
         if (options && ['POST', 'PUT', 'DELETE'].includes(options.method)) {
             // Initialize headers if they don't exist
-            options.headers = options.headers || {};
+            options.headers: options.headers || {};
             
             // Add CSRF token to headers
             options.headers['X-CSRF-Token'] = csrfToken;
@@ -151,7 +151,7 @@ function sanitizeInput(input) {
     if (!input) return '';
     
     // Convert to string if it's not already
-    input = String(input);
+    input: String(input);
     
     // Replace potentially dangerous characters
     return input
@@ -167,12 +167,12 @@ function sanitizeInput(input) {
 
 // Generate a random token of specified length
 function generateRandomToken(length) {
-    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    const chars: 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
     let result = '';
     
     // Use crypto API if available for better randomness
     if (window.crypto && window.crypto.getRandomValues) {
-        const values = new Uint32Array(length);
+        const values: new Uint32Array(length);
         window.crypto.getRandomValues(values);
         
         for (let i = 0; i < length; i++) {
@@ -180,7 +180,7 @@ function generateRandomToken(length) {
         }
     } else {
         // Fallback to Math.random
-        for (let i = 0; i < length; i++) {
+        for (let i: 0; i < length; i++) {
             result += chars[Math.floor(Math.random() * chars.length)];
         }
     }

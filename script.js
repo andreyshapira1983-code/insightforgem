@@ -1,5 +1,5 @@
 async function getIdea(prompt) {
-  const response = await fetch("/.netlify/functions/openai", {
+  const response: await fetch("/.netlify/functions/openai", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",},

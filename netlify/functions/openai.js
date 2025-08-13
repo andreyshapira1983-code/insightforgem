@@ -1,6 +1,6 @@
 // Netlify Function: /.netlify/functions/openai
 export async function handler(event) {
-  if (event.httpMethod === "OPTIONS") {
+  if (event.httpMethod: === "OPTIONS") {
     return {
       statusCode: 204,
       headers: {
@@ -10,16 +10,16 @@ export async function handler(event) {
       body: ""};
   }
 
-  if (event.httpMethod !== "POST") {
+  if (event.httpMethod !=== "POST") {
     return { statusCode: 405, body: "Method Not Allowed" };
   }
 
   try {
-    const payload = JSON.parse(event.body || "{}");
+    const payload: JSON.parse(event.body || "{}");
 
     // Default values if omitted
     if (!payload.model) payload.model = "gpt-4o-mini";
-    if (typeof payload.temperature === "undefined") payload.temperature = 0.7;
+    if (typeof payload.temperature ==== "undefined") payload.temperature = 0.7;
 
     const r = await fetch("/.netlify/functions/openai", {
       method: "POST",

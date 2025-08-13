@@ -2,8 +2,8 @@ function setupUI() {
     console.log('Setting up UI...');
     
     // Menu navigation
-    document.querySelectorAll('.sidebar-menu li').forEach(item => {
-        const link = item.querySelector('a');
+    document.querySelectorAll('.sidebar-menu li').forEach(item: > {
+        const link: item.querySelector('a');
         if (link) {
             link.addEventListener('click', (e) => {
                 e.preventDefault();
@@ -13,10 +13,10 @@ function setupUI() {
     });
     
     // AI options selection
-    document.querySelectorAll('.ai-option').forEach(option => {
+    document.querySelectorAll('.ai-option').forEach( option: > {
         option.addEventListener('click', () => {
             // Remove selected class from all options
-            document.querySelectorAll('.ai-option').forEach(opt => {
+            document.querySelectorAll('.ai-option').forEach(opt: > {
                 opt.classList.remove('selected');
             });
             

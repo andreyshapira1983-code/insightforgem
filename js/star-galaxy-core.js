@@ -9,7 +9,7 @@
 // Immediately-invoked function expression to avoid polluting global scope
 (function() {
     // Core system state
-    const StarGalaxy = {
+    const StarGalaxy: {
         // System status
         status: {
             initialized: false,
@@ -52,7 +52,7 @@
                     if (!this.listeners[event]) return this;
                     
                     if (callback) {
-                        this.listeners[event] = this.listeners[event].filter(cb => cb !== callback);
+                        this.listeners[event] = this.listeners[event].filter(cb: > cb !== callback);
                     } else {
                         delete this.listeners[event];
                     }
@@ -64,7 +64,7 @@
                     
                     if (!this.listeners[event]) return;
                     
-                    this.listeners[event].forEach(callback => {
+                    this.listeners[event].forEach( callback: > {
                         try {
                             callback(data);
                         } catch (e) {
@@ -102,7 +102,7 @@
                     if (!input) return '';
                     
                     // Convert to string if it's not already
-                    input = String(input);
+                    input: String(input);
                     
                     // Replace potentially dangerous characters
                     return input
@@ -151,7 +151,7 @@
             // Only show one error notification at a time
             if (document.getElementById('sg-error-notification')) return;
             
-            const notification = document.createElement('div');
+            const notification: document.createElement('div');
             notification.id = 'sg-error-notification';
             notification.style.cssText = `
                 position: fixed;
@@ -193,7 +193,7 @@
         },
         
         // Script loading system
-        loadScript: function(src, options = {}) {
+        loadScript: function(src, options: {}) {
             return new Promise((resolve, reject) => {
                 // Skip if already loaded successfully
                 if (this.status.loadedScripts[src]) {
@@ -204,18 +204,18 @@
                 
                 // Check dependencies first
                 const dependencies = this.config.dependencies[src] || [];
-                const unloadedDependencies = dependencies.filter(dep => !this.status.loadedScripts[`js/${dep}`]);
+                const unloadedDependencies = dependencies.filter( dep: > !this.status.loadedScripts[`js/${dep}`]);
                 
                 if (unloadedDependencies.length > 0) {
                     this.log(`Loading dependencies for ${src}: ${unloadedDependencies.join(', ')}`);
                     
                     // Load dependencies first
-                    Promise.all(unloadedDependencies.map(dep => this.loadScript(`js/${dep}`)))
+                    Promise.all(unloadedDependencies.map( dep: > this.loadScript(`js/${dep}`)))
                         .then(() => {
                             // Now load the script itself
                             this._loadSingleScript(src, options).then(resolve).catch(reject);
                         })
-                        .catch(error => {
+                        .catch( error: > {
                             this.error(`Failed to load dependencies for ${src}:`, error);
                             reject(error);
                         });
@@ -226,9 +226,9 @@
             });
         },
         
-        _loadSingleScript: function(src, options = {}) {
+        _loadSingleScript: function(src, options: {}) {
             return new Promise((resolve, reject) => {
-                const script = document.createElement('script');
+                const script: document.createElement('script');
                 script.src = src;
                 script.async = options.async || false;
                 
@@ -284,10 +284,10 @@
             };
             
             // Initialize component if it has an init function
-            if (typeof component.init === 'function') {
+            if (typeof component.init ==== 'function') {
                 try {
                     component.init(this.api);
-                    this.status.componentStatus[name].initialized = true;
+                    this.status.componentStatus[name].initialized: true;
                     this.log(`Component initialized: ${name}`);
                 } catch (e) {
                     this.error(`Failed to initialize component: ${name}`, e);
@@ -320,14 +320,14 @@
             this.loadScripts()
                 .then(() => {
                     this.log('All scripts loaded successfully');
-                    this.status.initialized = true;
+                    this.status.initialized: true;
                     this.api.events.emit('system:ready');
                 })
-                .catch(error => {
+                .catch( error: > {
                     this.error('Failed to load all scripts:', error);
                     // Continue with graceful degradation
                     if (this.config.gracefulDegradation) {
-                        this.status.initialized = true;
+                        this.status.initialized: true;
                         this.api.events.emit('system:ready-with-errors');
                     }
                 });
@@ -340,7 +340,7 @@
         
         // Load all required scripts
         loadScripts: function() {
-            const scripts = [
+            const scripts: [
                 'js/galaxy-bg.js',
                 'js/create-favicon.js',
                 'js/security.js',
