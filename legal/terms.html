@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Terms of Service — Star Galaxy</title>
+  <meta name="robots" content="index,follow">
+  <link rel="icon" type="image/x-icon" href="/favicon.ico"/>
+  <!-- Include base and custom styles -->
+  <link rel="stylesheet" href="../css/styles.css"/>
+  <link rel="stylesheet" href="../css/global-fixes.css"/>
+  <link rel="stylesheet" href="../css/custom.css"/>
+</head>
+<body>
+  <!-- Galaxy background canvas -->
+  <canvas id="galaxy-bg" aria-hidden="true"></canvas>
+  <!-- Header with navigation -->
+  <header class="header">
+    <div class="logo"><span class="logo-icon"></span>Star Galaxy</div>
+    <!-- Mobile menu toggle -->
+    <button id="mobile-menu-toggle" class="mobile-menu-toggle" aria-label="Open menu">☰</button>
+    <nav class="nav">
+      <a href="../index.html">Home</a>
+      <a href="../generator.html">Generator</a>
+      <a href="../ideas.html">My Ideas</a>
+      <a href="../trending.html">Trending</a>
+      <a href="../resources.html">Resources</a>
+      <a href="../community.html">Community</a>
+      <a href="terms.html">Legal</a>
+    </nav>
+    <div class="header-actions">
+      <button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme">☾</button>
+      <!-- Global search toggle -->
+      <button id="global-search-button" class="search-toggle" aria-label="Search">🔍</button>
+      <button id="sign-in-button" class="auth-button">Sign In</button>
+      <div id="user-profile" class="user-profile" style="display:none;"></div>
+    </div>
+  </header>
+  <!-- Overlay for mobile navigation -->
+  <div id="nav-overlay" class="nav-overlay"></div>
+  <!-- Main content -->
+  <main class="legal-main">
+    <h1>Terms of Service</h1>
+    <h2>1. Acceptance</h2>
+    <p>By accessing or using Star Galaxy (the “Service”), you agree to these Terms. If you do not agree, do not use the Service.</p>
+    <h2>2. Use of the Service</h2>
+    <p>You may use the Service only for lawful purposes and in accordance with these Terms. You must not misuse the Service or attempt to circumvent rate limits or security.</p>
+    <h2>3. Your Content</h2>
+    <p>You are responsible for the content you submit. Do not upload confidential, personal, or proprietary data you are not authorized to share. You grant us a license to process your content solely to provide the Service.</p>
+    <h2>4. No Warranties</h2>
+    <p>The Service is provided “as is” and “as available” without warranties of any kind.</p>
+    <h2>5. Limitation of Liability</h2>
+    <p>To the maximum extent permitted by law, we are not liable for indirect, incidental, special, consequential, or punitive damages arising out of your use of the Service.</p>
+    <h2>6. Changes</h2>
+    <p>We may modify these Terms at any time by updating this page. Continued use constitutes acceptance of the new Terms.</p>
+  </main>
+  <!-- Footer -->
+  <footer id="site-legal" class="legal-footer-center">
+    <a href="disclaimer.html">Disclaimer</a>
+    <a href="terms.html">Terms</a>
+    <a href="privacy.html">Privacy</a>
+  </footer>
+  <!-- Global search overlay -->
+  <div id="global-search-overlay" class="search-overlay" aria-hidden="true">
+    <div class="search-modal">
+      <input type="text" id="global-search-input" placeholder="Search..." aria-label="Global search" />
+      <div id="global-search-results" class="search-results"></div>
+    </div>
+  </div>
+  <!-- Scripts -->
+  <script src="../js/galaxy-bg.js"></script>
+  <script src="../js/theme.js"></script>
+  <script src="../js/main.js"></script>
+  <script src="../js/navigation.js"></script>
+  <script src="../js/search.js"></script>
+</body>
+</html>
