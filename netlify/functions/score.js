@@ -3,7 +3,12 @@ const { pickKey } = require('./openai-keys');
 const OPENAI_API = 'https://api.openai.com/v1';
 const MODEL_CHAT = 'gpt-4o';
 const MODEL_EMB = 'text-embedding-3-small';
-const ALLOWED_ORIGIN = process.env.CORS_ORIGIN || 'https://insightforgem.netlify.app';
+const ORIGIN = process.env.ALLOWED_ORIGIN || 'https://insightforgem.netlify.app';
+const baseHeaders = {
+  'Access-Control-Allow-Origin': ORIGIN,
+  'Access-Control-Allow-Methods': 'GET,POST,OPTIONS',
+  'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+};
 
 function clamp(n, a, b) {
   return Math.max(a, Math.min(b, n));
@@ -48,7 +53,7 @@ exports.handler = async (event) => {
     if (event.httpMethod !== 'POST')
       return {
         statusCode: 405,
-        headers: { 'Access-Control-Allow-Origin': ALLOWED_ORIGIN },
+        headers: baseHeaders,
         body: 'Use POST',
       };
 
@@ -57,7 +62,7 @@ exports.handler = async (event) => {
     if (!apiKey)
       return {
         statusCode: 500,
-        headers: { 'Access-Control-Allow-Origin': ALLOWED_ORIGIN },
+        headers: baseHeaders,
         body: JSON.stringify({ error: 'No API key in env vars' }),
       };
 
@@ -67,7 +72,7 @@ exports.handler = async (event) => {
     if (!idea)
       return {
         statusCode: 400,
-        headers: { 'Access-Control-Allow-Origin': ALLOWED_ORIGIN },
+        headers: baseHeaders,
         body: JSON.stringify({ error: 'Provide `idea` string' }),
       };
 
@@ -120,10 +125,7 @@ exports.handler = async (event) => {
 
     return {
       statusCode: 200,
-      headers: {
-        'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': ALLOWED_ORIGIN,
-      },
+      headers: { ...baseHeaders, 'Content-Type': 'application/json' },
       body: JSON.stringify({
         score,
         breakdown: { originality, viability: V, impact: I, evidence: E, clarity_risk: C },
@@ -134,10 +136,7 @@ exports.handler = async (event) => {
     const sc = e.status || 500;
     return {
       statusCode: sc,
-      headers: {
-        'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': ALLOWED_ORIGIN,
-      },
+      headers: { ...baseHeaders, 'Content-Type': 'application/json' },
       body: JSON.stringify({ error: e.message || String(e) }),
     };
   }

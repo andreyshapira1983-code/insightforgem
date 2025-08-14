@@ -7,7 +7,12 @@
 // idea of the day.  For this MVP, static values are returned.  You
 // can adjust these numbers or add randomisation if desired.
 
-const ALLOWED_ORIGIN = process.env.CORS_ORIGIN || 'https://insightforgem.netlify.app';
+const ORIGIN = process.env.ALLOWED_ORIGIN || 'https://insightforgem.netlify.app';
+const baseHeaders = {
+  'Access-Control-Allow-Origin': ORIGIN,
+  'Access-Control-Allow-Methods': 'GET,POST,OPTIONS',
+  'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+};
 
 export async function handler() {
   const stats = {
@@ -17,9 +22,7 @@ export async function handler() {
   };
   return {
     statusCode: 200,
-    headers: {
-      'Access-Control-Allow-Origin': ALLOWED_ORIGIN,
-    },
+    headers: { ...baseHeaders, 'Content-Type': 'application/json' },
     body: JSON.stringify(stats),
   };
 }
