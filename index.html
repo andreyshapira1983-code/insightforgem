@@ -1,156 +1,157 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Star Galaxy — Explore Ideas Among the Stars</title>
-  <link rel="icon" type="image/x-icon" href="/favicon.ico"/>
-  <!-- Core styles -->
-  <link rel="stylesheet" href="css/styles.css"/>
-  <link rel="stylesheet" href="css/global-fixes.css"/>
-  <!-- Custom overrides for the new site structure -->
-  <link rel="stylesheet" href="css/custom.css"/>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Star Galaxy — Explore Ideas Among the Stars</title>
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <!-- Core styles -->
+    <link rel="stylesheet" href="css/styles.css" />
+    <link rel="stylesheet" href="css/global-fixes.css" />
+    <!-- Custom overrides for the new site structure -->
+    <link rel="stylesheet" href="css/custom.css" />
+  </head>
+  <body>
+    <!-- Animated galaxy background canvas -->
+    <canvas id="galaxy-bg" aria-hidden="true"></canvas>
 
-  <!-- Security headers via meta tags.  Real deployments should set
-       these headers server-side; these tags provide defence in depth. -->
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self'; frame-ancestors 'none'" />
-  <meta http-equiv="Strict-Transport-Security" content="max-age=63072000; includeSubDomains" />
-  <meta http-equiv="X-Content-Type-Options" content="nosniff" />
-  <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=()" />
-</head>
-<body>
-  <!-- Animated galaxy background canvas -->
-  <canvas id="galaxy-bg" aria-hidden="true"></canvas>
+    <!-- Site header with navigation and auth controls -->
+    <header class="header">
+      <div class="logo"><span class="logo-icon"></span>Star Galaxy</div>
+      <!-- Mobile menu toggle shown on small screens -->
+      <button id="mobile-menu-toggle" class="mobile-menu-toggle" aria-label="Open menu">☰</button>
+      <nav class="nav">
+        <a href="index.html">Home</a>
+        <a href="generator.html">Generator</a>
+        <a href="ideas.html">My Ideas</a>
+        <a href="trending.html">Trending</a>
+        <a href="resources.html">Resources</a>
+        <a href="community.html">Community</a>
+        <a href="legal/terms.html">Legal</a>
+      </nav>
+      <div class="header-actions">
+        <!-- Theme toggle button; icon is set via theme.js -->
+        <button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme">☾</button>
+        <!-- Global search toggle -->
+        <button id="global-search-button" class="search-toggle" aria-label="Search">🔍</button>
+        <!-- Sign in button shown when user not authenticated -->
+        <button id="sign-in-button" class="auth-button">Sign In</button>
+        <!-- User profile placeholder (filled when logged in) -->
+        <div id="user-profile" class="user-profile" style="display: none"></div>
+      </div>
+    </header>
 
-  <!-- Site header with navigation and auth controls -->
-  <header class="header">
-    <div class="logo"><span class="logo-icon"></span>Star Galaxy</div>
-    <!-- Mobile menu toggle shown on small screens -->
-    <button id="mobile-menu-toggle" class="mobile-menu-toggle" aria-label="Open menu">☰</button>
-    <nav class="nav">
-      <a href="index.html">Home</a>
-      <a href="generator.html">Generator</a>
-      <a href="ideas.html">My Ideas</a>
-      <a href="trending.html">Trending</a>
-      <a href="resources.html">Resources</a>
-      <a href="community.html">Community</a>
-      <a href="legal/terms.html">Legal</a>
-    </nav>
-    <div class="header-actions">
-      <!-- Theme toggle button; icon is set via theme.js -->
-      <button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme">☾</button>
-      <!-- Global search toggle -->
-      <button id="global-search-button" class="search-toggle" aria-label="Search">🔍</button>
-      <!-- Sign in button shown when user not authenticated -->
-      <button id="sign-in-button" class="auth-button">Sign In</button>
-      <!-- User profile placeholder (filled when logged in) -->
-      <div id="user-profile" class="user-profile" style="display:none;"></div>
-    </div>
-  </header>
+    <!-- Overlay for dimming page when mobile menu is open -->
+    <div id="nav-overlay" class="nav-overlay"></div>
 
-  <!-- Overlay for dimming page when mobile menu is open -->
-  <div id="nav-overlay" class="nav-overlay"></div>
-
-  <!-- Main home page content -->
-  <main class="home-main">
-    <!-- Home layout with side rails and central content -->
-    <div class="home-layout">
-      <aside class="left-rail">
-        <h2>Stats</h2>
-        <div id="stats-content">
-          <!-- Stats loaded via home.js will appear here -->
-          <p>Loading…</p>
-        </div>
-      </aside>
-      <section class="home-content">
-        <h1>Welcome to Star Galaxy</h1>
-        <p>Discover and refine business ideas with AI and a vibrant community of innovators.</p>
-        <div class="home-buttons">
-          <a href="generator.html" class="cosmic-button"><span>Try the Generator</span></a>
-          <a href="ideas.html" class="cosmic-button"><span>My Ideas</span></a>
-        </div>
-        <section class="market-trends">
-          <h2>Market Trends</h2>
-          <div class="trend-list">
-            <div class="trend-item">
-              <h3>AI &amp; Machine Learning</h3>
-              <p>Growing at 38% annually with applications in healthcare, finance, and education.</p>
-            </div>
-            <div class="trend-item">
-              <h3>Sustainable Products</h3>
-              <p>Eco‑friendly solutions seeing strong growth as consumer awareness increases.</p>
-            </div>
-            <div class="trend-item">
-              <h3>Remote Work Tools</h3>
-              <p>Collaboration platforms continue steady adoption after the pandemic.</p>
-            </div>
+    <!-- Main home page content -->
+    <main class="home-main">
+      <!-- Home layout with side rails and central content -->
+      <div class="home-layout">
+        <aside class="left-rail">
+          <h2>Stats</h2>
+          <div id="stats-content">
+            <!-- Stats loaded via home.js will appear here -->
+            <p>Loading…</p>
           </div>
+        </aside>
+        <section class="home-content">
+          <h1>Welcome to Star Galaxy</h1>
+          <p>Discover and refine business ideas with AI and a vibrant community of innovators.</p>
+          <div class="home-buttons">
+            <a href="generator.html" class="cosmic-button"><span>Try the Generator</span></a>
+            <a href="ideas.html" class="cosmic-button"><span>My Ideas</span></a>
+          </div>
+          <section class="market-trends">
+            <h2>Market Trends</h2>
+            <div class="trend-list">
+              <div class="trend-item">
+                <h3>AI &amp; Machine Learning</h3>
+                <p>
+                  Growing at 38% annually with applications in healthcare, finance, and education.
+                </p>
+              </div>
+              <div class="trend-item">
+                <h3>Sustainable Products</h3>
+                <p>Eco‑friendly solutions seeing strong growth as consumer awareness increases.</p>
+              </div>
+              <div class="trend-item">
+                <h3>Remote Work Tools</h3>
+                <p>Collaboration platforms continue steady adoption after the pandemic.</p>
+              </div>
+            </div>
+          </section>
         </section>
-      </section>
-      <aside class="right-rail">
-        <h2>Latest News</h2>
-        <ul id="news-list" class="news-list">
-          <li>Loading…</li>
-        </ul>
-      </aside>
-    </div>
-  </main>
-
-  <!-- Footer with legal links -->
-  <footer id="site-legal" class="legal-footer-center">
-    <a href="legal/disclaimer.html">Disclaimer</a>
-    <a href="legal/terms.html">Terms</a>
-    <a href="legal/privacy.html">Privacy</a>
-  </footer>
-
-  <!-- Global search overlay -->
-  <div id="global-search-overlay" class="search-overlay" aria-hidden="true">
-    <div class="search-modal">
-      <input type="text" id="global-search-input" placeholder="Search..." aria-label="Global search" />
-      <div id="global-search-results" class="search-results"></div>
-    </div>
-  </div>
-
-  <!-- Authentication modal (hidden until triggered) -->
-  <div class="auth-modal" id="auth-modal">
-    <div class="auth-modal-content">
-      <button class="auth-modal-close">×</button>
-      <h2 class="auth-modal-title">Sign In</h2>
-      <p class="auth-modal-subtitle">Choose how you'd like to sign in</p>
-      <div class="social-auth-buttons">
-        <button class="social-auth-button" data-provider="google">
-          <span>Google</span>
-        </button>
-        <button class="social-auth-button" data-provider="facebook">
-          <span>Facebook</span>
-        </button>
-        <button class="social-auth-button" data-provider="github">
-          <span>GitHub</span>
-        </button>
-        <button class="social-auth-button" data-provider="apple">
-          <span>Apple</span>
-        </button>
-        <button class="social-auth-button" data-provider="email">
-          <span>Email</span>
-        </button>
+        <aside class="right-rail">
+          <h2>Latest News</h2>
+          <ul id="news-list" class="news-list">
+            <li>Loading…</li>
+          </ul>
+        </aside>
       </div>
-      <div class="auth-footer">
-        By signing in, you agree to our <a href="legal/terms.html" target="_blank">Terms</a> and <a href="legal/privacy.html" target="_blank">Privacy</a>.
+    </main>
+
+    <!-- Footer with legal links -->
+    <footer id="site-legal" class="legal-footer-center">
+      <a href="legal/disclaimer.html">Disclaimer</a>
+      <a href="legal/terms.html">Terms</a>
+      <a href="legal/privacy.html">Privacy</a>
+    </footer>
+
+    <!-- Global search overlay -->
+    <div id="global-search-overlay" class="search-overlay" aria-hidden="true">
+      <div class="search-modal">
+        <input
+          type="text"
+          id="global-search-input"
+          placeholder="Search..."
+          aria-label="Global search"
+        />
+        <div id="global-search-results" class="search-results"></div>
       </div>
     </div>
-  </div>
 
-  <!-- Scripts -->
-  <script src="js/galaxy-bg.js"></script>
-  <!-- Theme toggle script (must be loaded before main.js) -->
-  <script src="js/theme.js"></script>
-  <!-- Global configuration for API keys and endpoints -->
-  <script src="js/config.js"></script>
-  <!-- Internationalisation -->
-  <script src="js/main.js"></script>
-  <!-- Home page dynamic loaders -->
-  <script src="js/home.js"></script>
-  <script src="js/navigation.js"></script>
-  <script src="js/search.js"></script>
-</body>
+    <!-- Authentication modal (hidden until triggered) -->
+    <div class="auth-modal" id="auth-modal">
+      <div class="auth-modal-content">
+        <button class="auth-modal-close">×</button>
+        <h2 class="auth-modal-title">Sign In</h2>
+        <p class="auth-modal-subtitle">Choose how you'd like to sign in</p>
+        <div class="social-auth-buttons">
+          <button class="social-auth-button" data-provider="google">
+            <span>Google</span>
+          </button>
+          <button class="social-auth-button" data-provider="facebook">
+            <span>Facebook</span>
+          </button>
+          <button class="social-auth-button" data-provider="github">
+            <span>GitHub</span>
+          </button>
+          <button class="social-auth-button" data-provider="apple">
+            <span>Apple</span>
+          </button>
+          <button class="social-auth-button" data-provider="email">
+            <span>Email</span>
+          </button>
+        </div>
+        <div class="auth-footer">
+          By signing in, you agree to our <a href="legal/terms.html" target="_blank">Terms</a> and
+          <a href="legal/privacy.html" target="_blank">Privacy</a>.
+        </div>
+      </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/galaxy-bg.js"></script>
+    <!-- Theme toggle script (must be loaded before main.js) -->
+    <script src="js/theme.js"></script>
+    <!-- Global configuration for API keys and endpoints -->
+    <script src="js/config.js"></script>
+    <!-- Internationalisation -->
+    <script src="js/main.js"></script>
+    <!-- Home page dynamic loaders -->
+    <script src="js/home.js"></script>
+    <script src="js/navigation.js"></script>
+    <script src="js/search.js"></script>
+  </body>
 </html>

@@ -1,34 +1,94 @@
 <!doctype html>
 <html class="notranslate" lang="en" translate="no">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Sign in — Star Galaxy</title>
-  <style>
-    body{margin:0;min-height:100vh;display:grid;place-items:center;background:radial-gradient(80% 60% at 50% 0%, #1e1f3a, #0f1224)}
-    main.card{width:min(560px, 92vw);background:#11162a;border-radius:20px;padding:28px;box-shadow:0 10px 30px rgba(0,0,0,.45);color:#e9edf6;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial}
-    h1{margin:0 0 8px;font-size:24px}
-    p.hint{margin:0 0 20px;color:#aab2c8}
-    .row{display:flex;gap:12px;flex-wrap:wrap}
-    .btn{flex:1 1 240px;display:flex;align-items:center;gap:10px; justify-content:center;padding:12px 14px;border-radius:12px;background:#1f2742;color:#fff;text-decoration:none;font-weight:700}
-    .btn:hover{filter:brightness(1.1)}
-    .back{display:inline-block;margin-top:18px;color:#9fb4ff;text-decoration:none}
-  </style>
-</head>
-<body>
-  <a class="visually-hidden" href="#main" style="position:absolute;left:-10000px;top:auto;width:1px;height:1px;overflow:hidden;">Skip to content</a>
-  <main id="main" class="card" role="main" aria-labelledby="page-title">
-    <h1 id="page-title">Sign in</h1>
-    <p class="hint">Choose a provider or create a local account (stub page for now).</p>
-    <div class="row" role="group" aria-label="Sign in providers">
-      <a class="btn" href="#" aria-label="Sign in with Google">Google</a>
-      <a class="btn" href="#" aria-label="Sign in with Facebook">Facebook</a>
-      <a class="btn" href="#" aria-label="Sign in with GitHub">GitHub</a>
-      <a class="btn" href="#" aria-label="Sign in with Apple">Apple</a>
-    </div>
-    <nav aria-label="Back">
-      <a class="back" href="index.html">← Back to Star Galaxy</a>
-    </nav>
-  </main>
-</body>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Sign in — Star Galaxy</title>
+    <style>
+      body {
+        margin: 0;
+        min-height: 100vh;
+        display: grid;
+        place-items: center;
+        background: radial-gradient(80% 60% at 50% 0%, #1e1f3a, #0f1224);
+      }
+      main.card {
+        width: min(560px, 92vw);
+        background: #11162a;
+        border-radius: 20px;
+        padding: 28px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
+        color: #e9edf6;
+        font-family:
+          system-ui,
+          -apple-system,
+          Segoe UI,
+          Roboto,
+          Arial;
+      }
+      h1 {
+        margin: 0 0 8px;
+        font-size: 24px;
+      }
+      p.hint {
+        margin: 0 0 20px;
+        color: #aab2c8;
+      }
+      .row {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+      }
+      .btn {
+        flex: 1 1 240px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        justify-content: center;
+        padding: 12px 14px;
+        border-radius: 12px;
+        background: #1f2742;
+        color: #fff;
+        text-decoration: none;
+        font-weight: 700;
+      }
+      .btn:hover {
+        filter: brightness(1.1);
+      }
+      .back {
+        display: inline-block;
+        margin-top: 18px;
+        color: #9fb4ff;
+        text-decoration: none;
+      }
+    </style>
+  </head>
+  <body>
+    <a
+      class="visually-hidden"
+      href="#main"
+      style="
+        position: absolute;
+        left: -10000px;
+        top: auto;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+      "
+      >Skip to content</a
+    >
+    <main id="main" class="card" role="main" aria-labelledby="page-title">
+      <h1 id="page-title">Sign in</h1>
+      <p class="hint">Choose a provider or create a local account (stub page for now).</p>
+      <div class="row" role="group" aria-label="Sign in providers">
+        <a class="btn" href="#" aria-label="Sign in with Google">Google</a>
+        <a class="btn" href="#" aria-label="Sign in with Facebook">Facebook</a>
+        <a class="btn" href="#" aria-label="Sign in with GitHub">GitHub</a>
+        <a class="btn" href="#" aria-label="Sign in with Apple">Apple</a>
+      </div>
+      <nav aria-label="Back">
+        <a class="back" href="index.html">← Back to Star Galaxy</a>
+      </nav>
+    </main>
+  </body>
 </html>

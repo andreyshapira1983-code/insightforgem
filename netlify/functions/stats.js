@@ -7,17 +7,22 @@
 // idea of the day.  For this MVP, static values are returned.  You
 // can adjust these numbers or add randomisation if desired.
 
+const ORIGIN = process.env.ALLOWED_ORIGIN || 'https://insightforgem.netlify.app';
+const baseHeaders = {
+  'Access-Control-Allow-Origin': ORIGIN,
+  'Access-Control-Allow-Methods': 'GET,POST,OPTIONS',
+  'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+};
+
 export async function handler() {
   const stats = {
     ideas_total: 42,
     users_online: 7,
-    idea_of_the_day: 'Solar Powered Delivery Drones'
+    idea_of_the_day: 'Solar Powered Delivery Drones',
   };
   return {
     statusCode: 200,
-    headers: {
-      'Access-Control-Allow-Origin': '*'
-    },
-    body: JSON.stringify(stats)
+    headers: { ...baseHeaders, 'Content-Type': 'application/json' },
+    body: JSON.stringify(stats),
   };
 }

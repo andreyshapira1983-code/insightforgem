@@ -1,49 +1,87 @@
 // netlify/functions/score.js
+const { pickKey } = require('./openai-keys');
 const OPENAI_API = 'https://api.openai.com/v1';
 const MODEL_CHAT = 'gpt-4o';
-const MODEL_EMB  = 'text-embedding-3-small';
+const MODEL_EMB = 'text-embedding-3-small';
+const ORIGIN = process.env.ALLOWED_ORIGIN || 'https://insightforgem.netlify.app';
+const baseHeaders = {
+  'Access-Control-Allow-Origin': ORIGIN,
+  'Access-Control-Allow-Methods': 'GET,POST,OPTIONS',
+  'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+};
 
-function clamp(n,a,b){ return Math.max(a, Math.min(b, n)); }
-function cosine(a,b){ let dot=0,na=0,nb=0; for(let i=0;i<a.length;i++){const x=a[i],y=b[i]; dot+=x*y; na+=x*x; nb+=y*y;} return dot/(Math.sqrt(na)*Math.sqrt(nb)); }
+function clamp(n, a, b) {
+  return Math.max(a, Math.min(b, n));
+}
+function cosine(a, b) {
+  let dot = 0,
+    na = 0,
+    nb = 0;
+  for (let i = 0; i < a.length; i++) {
+    const x = a[i],
+      y = b[i];
+    dot += x * y;
+    na += x * x;
+    nb += y * y;
+  }
+  return dot / (Math.sqrt(na) * Math.sqrt(nb));
+}
 
-async function openai(path, body, apiKey){
+async function openai(path, body, apiKey) {
   const r = await fetch(`${OPENAI_API}/${path}`, {
-    method:'POST',
-    headers:{ 'Authorization':`Bearer ${apiKey}`, 'Content-Type':'application/json' },
-    body: JSON.stringify(body)
+    method: 'POST',
+    headers: { Authorization: `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify(body),
   });
-  const txt = await r.text(); let data=null; try{ data=JSON.parse(txt);}catch{}
-  if(!r.ok){ const err=new Error(data?.error?.message || txt || `OpenAI ${r.status}`); err.status=r.status; throw err; }
+  const txt = await r.text();
+  let data = null;
+  try {
+    data = JSON.parse(txt);
+  } catch (e) {
+    /* ignore */
+  }
+  if (!r.ok) {
+    const err = new Error(data?.error?.message || txt || `OpenAI ${r.status}`);
+    err.status = r.status;
+    throw err;
+  }
   return data || {};
 }
 
 exports.handler = async (event) => {
   try {
-    if (event.httpMethod !== 'POST') return { statusCode:405, body:'Use POST' };
-
-    // Берём любой из твоих ключей
-    const apiKey =
-      process.env.OPENAI_KEY_EVAL   ||
-      process.env.OPENAI_API_KEY    ||
-      process.env.OPEN_API_KEY      ||
-      process.env.OPENAI_KEY_GEN    ||
-      process.env.OPENAI_KEY_DESIGN ||
-      process.env.OPENAI_KEY_RESEARCH ||
-      process.env.OPENAI_KEY_GUARD;
-
-    if (!apiKey) return { statusCode:500, body: JSON.stringify({ error:'No API key in env vars' }) };
+    if (event.httpMethod !== 'POST')
+      return {
+        statusCode: 405,
+        headers: baseHeaders,
+        body: 'Use POST',
+      };
 
     const body = JSON.parse(event.body || '{}');
+    const apiKey = pickKey({ role: body.role });
+    if (!apiKey)
+      return {
+        statusCode: 500,
+        headers: baseHeaders,
+        body: JSON.stringify({ error: 'No API key in env vars' }),
+      };
+
     const idea = (body.idea || '').trim();
     const brief = body.brief || {};
-    const historyTexts = Array.isArray(body.historyTexts) ? body.historyTexts.slice(0,20) : [];
-    if (!idea) return { statusCode:400, body: JSON.stringify({ error:'Provide `idea` string' }) };
+    const historyTexts = Array.isArray(body.historyTexts) ? body.historyTexts.slice(0, 20) : [];
+    if (!idea)
+      return {
+        statusCode: 400,
+        headers: baseHeaders,
+        body: JSON.stringify({ error: 'Provide `idea` string' }),
+      };
 
     // 1) оригинальность
     const inputs = [idea, ...historyTexts];
     const emb = await openai('embeddings', { model: MODEL_EMB, input: inputs }, apiKey);
     const ideaEmb = emb.data[0].embedding;
-    let maxSim = 0; for (const d of emb.data.slice(1)) maxSim = Math.max(maxSim, cosine(ideaEmb, d.embedding));
+    let maxSim = 0;
+    for (const d of emb.data.slice(1)) maxSim = Math.max(maxSim, cosine(ideaEmb, d.embedding));
     const originality = Math.round((1 - maxSim) * 100);
 
     // 2) остальные саб-оценки
@@ -51,30 +89,55 @@ exports.handler = async (event) => {
       'You are a strict product evaluator.',
       'Return ONLY valid JSON with keys: viability, impact, evidence, clarity_risk (0..100 each),',
       'verdict (<=140 chars), recommendations (3-6 items),',
-      'risks (2-5), next_steps (3-6), patentability ("yes"|"no"|"unclear").'
+      'risks (2-5), next_steps (3-6), patentability ("yes"|"no"|"unclear").',
     ].join(' ');
-    const chat = await openai('chat/completions', {
-      model: MODEL_CHAT, temperature: 0,
-      messages: [
-        { role:'system', content: system },
-        { role:'user', content: JSON.stringify({ idea, brief, rules:['JSON only','Be concrete'] }) }
-      ]
-    }, apiKey);
+    const chat = await openai(
+      'chat/completions',
+      {
+        model: MODEL_CHAT,
+        temperature: 0,
+        messages: [
+          { role: 'system', content: system },
+          {
+            role: 'user',
+            content: JSON.stringify({ idea, brief, rules: ['JSON only', 'Be concrete'] }),
+          },
+        ],
+      },
+      apiKey
+    );
 
     let txt = chat.choices?.[0]?.message?.content || '{}';
-    const m = txt.match(/\{[\s\S]*\}$/); if (m) txt = m[0];
-    let a={}; try{ a=JSON.parse(txt); }catch{ a={}; }
+    const m = txt.match(/\{[\s\S]*\}$/);
+    if (m) txt = m[0];
+    let a = {};
+    try {
+      a = JSON.parse(txt);
+    } catch {
+      a = {};
+    }
 
-    const V = clamp(parseInt(a.viability ?? 50),0,100);
-    const I = clamp(parseInt(a.impact ?? 50),0,100);
-    const E = clamp(parseInt(a.evidence ?? 50),0,100);
-    const C = clamp(parseInt(a.clarity_risk ?? 50),0,100);
-    const score = Math.round(0.30*originality + 0.25*V + 0.15*I + 0.15*E + 0.15*C);
+    const V = clamp(parseInt(a.viability ?? 50), 0, 100);
+    const I = clamp(parseInt(a.impact ?? 50), 0, 100);
+    const E = clamp(parseInt(a.evidence ?? 50), 0, 100);
+    const C = clamp(parseInt(a.clarity_risk ?? 50), 0, 100);
+    const score = Math.round(0.3 * originality + 0.25 * V + 0.15 * I + 0.15 * E + 0.15 * C);
 
-    return { statusCode:200, headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({ score, breakdown:{ originality, viability:V, impact:I, evidence:E, clarity_risk:C }, analysis:a }) };
+    return {
+      statusCode: 200,
+      headers: { ...baseHeaders, 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        score,
+        breakdown: { originality, viability: V, impact: I, evidence: E, clarity_risk: C },
+        analysis: a,
+      }),
+    };
   } catch (e) {
     const sc = e.status || 500;
-    return { statusCode:sc, headers:{'Content-Type':'application/json'}, body: JSON.stringify({ error: e.message || String(e) }) };
+    return {
+      statusCode: sc,
+      headers: { ...baseHeaders, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ error: e.message || String(e) }),
+    };
   }
 };

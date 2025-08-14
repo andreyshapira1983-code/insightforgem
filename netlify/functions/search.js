@@ -10,25 +10,25 @@
 // forwards the request to the configured search provider, attaches
 // the API key and returns results in a normalized format.
 
+const ORIGIN = process.env.ALLOWED_ORIGIN || 'https://insightforgem.netlify.app';
+const baseHeaders = {
+  'Access-Control-Allow-Origin': ORIGIN,
+  'Access-Control-Allow-Methods': 'GET,POST,OPTIONS',
+  'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+};
+
 export async function handler(event) {
   // Allow preflight OPTIONS requests for CORS
   if (event.httpMethod === 'OPTIONS') {
-    return {
-      statusCode: 204,
-      headers: {
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Methods': 'GET,OPTIONS',
-        'Access-Control-Allow-Headers': 'Content-Type'
-      },
-      body: ''
-    };
+    return { statusCode: 204, headers: baseHeaders, body: '' };
   }
 
   // Only support GET requests
   if (event.httpMethod !== 'GET') {
     return {
       statusCode: 405,
-      body: JSON.stringify({ error: 'Method not allowed' })
+      headers: { ...baseHeaders, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ error: 'Method not allowed' }),
     };
   }
 
@@ -37,8 +37,8 @@ export async function handler(event) {
   if (!query) {
     return {
       statusCode: 400,
-      headers: { 'Access-Control-Allow-Origin': '*' },
-      body: JSON.stringify({ error: 'Missing query parameter' })
+      headers: { ...baseHeaders, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ error: 'Missing query parameter' }),
     };
   }
 
@@ -50,8 +50,8 @@ export async function handler(event) {
   if (!endpoint || !apiKey) {
     return {
       statusCode: 200,
-      headers: { 'Access-Control-Allow-Origin': '*' },
-      body: JSON.stringify({ results: [] })
+      headers: { ...baseHeaders, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ results: [] }),
     };
   }
 
@@ -74,22 +74,22 @@ export async function handler(event) {
     const data = await response.json();
     // Normalize output to { results: [ { title, description, link } ] }
     const results = Array.isArray(data.results)
-      ? data.results.map(item => ({
+      ? data.results.map((item) => ({
           title: item.title || '',
           description: item.description || '',
-          link: item.link || '#'
+          link: item.link || '#',
         }))
       : [];
     return {
       statusCode: 200,
-      headers: { 'Access-Control-Allow-Origin': '*' },
-      body: JSON.stringify({ results })
+      headers: { ...baseHeaders, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ results }),
     };
   } catch (err) {
     return {
       statusCode: 500,
-      headers: { 'Access-Control-Allow-Origin': '*' },
-      body: JSON.stringify({ error: err.message })
+      headers: { ...baseHeaders, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ error: err.message }),
     };
   }
 }

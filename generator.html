@@ -1,108 +1,110 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Idea Generator — Star Galaxy</title>
-  <link rel="icon" type="image/x-icon" href="/favicon.ico"/>
-  <link rel="stylesheet" href="css/styles.css"/>
-  <link rel="stylesheet" href="css/global-fixes.css"/>
-  <link rel="stylesheet" href="css/custom.css"/>
-
-  <!-- Security headers via meta tags.  Real deployments should set
-       these headers server-side; these tags provide defence in depth. -->
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self'; frame-ancestors 'none'" />
-  <meta http-equiv="Strict-Transport-Security" content="max-age=63072000; includeSubDomains" />
-  <meta http-equiv="X-Content-Type-Options" content="nosniff" />
-  <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=()" />
-</head>
-<body>
-  <canvas id="galaxy-bg" aria-hidden="true"></canvas>
-  <header class="header">
-    <div class="logo"><span class="logo-icon"></span>Star Galaxy</div>
-    <!-- Mobile menu toggle shown on small screens -->
-    <button id="mobile-menu-toggle" class="mobile-menu-toggle" aria-label="Open menu">☰</button>
-    <nav class="nav">
-      <a href="index.html">Home</a>
-      <a href="generator.html">Generator</a>
-      <a href="ideas.html">My Ideas</a>
-      <a href="trending.html">Trending</a>
-      <a href="resources.html">Resources</a>
-      <a href="community.html">Community</a>
-      <a href="legal/terms.html">Legal</a>
-    </nav>
-    <div class="header-actions">
-      <!-- Theme toggle button; icon is set via theme.js -->
-      <button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme">☾</button>
-      <!-- Global search toggle -->
-      <button id="global-search-button" class="search-toggle" aria-label="Search">🔍</button>
-      <button id="sign-in-button" class="auth-button">Sign In</button>
-      <div id="user-profile" class="user-profile" style="display:none;"></div>
-    </div>
-  </header>
-  <!-- Overlay for dimming page when mobile menu is open -->
-  <div id="nav-overlay" class="nav-overlay"></div>
-  <main class="generator-main">
-    <h1>AI Idea Generator</h1>
-    <!-- Introductory text describing how the generator works -->
-    <p class="generator-intro">
-      Enter your business idea below.  Our AI will analyze its viability on a scale of
-      0–100 and provide a detailed verdict, recommendations, risk assessment,
-      next steps and patentability advice.  A score of 100 % indicates a fully
-      viable idea, while 0 % suggests it is not viable.  For example, try
-      “An app that connects local farmers with urban consumers” to see how
-      it performs.
-    </p>
-    <div class="generator-card">
-      <label for="idea-input">Describe your business idea:</label>
-      <textarea id="idea-input" placeholder="Enter your idea here..."></textarea>
-      <button id="generate-button" class="cosmic-button"><span>Generate</span></button>
-      <!-- Progress and score -->
-      <div id="progress-container" style="display:none;">
-        <div class="progress-circle"><span id="score-text">0%</span></div>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Idea Generator — Star Galaxy</title>
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="stylesheet" href="css/styles.css" />
+    <link rel="stylesheet" href="css/global-fixes.css" />
+    <link rel="stylesheet" href="css/custom.css" />
+  </head>
+  <body>
+    <canvas id="galaxy-bg" aria-hidden="true"></canvas>
+    <header class="header">
+      <div class="logo"><span class="logo-icon"></span>Star Galaxy</div>
+      <!-- Mobile menu toggle shown on small screens -->
+      <button id="mobile-menu-toggle" class="mobile-menu-toggle" aria-label="Open menu">☰</button>
+      <nav class="nav">
+        <a href="index.html">Home</a>
+        <a href="generator.html">Generator</a>
+        <a href="ideas.html">My Ideas</a>
+        <a href="trending.html">Trending</a>
+        <a href="resources.html">Resources</a>
+        <a href="community.html">Community</a>
+        <a href="legal/terms.html">Legal</a>
+      </nav>
+      <div class="header-actions">
+        <!-- Theme toggle button; icon is set via theme.js -->
+        <button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme">☾</button>
+        <!-- Global search toggle -->
+        <button id="global-search-button" class="search-toggle" aria-label="Search">🔍</button>
+        <button id="sign-in-button" class="auth-button">Sign In</button>
+        <div id="user-profile" class="user-profile" style="display: none"></div>
       </div>
-      <!-- Analysis results will be inserted here by generator.js -->
-      <div id="analysis-results" class="analysis-results" style="display:none;"></div>
-      <!-- Save button sits outside progress and appears after analysis -->
-      <button id="save-button" class="cosmic-button primary" style="display:none;"><span>Save to My Ideas</span></button>
-    </div>
-  </main>
-  <footer id="site-legal" class="legal-footer-center">
-    <a href="legal/disclaimer.html">Disclaimer</a>
-    <a href="legal/terms.html">Terms</a>
-    <a href="legal/privacy.html">Privacy</a>
-  </footer>
-  <!-- Global search overlay -->
-  <div id="global-search-overlay" class="search-overlay" aria-hidden="true">
-    <div class="search-modal">
-      <input type="text" id="global-search-input" placeholder="Search..." aria-label="Global search" />
-      <div id="global-search-results" class="search-results"></div>
-    </div>
-  </div>
-  <!-- Auth modal duplicated on each page -->
-  <div class="auth-modal" id="auth-modal">
-    <div class="auth-modal-content">
-      <button class="auth-modal-close">×</button>
-      <h2 class="auth-modal-title">Sign In</h2>
-      <p class="auth-modal-subtitle">Choose how you'd like to sign in</p>
-      <div class="social-auth-buttons">
-        <button class="social-auth-button" data-provider="google"><span>Google</span></button>
-        <button class="social-auth-button" data-provider="facebook"><span>Facebook</span></button>
-        <button class="social-auth-button" data-provider="github"><span>GitHub</span></button>
-        <button class="social-auth-button" data-provider="apple"><span>Apple</span></button>
-        <button class="social-auth-button" data-provider="email"><span>Email</span></button>
+    </header>
+    <!-- Overlay for dimming page when mobile menu is open -->
+    <div id="nav-overlay" class="nav-overlay"></div>
+    <main class="generator-main">
+      <h1>AI Idea Generator</h1>
+      <!-- Introductory text describing how the generator works -->
+      <p class="generator-intro">
+        Enter your business idea below. Our AI will analyze its viability on a scale of 0–100 and
+        provide a detailed verdict, recommendations, risk assessment, next steps and patentability
+        advice. A score of 100 % indicates a fully viable idea, while 0 % suggests it is not viable.
+        For example, try “An app that connects local farmers with urban consumers” to see how it
+        performs.
+      </p>
+      <div class="generator-card">
+        <label for="idea-input">Describe your business idea:</label>
+        <textarea id="idea-input" placeholder="Enter your idea here..."></textarea>
+        <button id="generate-button" class="cosmic-button"><span>Generate</span></button>
+        <!-- Progress and score -->
+        <div id="progress-container" style="display: none">
+          <div class="progress-circle"><span id="score-text">0%</span></div>
+        </div>
+        <!-- Analysis results will be inserted here by generator.js -->
+        <div id="analysis-results" class="analysis-results" style="display: none"></div>
+        <!-- Save button sits outside progress and appears after analysis -->
+        <button id="save-button" class="cosmic-button primary" style="display: none">
+          <span>Save to My Ideas</span>
+        </button>
       </div>
-      <div class="auth-footer">By signing in, you agree to our <a href="legal/terms.html" target="_blank">Terms</a> and <a href="legal/privacy.html" target="_blank">Privacy</a>.</div>
+    </main>
+    <footer id="site-legal" class="legal-footer-center">
+      <a href="legal/disclaimer.html">Disclaimer</a>
+      <a href="legal/terms.html">Terms</a>
+      <a href="legal/privacy.html">Privacy</a>
+    </footer>
+    <!-- Global search overlay -->
+    <div id="global-search-overlay" class="search-overlay" aria-hidden="true">
+      <div class="search-modal">
+        <input
+          type="text"
+          id="global-search-input"
+          placeholder="Search..."
+          aria-label="Global search"
+        />
+        <div id="global-search-results" class="search-results"></div>
+      </div>
     </div>
-  </div>
-  <script src="js/galaxy-bg.js"></script>
-  <script src="js/theme.js"></script>
-  <!-- Global configuration for API keys and endpoints -->
-  <script src="js/config.js"></script>
-  <!-- Internationalisation -->
-  <script src="js/main.js"></script>
-  <script src="js/generator.js"></script>
-  <script src="js/navigation.js"></script>
-  <script src="js/search.js"></script>
-</body>
+    <!-- Auth modal duplicated on each page -->
+    <div class="auth-modal" id="auth-modal">
+      <div class="auth-modal-content">
+        <button class="auth-modal-close">×</button>
+        <h2 class="auth-modal-title">Sign In</h2>
+        <p class="auth-modal-subtitle">Choose how you'd like to sign in</p>
+        <div class="social-auth-buttons">
+          <button class="social-auth-button" data-provider="google"><span>Google</span></button>
+          <button class="social-auth-button" data-provider="facebook"><span>Facebook</span></button>
+          <button class="social-auth-button" data-provider="github"><span>GitHub</span></button>
+          <button class="social-auth-button" data-provider="apple"><span>Apple</span></button>
+          <button class="social-auth-button" data-provider="email"><span>Email</span></button>
+        </div>
+        <div class="auth-footer">
+          By signing in, you agree to our <a href="legal/terms.html" target="_blank">Terms</a> and
+          <a href="legal/privacy.html" target="_blank">Privacy</a>.
+        </div>
+      </div>
+    </div>
+    <script src="js/galaxy-bg.js"></script>
+    <script src="js/theme.js"></script>
+    <!-- Global configuration for API keys and endpoints -->
+    <script src="js/config.js"></script>
+    <!-- Internationalisation -->
+    <script src="js/main.js"></script>
+    <script src="js/generator.js"></script>
+    <script src="js/navigation.js"></script>
+    <script src="js/search.js"></script>
+  </body>
 </html>

@@ -2,13 +2,9 @@
   directory = "netlify/functions"
 
 [[headers]]
-  # Apply security headers to all routes.  These headers are set at
-  # the CDN edge to provide defence in depth against XSS, clickjacking
-  # and other attacks.  See MDN and OWASP guidance for details.
   for = "/*"
   [headers.values]
-    Content-Security-Policy = "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self'; frame-ancestors 'none'"
-    Strict-Transport-Security = "max-age=63072000; includeSubDomains"
+    Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://cdn-icons-png.flaticon.com; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'"
+    Strict-Transport-Security = "max-age=63072000; includeSubDomains; preload"
     X-Content-Type-Options = "nosniff"
-    Permissions-Policy = "camera=(), microphone=(), geolocation=()"
-    Referrer-Policy = "no-referrer"
+    Referrer-Policy = "strict-origin-when-cross-origin"
