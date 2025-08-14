@@ -10,13 +10,15 @@
 // forwards the request to the configured search provider, attaches
 // the API key and returns results in a normalized format.
 
+const ALLOWED_ORIGIN = process.env.CORS_ORIGIN || 'https://insightforgem.netlify.app';
+
 export async function handler(event) {
   // Allow preflight OPTIONS requests for CORS
   if (event.httpMethod === 'OPTIONS') {
     return {
       statusCode: 204,
       headers: {
-        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Origin': ALLOWED_ORIGIN,
         'Access-Control-Allow-Methods': 'GET,OPTIONS',
         'Access-Control-Allow-Headers': 'Content-Type'
       },
@@ -37,7 +39,7 @@ export async function handler(event) {
   if (!query) {
     return {
       statusCode: 400,
-      headers: { 'Access-Control-Allow-Origin': '*' },
+      headers: { 'Access-Control-Allow-Origin': ALLOWED_ORIGIN },
       body: JSON.stringify({ error: 'Missing query parameter' })
     };
   }
@@ -50,7 +52,7 @@ export async function handler(event) {
   if (!endpoint || !apiKey) {
     return {
       statusCode: 200,
-      headers: { 'Access-Control-Allow-Origin': '*' },
+      headers: { 'Access-Control-Allow-Origin': ALLOWED_ORIGIN },
       body: JSON.stringify({ results: [] })
     };
   }
@@ -82,13 +84,13 @@ export async function handler(event) {
       : [];
     return {
       statusCode: 200,
-      headers: { 'Access-Control-Allow-Origin': '*' },
+      headers: { 'Access-Control-Allow-Origin': ALLOWED_ORIGIN },
       body: JSON.stringify({ results })
     };
   } catch (err) {
     return {
       statusCode: 500,
-      headers: { 'Access-Control-Allow-Origin': '*' },
+      headers: { 'Access-Control-Allow-Origin': ALLOWED_ORIGIN },
       body: JSON.stringify({ error: err.message })
     };
   }

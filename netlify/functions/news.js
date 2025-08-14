@@ -10,6 +10,8 @@
 // expected output: an array of objects with `source`, `title`,
 // `link` and `date` properties.
 
+const ALLOWED_ORIGIN = process.env.CORS_ORIGIN || 'https://insightforgem.netlify.app';
+
 export async function handler() {
   // Example static news items.  Replace or extend with dynamic
   // fetching logic in a real deployment.
@@ -48,7 +50,7 @@ export async function handler() {
   return {
     statusCode: 200,
     headers: {
-      'Access-Control-Allow-Origin': '*'
+      'Access-Control-Allow-Origin': ALLOWED_ORIGIN
     },
     body: JSON.stringify(items)
   };

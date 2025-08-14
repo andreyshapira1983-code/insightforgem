@@ -7,6 +7,8 @@
 // idea of the day.  For this MVP, static values are returned.  You
 // can adjust these numbers or add randomisation if desired.
 
+const ALLOWED_ORIGIN = process.env.CORS_ORIGIN || 'https://insightforgem.netlify.app';
+
 export async function handler() {
   const stats = {
     ideas_total: 42,
@@ -16,7 +18,7 @@ export async function handler() {
   return {
     statusCode: 200,
     headers: {
-      'Access-Control-Allow-Origin': '*'
+      'Access-Control-Allow-Origin': ALLOWED_ORIGIN
     },
     body: JSON.stringify(stats)
   };

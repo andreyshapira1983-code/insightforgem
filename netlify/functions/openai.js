@@ -39,7 +39,7 @@ exports.handler = async function(event) {
 
   let apiKey;
   try {
-    apiKey = pickKey({ role });
+    apiKey = pickKey({ role: role || payload.purpose });
   } catch (e) {
     return {
       statusCode: 500,

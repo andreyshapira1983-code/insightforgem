@@ -1,49 +1,29 @@
-const centralNames = ['OPENAI_API_KEY','OPEN_API_KEY','OPENAI_KEY','OPEN_KEY'];
-const env = process.env;
+const CENTRAL = ['OPENAI_API_KEY','OPEN_API_KEY','OPENAI_KEY','OPEN_KEY'];
+const PREFIX = 'OPENAI_KEY_';
+let rr = 0;
 
-// Collect all key values and role specific mappings
-const allKeys = [];
-const added = new Set();
-const roleKeys = {};
-
-for (const [name, value] of Object.entries(env)) {
-  if (!value) continue;
-  if (centralNames.includes(name) || name.startsWith('OPENAI_KEY_')) {
-    if (!added.has(value)) {
-      allKeys.push(value);
-      added.add(value);
-    }
-    if (name.startsWith('OPENAI_KEY_') && !centralNames.includes(name)) {
-      const role = name.slice('OPENAI_KEY_'.length).toLowerCase();
-      if (!roleKeys[role]) roleKeys[role] = [];
-      if (!roleKeys[role].includes(value)) roleKeys[role].push(value);
-    }
-  }
+function collect(env=process.env){
+  const set = new Set();
+  CENTRAL.forEach(n=>env[n] && set.add(env[n]));
+  Object.entries(env).forEach(([k,v])=>k.startsWith(PREFIX)&&v&&set.add(v));
+  return [...set];
 }
 
-let index = 0;
-const roleIndex = {};
-
-function pickKey({ role } = {}) {
-  if (role) {
-    const r = String(role).toLowerCase();
-    const list = roleKeys[r];
-    if (list && list.length) {
-      const i = roleIndex[r] || 0;
-      roleIndex[r] = (i + 1) % list.length;
-      return list[i % list.length];
-    }
-  }
-  if (!allKeys.length) throw new Error('No OpenAI API keys configured');
-  const key = allKeys[index % allKeys.length];
-  index = (index + 1) % allKeys.length;
-  return key;
+function roleMap(env=process.env){
+  const m={}; Object.entries(env).forEach(([k,v])=>{
+    if(k.startsWith(PREFIX)) m[k.slice(PREFIX.length).toLowerCase()] = v;
+  }); return m;
 }
 
-function detectedKeyNames() {
-  return Object.keys(env).filter(name =>
-    (centralNames.includes(name) || name.startsWith('OPENAI_KEY_')) && env[name]
-  );
+function pickKey({role}={}, env=process.env){
+  const by=roleMap(env); if(role&&by[role.toLowerCase()]) return by[role.toLowerCase()];
+  const all=collect(env); if(!all.length) throw new Error('No OpenAI keys found');
+  const k = all[rr % all.length]; rr++; return k;
+}
+
+function detectedKeyNames(env=process.env){
+  return [...CENTRAL.filter(n=>env[n]), ...Object.keys(env).filter(k=>k.startsWith(PREFIX))].sort();
 }
 
 module.exports = { pickKey, detectedKeyNames };
+

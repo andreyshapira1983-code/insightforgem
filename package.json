@@ -3,6 +3,7 @@
   "private": true,
   "scripts": {
     "dev": "netlify dev",
+    "lint": "npx eslint . || true",
     "test": "node tests/smoke-diag.js"
   }
 }
