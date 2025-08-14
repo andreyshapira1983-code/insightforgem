@@ -36,7 +36,9 @@ export async function handler(event) {
     };
   }
   // Set sensible defaults if not provided
-  if (!payload.model) payload.model = 'gpt-3.5-turbo';
+if (!payload.model || payload.model === 'gpt-4o-mini') {
+  payload.model = 'gpt-4o';
+}
   if (typeof payload.temperature === 'undefined') payload.temperature = 0.7;
   // Determine API key
   const apiKey = process.env.OPENAI_API_KEY || process.env.OPEN_API_KEY;
