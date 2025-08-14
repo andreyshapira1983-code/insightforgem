@@ -1,5 +1,7 @@
 [functions]
   directory = "netlify/functions"
+  [functions.environment]
+    ALLOWED_ORIGINS = "https://insightforgem.netlify.app"
 
 [[headers]]
   # Apply security headers to all routes.  These headers are set at

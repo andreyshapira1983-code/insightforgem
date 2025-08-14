@@ -85,7 +85,7 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.5);
+    background: rgb(0 0 0 / 0.5);
     display: none;
     z-index: 1400;
   }
@@ -114,7 +114,7 @@
   transition: background 0.2s;
 }
 .search-toggle:hover {
-  background: rgba(255, 255, 255, 0.1);
+  background: rgb(255 255 255 / 0.1);
 }
 
 .search-overlay {
@@ -123,7 +123,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.6);
+  background: rgb(0 0 0 / 0.6);
   display: none;
   align-items: center;
   justify-content: center;
@@ -488,7 +488,7 @@ input[type="submit"],
 }
 
 .user-menu a:hover {
-  background: rgba(255,255,255,0.1);
+  background: rgb(255 255 255 / 0.1);
 }
 
 /*
@@ -501,15 +501,15 @@ input[type="submit"],
  * in localStorage via theme.js.
  */
 body.light {
-  --nebula-1: rgba(200, 215, 255, 0.4);
-  --nebula-2: rgba(215, 255, 255, 0.4);
-  --nebula-3: rgba(255, 220, 245, 0.4);
+  --nebula-1: rgb(200 215 255 / 0.4);
+  --nebula-2: rgb(215 255 255 / 0.4);
+  --nebula-3: rgb(255 220 245 / 0.4);
   --bg-deep: #f6f7fb;
   --bg-deeper: #eceff5;
   --text: #0f172a;
   --text-muted: #475569;
-  --panel: rgba(255, 255, 255, 0.8);
-  --border: rgba(0, 0, 0, 0.12);
+  --panel: rgb(255 255 255 / 0.8);
+  --border: rgb(0 0 0 / 0.12);
   --card: #ffffff;
   /* keep primary and accent colours unchanged for brand consistency */
 }
@@ -527,7 +527,7 @@ body.light {
 }
 
 .theme-toggle:hover {
-  background: rgba(255, 255, 255, 0.1);
+  background: rgb(255 255 255 / 0.1);
 }
 
 /* Search inputs in trending page */

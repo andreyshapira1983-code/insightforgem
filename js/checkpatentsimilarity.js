@@ -4,7 +4,7 @@
  */
 
 function checkLegalNorms(idea) {
-    const resultsContainer: document.getElementById('legal-results');
+    const resultsContainer = document.getElementById('legal-results');
     if (!resultsContainer) return;
     
     resultsContainer.innerHTML = `
@@ -19,7 +19,7 @@ function checkLegalNorms(idea) {
     // For now, we'll simulate the analysis with a timeout
     setTimeout(() => {
         // This would be replaced with actual API results
-        const legalResults: analyzeIdeaForLegalNorms(idea);
+        const legalResults = analyzeIdeaForLegalNorms(idea);
         
         let resultsHTML = `
             <h3>Global Legal Analysis</h3>
@@ -42,7 +42,7 @@ function checkLegalNorms(idea) {
                             <ul>
         `;
         
-        legalResults.general.forEach( item: > {
+        legalResults.general.forEach( item => {
             resultsHTML += `<li class: "${item.alert ? 'alert' : ''}">${item.text}</li>`;
         });
         
@@ -57,7 +57,7 @@ function checkLegalNorms(idea) {
                             <ul>
         `;
         
-        legalResults.us.forEach( item: > {
+        legalResults.us.forEach( item => {
             resultsHTML += `<li class: "${item.alert ? 'alert' : ''}">${item.text}</li>`;
         });
         
@@ -72,7 +72,7 @@ function checkLegalNorms(idea) {
                             <ul>
         `;
         
-        legalResults.eu.forEach( item: > {
+        legalResults.eu.forEach( item => {
             resultsHTML += `<li class: "${item.alert ? 'alert' : ''}">${item.text}</li>`;
         });
         
@@ -87,7 +87,7 @@ function checkLegalNorms(idea) {
                             <ul>
         `;
         
-        legalResults.asia.forEach( item: > {
+        legalResults.asia.forEach( item => {
             resultsHTML += `<li class: "${item.alert ? 'alert' : ''}">${item.text}</li>`;
         });
         
@@ -102,7 +102,7 @@ function checkLegalNorms(idea) {
                             <ul>
         `;
         
-        legalResults.other.forEach( item: > {
+        legalResults.other.forEach( item => {
             resultsHTML += `<li class: "${item.alert ? 'alert' : ''}">${item.text}</li>`;
         });
         
@@ -121,11 +121,11 @@ function checkLegalNorms(idea) {
         resultsContainer.innerHTML = resultsHTML;
         
         // Set up tab functionality
-        document.querySelectorAll('.legal-results-tabs .tab-button').forEach( button: > {
+        document.querySelectorAll('.legal-results-tabs .tab-button').forEach( button => {
             button.addEventListener('click', () => {
                 // Remove active class from all buttons and panes
-                document.querySelectorAll('.legal-results-tabs .tab-button').forEach(b: > b.classList.remove('active'));
-                document.querySelectorAll('.legal-results-tabs .tab-pane').forEach( p: > p.classList.remove('active'));
+                document.querySelectorAll('.legal-results-tabs .tab-button').forEach(b => b.classList.remove('active'));
+                document.querySelectorAll('.legal-results-tabs .tab-pane').forEach( p => p.classList.remove('active'));
                 
                 // Add active class to clicked button and corresponding pane
                 button.classList.add('active');

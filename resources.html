@@ -46,14 +46,14 @@
     <p>Useful guides, patent links, templates and AI tools to help you develop your ideas:</p>
     <!-- Search bar for resources -->
     <div class="resources-search-bar">
-      <input type="text" id="resources-search" placeholder="Search resources..." aria-label="Search resources">
+      <input type="text" id="resources-search" name="resources-search" placeholder="Search resources..." aria-label="Search resources">
     </div>
     <!-- Filter controls for resource categories -->
     <div class="resource-filters">
-      <label class="resource-filter"><input type="checkbox" value="patent"> Patents</label>
-      <label class="resource-filter"><input type="checkbox" value="template"> Templates</label>
-      <label class="resource-filter"><input type="checkbox" value="guide"> Guides</label>
-      <label class="resource-filter"><input type="checkbox" value="tool"> Tools</label>
+      <label class="resource-filter"><input type="checkbox" name="filter-patent" value="patent"> Patents</label>
+      <label class="resource-filter"><input type="checkbox" name="filter-template" value="template"> Templates</label>
+      <label class="resource-filter"><input type="checkbox" name="filter-guide" value="guide"> Guides</label>
+      <label class="resource-filter"><input type="checkbox" name="filter-tool" value="tool"> Tools</label>
     </div>
     <ul id="resources-list">
       <li data-text="uspto patent search" data-category="patent">USPTO Patent Search — <a href="https://www.uspto.gov/patents/search" target="_blank">search the US patent database</a></li>
@@ -76,7 +76,7 @@
   <!-- Global search overlay -->
   <div id="global-search-overlay" class="search-overlay">
     <div class="search-modal">
-      <input type="text" id="global-search-input" placeholder="Search..." aria-label="Global search">
+      <input type="text" id="global-search-input" name="search" placeholder="Search..." aria-label="Global search">
       <div id="global-search-results" class="search-results"></div>
     </div>
   </div>

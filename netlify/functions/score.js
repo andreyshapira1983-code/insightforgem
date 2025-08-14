@@ -45,7 +45,7 @@ export async function handler(event) {
       return { statusCode: 405, headers: corsHeaders(event), body: 'Use POST' };
     }
 
-    const apiKey = selectApiKey();
+    const apiKey = selectApiKey("openai");
     if (!apiKey) {
       return { statusCode: 500, headers: corsHeaders(event), body: JSON.stringify({ error: 'No API key in env vars' }) };
     }

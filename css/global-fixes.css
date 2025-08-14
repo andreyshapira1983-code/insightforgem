@@ -50,7 +50,7 @@ html, body {
   box-shadow: none !important;
 }
 * {
-  -webkit-tap-highlight-color: rgba(0,0,0,0);
+  -webkit-tap-highlight-color: rgb(0 0 0 / 0);
 }
 /*
  * Restore visible caret and focus indicators on form controls.

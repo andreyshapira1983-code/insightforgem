@@ -1,0 +1,18 @@
+{
+  "extends": "stylelint-config-standard",
+  "rules": {
+    "color-function-notation": "modern",
+    "alpha-value-notation": "number",
+    "comment-empty-line-before": null,
+    "no-duplicate-selectors": null,
+    "declaration-block-single-line-max-declarations": null,
+    "rule-empty-line-before": null,
+    "no-descending-specificity": null,
+    "font-family-name-quotes": null,
+    "media-feature-range-notation": null,
+    "keyframes-name-pattern": null,
+    "declaration-block-no-redundant-longhand-properties": null,
+    "at-rule-empty-line-before": null,
+    "color-hex-length": null
+  }
+}

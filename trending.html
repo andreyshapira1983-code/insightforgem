@@ -46,12 +46,12 @@
     <p>Explore what's popular among innovators:</p>
     <!-- Search bar and category filters -->
     <div class="trending-search-bar">
-      <input type="text" id="trending-search" placeholder="Search trends..." aria-label="Search trends">
+      <input type="text" id="trending-search" name="trending-search" placeholder="Search trends..." aria-label="Search trends">
       <div class="trend-filters">
-        <label class="trend-filter"><input type="checkbox" value="clean"> Clean Energy</label>
-        <label class="trend-filter"><input type="checkbox" value="health"> Health Tech</label>
-        <label class="trend-filter"><input type="checkbox" value="remote"> Remote Work</label>
-        <label class="trend-filter"><input type="checkbox" value="ai"> AI Creativity</label>
+        <label class="trend-filter"><input type="checkbox" name="trend-clean" value="clean"> Clean Energy</label>
+        <label class="trend-filter"><input type="checkbox" name="trend-health" value="health"> Health Tech</label>
+        <label class="trend-filter"><input type="checkbox" name="trend-remote" value="remote"> Remote Work</label>
+        <label class="trend-filter"><input type="checkbox" name="trend-ai" value="ai"> AI Creativity</label>
       </div>
     </div>
     <div class="trend-list">
@@ -97,7 +97,7 @@
   <!-- Global search overlay -->
   <div id="global-search-overlay" class="search-overlay">
     <div class="search-modal">
-      <input type="text" id="global-search-input" placeholder="Search..." aria-label="Global search">
+      <input type="text" id="global-search-input" name="search" placeholder="Search..." aria-label="Global search">
       <div id="global-search-results" class="search-results"></div>
     </div>
   </div>

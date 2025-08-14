@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', function() {
     console.log("App initialized");
     
     // Auth modal functionality
-    const signInButton: document.getElementById('sign-in-button');
+    const signInButton = document.getElementById('sign-in-button');
     const authModal = document.getElementById('auth-modal');
     const authModalClose = document.querySelector('.auth-modal-close');
     
@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
     if (authModal) {
         authModal.addEventListener('click', function(e) {
-            if (e.target: === authModal) {
+            if (e.target === authModal) {
                 console.log("Clicked outside auth modal");
                 authModal.classList.remove('active');
             }
@@ -37,11 +37,11 @@ document.addEventListener('DOMContentLoaded', function() {
     // AI option selection
     const aiOptions = document.querySelectorAll('.ai-option');
     
-    aiOptions.forEach( option: > {
+    aiOptions.forEach( option => {
         option.addEventListener('click', function() {
             console.log("AI option selected:", this.getAttribute('data-mode'));
             // Remove selected class from all options
-            aiOptions.forEach(opt: > opt.classList.remove('selected'));
+            aiOptions.forEach(opt => opt.classList.remove('selected'));
             
             // Add selected class to clicked option
             this.classList.add('selected');
@@ -117,7 +117,7 @@ document.addEventListener('DOMContentLoaded', function() {
     };
     
     // Add click event to legal links
-    legalLinks.forEach( link: > {
+    legalLinks.forEach( link => {
         link.addEventListener('click', function(e) {
             e.preventDefault();
             console.log("Legal link clicked:", this.getAttribute('data-content'));
@@ -135,7 +135,7 @@ document.addEventListener('DOMContentLoaded', function() {
             
             if (content) {
                 // Set content title and body
-                legalTitle.textContent: content.title;
+                legalTitle.textContent = content.title;
                 legalBody.innerHTML = content.content;
                 
                 // Hide main content and show legal content
@@ -155,7 +155,7 @@ document.addEventListener('DOMContentLoaded', function() {
         backButton.addEventListener('click', function() {
             console.log("Back button clicked");
             // Hide legal content and show main content
-            legalContent.style.display: 'none';
+            legalContent.style.display = 'none';
             mainCard.style.display = 'block';
             
             // Scroll to top
@@ -172,7 +172,7 @@ document.addEventListener('DOMContentLoaded', function() {
         analyzeButton.addEventListener('click', function() {
             console.log("Analyze button clicked");
             // Get selected mode
-            const selectedMode: document.querySelector('.ai-option.selected').getAttribute('data-mode');
+            const selectedMode = document.querySelector('.ai-option.selected').getAttribute('data-mode');
             
             // Get idea text
             const idea = ideaText.value.trim();
@@ -180,7 +180,7 @@ document.addEventListener('DOMContentLoaded', function() {
             if (idea) {
                 console.log("Analyzing idea in mode:", selectedMode);
                 // Show loading state
-                resultsContainer.style.display: 'block';
+                resultsContainer.style.display = 'block';
                 resultsContainer.innerHTML = `
                     <div class="ai-thinking">
                         <div class="dot"></div>
@@ -204,7 +204,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Function to show dummy results (for demonstration)
     function showDummyResults(idea, mode) {
         console.log("Showing results for mode:", mode);
-        let results: '';
+        let results = '';
         
         switch (mode) {
             case 'analyze':
@@ -289,15 +289,15 @@ document.addEventListener('DOMContentLoaded', function() {
     // Sidebar menu functionality
     const menuItems = document.querySelectorAll('.sidebar-menu li');
     
-    menuItems.forEach( item: > {
+    menuItems.forEach( item => {
         item.addEventListener('click', function() {
-            const page: this.getAttribute('data-page');
+            const page = this.getAttribute('data-page');
             console.log("Menu item clicked:", page);
             
             // Only do something for the dashboard page for now
-            if ( page: === 'dashboard') {
+            if ( page === 'dashboard') {
                 // Set this item as active
-                menuItems.forEach(i: > i.classList.remove('active'));
+                menuItems.forEach(i => i.classList.remove('active'));
                 this.classList.add('active');
                 
                 // Show main content, hide legal content
@@ -310,9 +310,9 @@ document.addEventListener('DOMContentLoaded', function() {
     // Social auth buttons
     const socialAuthButtons = document.querySelectorAll('.social-auth-button');
     
-    socialAuthButtons.forEach( button: > {
+    socialAuthButtons.forEach( button => {
         button.addEventListener('click', function() {
-            const provider: this.id.split('-')[0];
+            const provider = this.id.split('-')[0];
             console.log("Auth button clicked:", provider);
             alert(`${provider} authentication would happen here in a real app.`);
         });

@@ -23,11 +23,10 @@ export function preflight(event, methods = 'GET,POST,OPTIONS') {
   return null;
 }
 
-export function selectApiKey() {
-  const keys = (process.env.OPENAI_API_KEYS || process.env.OPENAI_API_KEY || process.env.OPEN_API_KEY || '')
-    .split(',')
-    .map(k => k.trim())
-    .filter(Boolean);
+export function selectApiKey(role = 'default') {
+  const envVar = `OPENAI_API_KEYS_${role.toUpperCase()}`;
+  const raw = process.env[envVar] || process.env.OPENAI_API_KEYS || process.env.OPENAI_API_KEY || process.env.OPEN_API_KEY || '';
+  const keys = raw.split(',').map(k => k.trim()).filter(Boolean);
   if (!keys.length) return null;
   const index = Math.floor(Date.now() / 60000) % keys.length;
   return keys[index];

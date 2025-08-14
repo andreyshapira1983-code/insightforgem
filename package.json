@@ -1,0 +1,11 @@
+{
+  "name": "insightforgem",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "lint:html": "npx html-validate \"*.html\" \"legal/*.html\"",
+    "lint:css": "npx stylelint \"css/*.css\"",
+    "lint:js": "npx eslint \"js/*.js\" netlify/functions/*.js",
+    "test": "npm run lint:html && npm run lint:css && npm run lint:js"
+  }
+}

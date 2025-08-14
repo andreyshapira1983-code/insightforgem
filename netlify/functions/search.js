@@ -19,7 +19,7 @@ export async function handler(event) {
   }
 
   const endpoint = process.env.SEARCH_API_URL;
-  const apiKey = selectApiKey();
+  const apiKey = selectApiKey("search");
   if (!endpoint || !apiKey) {
     return {
       statusCode: 200,

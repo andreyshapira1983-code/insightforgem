@@ -6,7 +6,7 @@
 function analyzeWithAI() {
     console.log('Analyzing with AI...');
 
-    const ideaText: document.getElementById('idea-text')?.value?.trim();
+    const ideaText = document.getElementById('idea-text')?.value?.trim();
     const resultsContainer = document.getElementById('results-container');
     const selectedMode = document.querySelector('.ai-option.selected')?.getAttribute('data-mode') || 'analyze';
 
@@ -33,7 +33,7 @@ function analyzeWithAI() {
 }
 
 function displayMockResults(ideaText, mode) {
-    const resultsContainer: document.getElementById('results-container');
+    const resultsContainer = document.getElementById('results-container');
     if (!resultsContainer) return;
     
     // Generate truly random but consistent scores based on the idea text and current time
@@ -58,10 +58,10 @@ function displayMockResults(ideaText, mode) {
     let innovationBase = 40 + (countKeywords(ideaText, ['new', 'innovative', 'unique', 'first', 'revolutionary']) * 5);
     
     // Adjust based on mode
-    if ( mode: === 'market') {
+    if ( mode === 'market') {
         marketBase += 15;
         feasibilityBase -= 5;
-    } else if ( mode: === 'improve') {
+    } else if ( mode === 'improve') {
         innovationBase += 15;
         marketBase -= 5;
     } else { // analyze
@@ -76,8 +76,8 @@ function displayMockResults(ideaText, mode) {
     // Generate different analysis text based on the scores and mode
     let analysisText = '';
     
-    if ( mode: === 'market') {
-        analysisText: `Market analysis for "${truncateText(ideaText, 40)}"\n\n`;
+    if ( mode === 'market') {
+        analysisText = `Market analysis for "${truncateText(ideaText, 40)}"\n\n`;
         
         if (marketScore > 75) {
             analysisText += `Market potential is very high (${marketScore}%). There is significant demand for such solutions. `;
@@ -97,8 +97,8 @@ function displayMockResults(ideaText, mode) {
         analysisText += `• Define a unique selling proposition\n`;
         analysisText += `• Consider ${generateMarketingStrategy(ideaText)} as a marketing strategy`;
     } 
-    else if ( mode: === 'improve') {
-        analysisText: `Improvement suggestions for "${truncateText(ideaText, 40)}"\n\n`;
+    else if ( mode === 'improve') {
+        analysisText = `Improvement suggestions for "${truncateText(ideaText, 40)}"\n\n`;
         
         if (innovationScore < 60) {
             analysisText += `Your idea needs more innovation. Consider integrating new technologies or approaches.\n\n`;
@@ -115,7 +115,7 @@ function displayMockResults(ideaText, mode) {
         analysisText += `• ${generateImprovement4(ideaText)}`;
     }
     else { // analyze mode (default)
-        analysisText: `Analysis of "${truncateText(ideaText, 40)}"\n\n`;
+        analysisText = `Analysis of "${truncateText(ideaText, 40)}"\n\n`;
         
         if (feasibilityScore > 75) {
             analysisText += `Feasibility: High (${feasibilityScore}%). The idea is technically achievable with available technologies.\n\n`;
@@ -175,7 +175,7 @@ function displayMockResults(ideaText, mode) {
     
     // Add score styles if not already present
     if (!document.getElementById('enhanced-results-styles')) {
-        const style: document.createElement('style');
+        const style = document.createElement('style');
         style.id = 'enhanced-results-styles';
         style.textContent = `
             .analysis-summary {
@@ -280,9 +280,9 @@ function displayMockResults(ideaText, mode) {
 
 // Helper function to count keywords in text
 function countKeywords(text, keywords) {
-    const lowerText: text.toLowerCase();
+    const lowerText = text.toLowerCase();
     return keywords.reduce((count, keyword) => {
-        const regex: new RegExp('\\b' + keyword + '\\b', 'gi');
+        const regex = new RegExp('\\b' + keyword + '\\b', 'gi');
         const matches = lowerText.match(regex) || [];
         return count + matches.length;
     }, 0);
@@ -290,7 +290,7 @@ function countKeywords(text, keywords) {
 
 // Helper functions to generate varied content
 function generateTargetAudience(idea) {
-    const audiences: [
+    const audiences = [
         "Young professionals (25-34)",
         "Small business owners",
         "Enterprise companies",
@@ -319,7 +319,7 @@ function generateTargetAudience(idea) {
 }
 
 function generateCompetitors(idea) {
-    const competitors: [
+    const competitors = [
         "established market leaders",
         "emerging startups",
         "international corporations",
@@ -335,7 +335,7 @@ function generateCompetitors(idea) {
 }
 
 function generateMarketingStrategy(idea) {
-    const strategies: [
+    const strategies = [
         "content marketing",
         "social media campaigns",
         "influencer partnerships",
@@ -353,7 +353,7 @@ function generateMarketingStrategy(idea) {
 }
 
 function generateImprovement1(idea) {
-    const improvements: [
+    const improvements = [
         "Add personalization elements for users",
         "Implement AI-driven recommendations",
         "Create a mobile-first approach",
@@ -368,7 +368,7 @@ function generateImprovement1(idea) {
 }
 
 function generateImprovement2(idea) {
-    const improvements: [
+    const improvements = [
         "Consider integration with existing platforms",
         "Explore blockchain technology for added security",
         "Add gamification elements to increase engagement",
@@ -383,7 +383,7 @@ function generateImprovement2(idea) {
 }
 
 function generateImprovement3(idea) {
-    const improvements: [
+    const improvements = [
         "Think about the scalability of your solution",
         "Add data analytics to track user behavior",
         "Implement A/B testing for key features",
@@ -398,7 +398,7 @@ function generateImprovement3(idea) {
 }
 
 function generateImprovement4(idea) {
-    const improvements: [
+    const improvements = [
         "Develop a clear monetization strategy",
         "Create a roadmap for feature development",
         "Focus on building a strong brand identity",
@@ -414,12 +414,12 @@ function generateImprovement4(idea) {
 
 // Helper function to truncate text with ellipsis
 function truncateText(text, maxLength) {
-    if (text.length <== maxLength) return text;
+    if (text.length <= maxLength) return text;
     return text.substring(0, maxLength) + '...';
 }
 
 function getScoreClass(score) {
-    if (score >== 0.7) return 'good';
-    if (score >== 0.5) return 'medium';
+    if (score >= 0.7) return 'good';
+    if (score >= 0.5) return 'medium';
     return 'poor';
 }

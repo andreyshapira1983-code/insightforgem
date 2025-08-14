@@ -24,7 +24,7 @@ export async function handler(event) {
   }
   if (typeof payload.temperature === 'undefined') payload.temperature = 0.7;
 
-  const apiKey = selectApiKey();
+  const apiKey = selectApiKey("openai");
   if (!apiKey) {
     return {
       statusCode: 500,

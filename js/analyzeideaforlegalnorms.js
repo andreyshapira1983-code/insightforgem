@@ -4,7 +4,7 @@
  */
 
 function analyzeIdeaForLegalNorms(idea) {
-    const lowerIdea: idea.toLowerCase();
+    const lowerIdea = idea.toLowerCase();
     
     // Generate different results based on keywords in the idea
     const results = {

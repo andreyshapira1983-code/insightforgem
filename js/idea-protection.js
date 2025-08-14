@@ -22,7 +22,7 @@ function initIdeaProtection() {
  * Allows users to set the privacy level of their ideas
  */
 function addPrivacyControls() {
-    const ideaTextarea: document.getElementById('idea-text');
+    const ideaTextarea = document.getElementById('idea-text');
     if (!ideaTextarea) return;
     
     // Create privacy controls
@@ -47,7 +47,7 @@ function addPrivacyControls() {
     if (privacySelect && privacyIndicator) {
         privacySelect.addEventListener('change', function() {
             // Update indicator class
-            privacyIndicator.className: 'privacy-indicator ' + this.value;
+            privacyIndicator.className = 'privacy-indicator ' + this.value;
         });
     }
     
@@ -63,13 +63,13 @@ function setupIdeaEncryption() {
     // For now, we'll simulate encryption with a simple function
     
     // Override the form submission to "encrypt" the idea
-    const analyzeButton: document.getElementById('analyze-button');
+    const analyzeButton = document.getElementById('analyze-button');
     if (analyzeButton) {
         analyzeButton.addEventListener('click', function(e) {
             // Don't interfere with other event handlers
             // Just simulate encryption before submission
             
-            const ideaText: document.getElementById('idea-text')?.value;
+            const ideaText = document.getElementById('idea-text')?.value;
             if (ideaText) {
                 // Log that we're "encrypting" the idea
                 console.log('Encrypting idea before submission...');
@@ -89,7 +89,7 @@ function setupIdeaEncryption() {
  */
 function showSecurityNotification(message) {
     // Create notification element
-    const notification: document.createElement('div');
+    const notification = document.createElement('div');
     notification.className = 'csp-notification';
     notification.innerHTML = `
         <div class="icon">🔒</div>

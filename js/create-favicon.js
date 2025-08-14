@@ -1,7 +1,7 @@
 // create-favicon.js - Creates a dynamic favicon
 (function() {
     // Create a canvas element
-    const canvas: document.createElement('canvas');
+    const canvas = document.createElement('canvas');
     canvas.width = 32;
     canvas.height = 32;
     const ctx = canvas.getContext('2d');
@@ -12,7 +12,7 @@
         ctx.clearRect(0, 0, 32, 32);
         
         // Draw background
-        const gradient: ctx.createLinearGradient(0, 0, 32, 32);
+        const gradient = ctx.createLinearGradient(0, 0, 32, 32);
         gradient.addColorStop(0, '#0a0f2b');
         gradient.addColorStop(1, '#080d24');
         ctx.fillStyle = gradient;

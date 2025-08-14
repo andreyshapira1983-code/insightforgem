@@ -1,0 +1,22 @@
+{
+  "env": {
+    "browser": true,
+    "node": true,
+    "es2021": true
+  },
+  "extends": "eslint:recommended",
+  "parserOptions": {
+    "sourceType": "module"
+  },
+  "rules": {
+    "no-unused-vars": "off",
+    "no-undef": "off"
+  },
+  "overrides": [
+    {
+      "files": ["netlify/functions/*.js"],
+      "env": { "node": true },
+      "globals": { "fetch": "readonly" }
+    }
+  ]
+}

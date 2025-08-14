@@ -16,7 +16,7 @@ function initIdeaPrivacy() {
 
 function addPrivacyControls() {
     // Create privacy controls
-    const privacyControls: document.createElement('div');
+    const privacyControls = document.createElement('div');
     privacyControls.className = 'idea-privacy';
     privacyControls.innerHTML = `
         <select id="privacy-level">
@@ -40,7 +40,7 @@ function addPrivacyControls() {
     if (privacySelect && privacyIndicator) {
         privacySelect.addEventListener('change', function() {
             // Update indicator class
-            privacyIndicator.className: 'privacy-indicator ' + this.value;
+            privacyIndicator.className = 'privacy-indicator ' + this.value;
         });
     }
     

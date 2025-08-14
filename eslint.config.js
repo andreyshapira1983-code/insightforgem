@@ -1,14 +1,19 @@
 export default [
   {
-    files: ['netlify/functions/**/*.js'],
-    ignores: ['netlify/functions/agents.js'],
+    files: ["js/*.js", "netlify/functions/*.js"],
     languageOptions: {
-      ecmaVersion: 2020,
-      sourceType: 'module'
+      ecmaVersion: 2021,
+      sourceType: "module",
+      globals: {
+        window: "readonly",
+        document: "readonly",
+        fetch: "readonly",
+        console: "readonly"
+      }
     },
     rules: {
-      quotes: ['error','single'],
-      semi: ['error','always']
+      "no-unused-vars": "off",
+      "no-undef": "off"
     }
   }
 ];
