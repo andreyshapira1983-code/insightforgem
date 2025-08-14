@@ -1,18 +1,9 @@
-// Netlify Function: /.netlify/functions/news
-//
-// Returns a list of recent news items for display on the home
-// page.  In a production environment this function could fetch
-// external RSS feeds based on the `NEWS_FEEDS` environment
-// variable and parse them into JSON.  However, for the purposes of
-// this MVP and in environments where external packages or network
-// calls may not be available, we return a small static list of
-// technology and business headlines.  The structure matches the
-// expected output: an array of objects with `source`, `title`,
-// `link` and `date` properties.
+import { corsHeaders, preflight } from './utils.js';
 
-export async function handler() {
-  // Example static news items.  Replace or extend with dynamic
-  // fetching logic in a real deployment.
+export async function handler(event) {
+  const pre = preflight(event, 'GET,OPTIONS');
+  if (pre) return pre;
+
   const items = [
     {
       source: 'TechCrunch',
@@ -45,11 +36,10 @@ export async function handler() {
       date: new Date(Date.now() - 4 * 60 * 60 * 1000).toISOString()
     }
   ];
+
   return {
     statusCode: 200,
-    headers: {
-      'Access-Control-Allow-Origin': '*'
-    },
+    headers: corsHeaders(event, 'GET,OPTIONS'),
     body: JSON.stringify(items)
   };
 }
