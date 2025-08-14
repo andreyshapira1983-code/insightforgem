@@ -1,0 +1,26 @@
+<!doctype html>
+<html>
+  <meta charset="utf-8">
+  <title>Idea Score Test</title>
+  <h1>Idea Score (EVAL)</h1>
+  <textarea id="idea" rows="6" style="width:100%;" placeholder="Введи идею..."></textarea><br>
+  <button id="go">Get Score</button>
+  <p id="out"></p>
+  <script>
+    async function post(url, data){
+      const r = await fetch(url, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(data) });
+      const t = await r.text(); try { return JSON.parse(t) } catch { throw new Error(t) }
+    }
+    document.getElementById('go').onclick = async () => {
+      const idea = document.getElementById('idea').value.trim();
+      if (!idea) { alert('Нужен текст идеи'); return; }
+      document.getElementById('out').textContent = 'Считаю...';
+      try {
+        const res = await post('/.netlify/functions/score', { idea, brief:{}, historyTexts: [] });
+        document.getElementById('out').textContent = `Score: ${res.score}%`;
+      } catch (e) {
+        document.getElementById('out').textContent = 'Ошибка: ' + e.message;
+      }
+    };
+  </script>
+</html>
