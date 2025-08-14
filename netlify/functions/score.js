@@ -1,4 +1,5 @@
-// netlify/functions/score.js
+import { preflight, json, getApiKey } from './utils.js';
+
 const OPENAI_API = 'https://api.openai.com/v1';
 const MODEL_CHAT = 'gpt-4o';
 const MODEL_EMB  = 'text-embedding-3-small';
@@ -17,36 +18,27 @@ async function openai(path, body, apiKey){
   return data || {};
 }
 
-exports.handler = async (event) => {
+export async function handler(event) {
+  const pf = preflight(event);
+  if (pf) return pf;
   try {
-    if (event.httpMethod !== 'POST') return { statusCode:405, body:'Use POST' };
+    if (event.httpMethod !== 'POST') return json(405, { error:'Use POST' });
 
-    // Берём любой из твоих ключей
-    const apiKey =
-      process.env.OPENAI_KEY_EVAL   ||
-      process.env.OPENAI_API_KEY    ||
-      process.env.OPEN_API_KEY      ||
-      process.env.OPENAI_KEY_GEN    ||
-      process.env.OPENAI_KEY_DESIGN ||
-      process.env.OPENAI_KEY_RESEARCH ||
-      process.env.OPENAI_KEY_GUARD;
-
-    if (!apiKey) return { statusCode:500, body: JSON.stringify({ error:'No API key in env vars' }) };
+    const apiKey = getApiKey();
+    if (!apiKey) return json(500, { error:'No API key in env vars' });
 
     const body = JSON.parse(event.body || '{}');
     const idea = (body.idea || '').trim();
     const brief = body.brief || {};
     const historyTexts = Array.isArray(body.historyTexts) ? body.historyTexts.slice(0,20) : [];
-    if (!idea) return { statusCode:400, body: JSON.stringify({ error:'Provide `idea` string' }) };
+    if (!idea) return json(400, { error:'Provide `idea` string' });
 
-    // 1) оригинальность
     const inputs = [idea, ...historyTexts];
     const emb = await openai('embeddings', { model: MODEL_EMB, input: inputs }, apiKey);
     const ideaEmb = emb.data[0].embedding;
     let maxSim = 0; for (const d of emb.data.slice(1)) maxSim = Math.max(maxSim, cosine(ideaEmb, d.embedding));
     const originality = Math.round((1 - maxSim) * 100);
 
-    // 2) остальные саб-оценки
     const system = [
       'You are a strict product evaluator.',
       'Return ONLY valid JSON with keys: viability, impact, evidence, clarity_risk (0..100 each),',
@@ -71,10 +63,9 @@ exports.handler = async (event) => {
     const C = clamp(parseInt(a.clarity_risk ?? 50),0,100);
     const score = Math.round(0.30*originality + 0.25*V + 0.15*I + 0.15*E + 0.15*C);
 
-    return { statusCode:200, headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({ score, breakdown:{ originality, viability:V, impact:I, evidence:E, clarity_risk:C }, analysis:a }) };
+    return json(200, { score, breakdown:{ originality, viability:V, impact:I, evidence:E, clarity_risk:C }, analysis:a });
   } catch (e) {
     const sc = e.status || 500;
-    return { statusCode:sc, headers:{'Content-Type':'application/json'}, body: JSON.stringify({ error: e.message || String(e) }) };
+    return json(sc, { error: e.message || String(e) });
   }
-};
+}

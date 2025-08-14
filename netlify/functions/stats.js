@@ -7,17 +7,15 @@
 // idea of the day.  For this MVP, static values are returned.  You
 // can adjust these numbers or add randomisation if desired.
 
-export async function handler() {
+import { preflight, json } from './utils.js';
+
+export async function handler(event) {
+  const pf = preflight(event);
+  if (pf) return pf;
   const stats = {
     ideas_total: 42,
     users_online: 7,
     idea_of_the_day: 'Solar Powered Delivery Drones'
   };
-  return {
-    statusCode: 200,
-    headers: {
-      'Access-Control-Allow-Origin': '*'
-    },
-    body: JSON.stringify(stats)
-  };
+  return json(200, stats);
 }

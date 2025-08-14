@@ -1,27 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Community — Star Galaxy</title>
-  <link rel="icon" type="image/x-icon" href="/favicon.ico"/>
-  <link rel="stylesheet" href="css/styles.css"/>
-  <link rel="stylesheet" href="css/global-fixes.css"/>
-  <link rel="stylesheet" href="css/custom.css"/>
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/global-fixes.css">
+  <link rel="stylesheet" href="css/custom.css">
 
   <!-- Security headers via meta tags.  Real deployments should set
        these headers server-side; these tags provide defence in depth. -->
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self'; frame-ancestors 'none'" />
-  <meta http-equiv="Strict-Transport-Security" content="max-age=63072000; includeSubDomains" />
-  <meta http-equiv="X-Content-Type-Options" content="nosniff" />
-  <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=()" />
 </head>
 <body>
-  <canvas id="galaxy-bg" aria-hidden="true"></canvas>
   <header class="header">
     <div class="logo"><span class="logo-icon"></span>Star Galaxy</div>
     <!-- Mobile menu toggle shown on small screens -->
-    <button id="mobile-menu-toggle" class="mobile-menu-toggle" aria-label="Open menu">☰</button>
+    <button type="button" id="mobile-menu-toggle" class="mobile-menu-toggle" aria-label="Open menu">☰</button>
     <nav class="nav">
       <a href="index.html">Home</a>
       <a href="generator.html">Generator</a>
@@ -32,10 +27,10 @@
       <a href="legal/terms.html">Legal</a>
     </nav>
     <div class="header-actions">
-      <button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme">☾</button>
+      <button type="button" id="theme-toggle" class="theme-toggle" aria-label="Toggle theme">☾</button>
       <!-- Global search toggle -->
-      <button id="global-search-button" class="search-toggle" aria-label="Search">🔍</button>
-      <button id="sign-in-button" class="auth-button">Sign In</button>
+      <button type="button" id="global-search-button" class="search-toggle" aria-label="Search">🔍</button>
+      <button type="button" id="sign-in-button" class="auth-button">Sign In</button>
       <div id="user-profile" class="user-profile" style="display:none;"></div>
     </div>
   </header>
@@ -58,8 +53,8 @@
         <h2 id="channel-title">#public</h2>
         <div class="chat-messages" id="chat-messages"></div>
         <div class="chat-input-container">
-          <input type="text" id="chat-input" placeholder="Type your message..." aria-label="Chat message" />
-          <button id="chat-send">Send</button>
+          <input type="text" id="chat-input" placeholder="Type your message..." aria-label="Chat message" >
+          <button type="button" id="chat-send">Send</button>
         </div>
       </section>
       <!-- Sidebar with members and pinned items -->
@@ -79,26 +74,25 @@
   <!-- Global search overlay -->
   <div id="global-search-overlay" class="search-overlay" aria-hidden="true">
     <div class="search-modal">
-      <input type="text" id="global-search-input" placeholder="Search..." aria-label="Global search" />
+      <input type="text" id="global-search-input" placeholder="Search..." aria-label="Global search" >
       <div id="global-search-results" class="search-results"></div>
     </div>
   </div>
   <div class="auth-modal" id="auth-modal">
     <div class="auth-modal-content">
-      <button class="auth-modal-close">×</button>
+      <button type="button" class="auth-modal-close">×</button>
       <h2 class="auth-modal-title">Sign In</h2>
       <p class="auth-modal-subtitle">Choose how you'd like to sign in</p>
       <div class="social-auth-buttons">
-        <button class="social-auth-button" data-provider="google"><span>Google</span></button>
-        <button class="social-auth-button" data-provider="facebook"><span>Facebook</span></button>
-        <button class="social-auth-button" data-provider="github"><span>GitHub</span></button>
-        <button class="social-auth-button" data-provider="apple"><span>Apple</span></button>
-        <button class="social-auth-button" data-provider="email"><span>Email</span></button>
+        <button type="button" class="social-auth-button" data-provider="google"><span>Google</span></button>
+        <button type="button" class="social-auth-button" data-provider="facebook"><span>Facebook</span></button>
+        <button type="button" class="social-auth-button" data-provider="github"><span>GitHub</span></button>
+        <button type="button" class="social-auth-button" data-provider="apple"><span>Apple</span></button>
+        <button type="button" class="social-auth-button" data-provider="email"><span>Email</span></button>
       </div>
       <div class="auth-footer">By signing in, you agree to our <a href="legal/terms.html" target="_blank">Terms</a> and <a href="legal/privacy.html" target="_blank">Privacy</a>.</div>
     </div>
   </div>
-  <script src="js/galaxy-bg.js"></script>
   <script src="js/theme.js"></script>
   <!-- Global configuration for API keys and endpoints -->
   <script src="js/config.js"></script>

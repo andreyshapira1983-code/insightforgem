@@ -10,7 +10,11 @@
 // expected output: an array of objects with `source`, `title`,
 // `link` and `date` properties.
 
-export async function handler() {
+import { preflight, json } from './utils.js';
+
+export async function handler(event) {
+  const pf = preflight(event);
+  if (pf) return pf;
   // Example static news items.  Replace or extend with dynamic
   // fetching logic in a real deployment.
   const items = [
@@ -45,11 +49,5 @@ export async function handler() {
       date: new Date(Date.now() - 4 * 60 * 60 * 1000).toISOString()
     }
   ];
-  return {
-    statusCode: 200,
-    headers: {
-      'Access-Control-Allow-Origin': '*'
-    },
-    body: JSON.stringify(items)
-  };
+  return json(200, items);
 }

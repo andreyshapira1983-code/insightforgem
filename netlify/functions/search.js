@@ -10,36 +10,21 @@
 // forwards the request to the configured search provider, attaches
 // the API key and returns results in a normalized format.
 
+import { preflight, json } from './utils.js';
+
 export async function handler(event) {
-  // Allow preflight OPTIONS requests for CORS
-  if (event.httpMethod === 'OPTIONS') {
-    return {
-      statusCode: 204,
-      headers: {
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Methods': 'GET,OPTIONS',
-        'Access-Control-Allow-Headers': 'Content-Type'
-      },
-      body: ''
-    };
-  }
+  const pf = preflight(event);
+  if (pf) return pf;
 
   // Only support GET requests
   if (event.httpMethod !== 'GET') {
-    return {
-      statusCode: 405,
-      body: JSON.stringify({ error: 'Method not allowed' })
-    };
+    return json(405, { error: 'Method not allowed' });
   }
 
   const params = event.queryStringParameters || {};
   const query = (params.query || '').trim();
   if (!query) {
-    return {
-      statusCode: 400,
-      headers: { 'Access-Control-Allow-Origin': '*' },
-      body: JSON.stringify({ error: 'Missing query parameter' })
-    };
+    return json(400, { error: 'Missing query parameter' });
   }
 
   // Fetch remote search results.  The endpoint and API key can be
@@ -48,11 +33,7 @@ export async function handler(event) {
   const endpoint = process.env.SEARCH_API_URL;
   const apiKey = process.env.OPEN_API_KEY;
   if (!endpoint || !apiKey) {
-    return {
-      statusCode: 200,
-      headers: { 'Access-Control-Allow-Origin': '*' },
-      body: JSON.stringify({ results: [] })
-    };
+    return json(200, { results: [] });
   }
 
   try {
@@ -80,16 +61,8 @@ export async function handler(event) {
           link: item.link || '#'
         }))
       : [];
-    return {
-      statusCode: 200,
-      headers: { 'Access-Control-Allow-Origin': '*' },
-      body: JSON.stringify({ results })
-    };
+    return json(200, { results });
   } catch (err) {
-    return {
-      statusCode: 500,
-      headers: { 'Access-Control-Allow-Origin': '*' },
-      body: JSON.stringify({ error: err.message })
-    };
+    return json(500, { error: err.message });
   }
 }
