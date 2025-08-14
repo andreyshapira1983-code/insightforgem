@@ -1,7 +1,9 @@
 // netlify/functions/score.js
+const { pickKey } = require('./openai-keys');
 const OPENAI_API = 'https://api.openai.com/v1';
 const MODEL_CHAT = 'gpt-4o';
 const MODEL_EMB  = 'text-embedding-3-small';
+const ALLOWED_ORIGIN = process.env.CORS_ORIGIN || 'https://insightforgem.netlify.app';
 
 function clamp(n,a,b){ return Math.max(a, Math.min(b, n)); }
 function cosine(a,b){ let dot=0,na=0,nb=0; for(let i=0;i<a.length;i++){const x=a[i],y=b[i]; dot+=x*y; na+=x*x; nb+=y*y;} return dot/(Math.sqrt(na)*Math.sqrt(nb)); }
@@ -19,25 +21,16 @@ async function openai(path, body, apiKey){
 
 exports.handler = async (event) => {
   try {
-    if (event.httpMethod !== 'POST') return { statusCode:405, body:'Use POST' };
-
-    // Берём любой из твоих ключей
-    const apiKey =
-      process.env.OPENAI_KEY_EVAL   ||
-      process.env.OPENAI_API_KEY    ||
-      process.env.OPEN_API_KEY      ||
-      process.env.OPENAI_KEY_GEN    ||
-      process.env.OPENAI_KEY_DESIGN ||
-      process.env.OPENAI_KEY_RESEARCH ||
-      process.env.OPENAI_KEY_GUARD;
-
-    if (!apiKey) return { statusCode:500, body: JSON.stringify({ error:'No API key in env vars' }) };
+    if (event.httpMethod !== 'POST') return { statusCode:405, headers:{'Access-Control-Allow-Origin': ALLOWED_ORIGIN}, body:'Use POST' };
 
     const body = JSON.parse(event.body || '{}');
+    const apiKey = pickKey({ role: body.role });
+    if (!apiKey) return { statusCode:500, headers:{'Access-Control-Allow-Origin': ALLOWED_ORIGIN}, body: JSON.stringify({ error:'No API key in env vars' }) };
+
     const idea = (body.idea || '').trim();
     const brief = body.brief || {};
     const historyTexts = Array.isArray(body.historyTexts) ? body.historyTexts.slice(0,20) : [];
-    if (!idea) return { statusCode:400, body: JSON.stringify({ error:'Provide `idea` string' }) };
+    if (!idea) return { statusCode:400, headers:{'Access-Control-Allow-Origin': ALLOWED_ORIGIN}, body: JSON.stringify({ error:'Provide `idea` string' }) };
 
     // 1) оригинальность
     const inputs = [idea, ...historyTexts];
@@ -71,10 +64,10 @@ exports.handler = async (event) => {
     const C = clamp(parseInt(a.clarity_risk ?? 50),0,100);
     const score = Math.round(0.30*originality + 0.25*V + 0.15*I + 0.15*E + 0.15*C);
 
-    return { statusCode:200, headers:{'Content-Type':'application/json'},
+    return { statusCode:200, headers:{'Content-Type':'application/json','Access-Control-Allow-Origin': ALLOWED_ORIGIN},
       body: JSON.stringify({ score, breakdown:{ originality, viability:V, impact:I, evidence:E, clarity_risk:C }, analysis:a }) };
   } catch (e) {
     const sc = e.status || 500;
-    return { statusCode:sc, headers:{'Content-Type':'application/json'}, body: JSON.stringify({ error: e.message || String(e) }) };
+    return { statusCode:sc, headers:{'Content-Type':'application/json','Access-Control-Allow-Origin': ALLOWED_ORIGIN}, body: JSON.stringify({ error: e.message || String(e) }) };
   }
 };

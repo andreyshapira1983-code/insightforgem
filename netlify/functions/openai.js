@@ -1,84 +1,74 @@
-// Netlify Function: /.netlify/functions/openai
-//
-// Acts as a proxy to the OpenAI API so that the secret API key can
-// remain on the server.  The function expects a POST request with a
-// JSON body identical to the OpenAI API payload.  It forwards the
-// request to OpenAI using the API key stored in `process.env.OPENAI_API_KEY`
-// (or `process.env.OPEN_API_KEY` as a fallback) and returns the
-// response.  This prevents exposing the key to the client.
+const { pickKey } = require('./openai-keys');
 
-export async function handler(event) {
-  // Allow preflight CORS requests
+const ALLOWED_ORIGIN = process.env.CORS_ORIGIN || 'https://insightforgem.netlify.app';
+
+exports.handler = async function(event) {
   if (event.httpMethod === 'OPTIONS') {
     return {
       statusCode: 204,
       headers: {
-        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Origin': ALLOWED_ORIGIN,
         'Access-Control-Allow-Methods': 'POST,OPTIONS',
         'Access-Control-Allow-Headers': 'Content-Type'
       },
       body: ''
     };
   }
-  // Only allow POST
+
   if (event.httpMethod !== 'POST') {
     return { statusCode: 405, body: 'Method Not Allowed' };
   }
-  // Parse the payload
-  let payload;
+
+  let payload = {};
   try {
     payload = JSON.parse(event.body || '{}');
-  } catch (err) {
+  } catch (e) {
     return {
       statusCode: 400,
-      headers: { 'Access-Control-Allow-Origin': '*' },
+      headers: { 'Access-Control-Allow-Origin': ALLOWED_ORIGIN },
       body: JSON.stringify({ error: 'Invalid JSON body' })
     };
   }
-  // Set sensible defaults if not provided
-if (!payload.model || payload.model === 'gpt-4o-mini') {
-  payload.model = 'gpt-4o';
-}
-  if (typeof payload.temperature === 'undefined') payload.temperature = 0.7;
-  // Determine API key
-  const apiKey = process.env.OPENAI_API_KEY || process.env.OPEN_API_KEY;
-  if (!apiKey) {
+
+  const {
+    model = 'gpt-4o-mini',
+    messages = [],
+    temperature = 0.7,
+    role
+  } = payload;
+
+  let apiKey;
+  try {
+    apiKey = pickKey({ role });
+  } catch (e) {
     return {
       statusCode: 500,
-      headers: { 'Access-Control-Allow-Origin': '*' },
+      headers: { 'Access-Control-Allow-Origin': ALLOWED_ORIGIN },
       body: JSON.stringify({ error: 'Missing OpenAI API key in environment' })
     };
   }
-  // Determine endpoint (use chat completions endpoint for chat models)
-  const endpoint = 'https://api.openai.com/v1/chat/completions';
+
   try {
-    // Use native fetch if available (Node 18) or import node-fetch
-    let fetchFn;
-    if (typeof fetch === 'function') {
-      fetchFn = fetch;
-    } else {
-      const nodeFetch = await import('node-fetch');
-      fetchFn = nodeFetch.default;
-    }
-    const res = await fetchFn(endpoint, {
+    const res = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${apiKey}`,
+        Authorization: `Bearer ${apiKey}`,
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify(payload)
+      body: JSON.stringify({ model, messages, temperature })
     });
-    const data = await res.json();
+
+    const text = await res.text();
     return {
       statusCode: res.ok ? 200 : res.status,
-      headers: { 'Access-Control-Allow-Origin': '*' },
-      body: JSON.stringify(data)
+      headers: { 'Access-Control-Allow-Origin': ALLOWED_ORIGIN },
+      body: text
     };
   } catch (err) {
     return {
       statusCode: 500,
-      headers: { 'Access-Control-Allow-Origin': '*' },
+      headers: { 'Access-Control-Allow-Origin': ALLOWED_ORIGIN },
       body: JSON.stringify({ error: err.message })
     };
   }
-}
+};

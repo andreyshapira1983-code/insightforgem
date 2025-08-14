@@ -1,0 +1,8 @@
+{
+  "name": "insightforgem",
+  "private": true,
+  "scripts": {
+    "dev": "netlify dev",
+    "test": "node tests/smoke-diag.js"
+  }
+}
