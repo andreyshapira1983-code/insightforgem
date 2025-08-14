@@ -1,0 +1,19 @@
+name: Hygiene
+on: [push, pull_request]
+jobs:
+  hygiene:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 20 }
+      - run: npm ci || npm i
+      - run: npm run lint
+      - run: npm run format:check
+      - run: npm run html:validate
+      - run: npm run css:lint
+      - run: npm run audit
+      - run: SITE_URL="${{ vars.SITE_URL }}" OPENAI_URL="${{ vars.OPENAI_URL }}" npm run smoke:functions
+      - run: OPENAI_URL="${{ vars.OPENAI_URL }}" npm run smoke:roles
+      - run: SITE_URL="${{ vars.SITE_URL }}" npm run smoke:pages
+      - run: SITE_URL="${{ vars.SITE_URL }}" npm run lhci
