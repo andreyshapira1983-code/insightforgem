@@ -1,140 +1,148 @@
 <!doctype html>
 <html lang="ru">
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Multi-Agents · DEMO</title>
-  <style>
-    body {
-      margin: 0;
-      padding: 20px;
-      font-family: system-ui, Arial, sans-serif;
-      background: #0b1220;
-      color: #e6edf3;
-    }
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 14px;
-      max-width: 1100px;
-      margin: 0 auto;
-    }
-    .card {
-      background: #0f172a;
-      border-radius: 14px;
-      box-shadow: 0 8px 28px rgba(0, 0, 0, 0.35);
-      padding: 14px;
-    }
-    input,
-    textarea,
-    button {
-      width: 100%;
-      padding: 10px;
-      border-radius: 10px;
-      border: 1px solid #1f2a44;
-      background: #0d1328;
-      color: #e6edf3;
-    }
-    button {
-      border: 0;
-      background: #2563eb;
-      cursor: pointer;
-      font-weight: 600;
-    }
-    pre {
-      background: #0d1328;
-      padding: 10px;
-      border-radius: 10px;
-      overflow: auto;
-      max-height: 220px;
-    }
-    .muted {
-      opacity: 0.8;
-      font-size: 12px;
-    }
-  </style>
-  <h2>🧩 6 агентов (DEMO-friendly)</h2>
-  <p class="muted">
-    Без ключа — офлайн DEMO. Поставишь <code>OPENAI_API_KEY</code> — пойдут ответы GPT-4o. При
-    401/429 будет мягкий фолбэк в DEMO.
-  </p>
-
-  <div class="grid">
-    <div class="card">
-      <h3>Guard</h3>
-      <textarea id="g_text" placeholder="Текст для проверки"></textarea>
-      <button onclick="call('guard','filter',{text: val('g_text')},'g_out')">Проверить</button>
-      <pre id="g_out">–</pre>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Multi-Agents · DEMO</title>
+    <style>
+      body {
+        margin: 0;
+        padding: 20px;
+        font-family: system-ui, Arial, sans-serif;
+        background: #0b1220;
+        color: #e6edf3;
+      }
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+        gap: 14px;
+        max-width: 1100px;
+        margin: 0 auto;
+      }
+      .card {
+        background: #0f172a;
+        border-radius: 14px;
+        box-shadow: 0 8px 28px rgba(0, 0, 0, 0.35);
+        padding: 14px;
+      }
+      input,
+      textarea,
+      button {
+        width: 100%;
+        padding: 10px;
+        border-radius: 10px;
+        border: 1px solid #1f2a44;
+        background: #0d1328;
+        color: #e6edf3;
+      }
+      button {
+        border: 0;
+        background: #2563eb;
+        cursor: pointer;
+        font-weight: 600;
+      }
+      pre {
+        background: #0d1328;
+        padding: 10px;
+        border-radius: 10px;
+        overflow: auto;
+        max-height: 220px;
+      }
+      .muted {
+        opacity: 0.8;
+        font-size: 12px;
+      }
+    </style>
+  </head>
+  <body>
+    <h2>🧩 6 агентов (DEMO-friendly)</h2>
+    <p class="muted">
+      Без ключа — офлайн DEMO. Поставишь <code>OPENAI_API_KEY</code> — пойдут ответы GPT-4o. При
+      401/429 будет мягкий фолбэк в DEMO.
+    </p>
+    <div class="grid">
+      <div class="card">
+        <h3>Guard</h3>
+        <textarea id="g_text" placeholder="Текст для проверки"></textarea>
+        <button type="button" onclick="call('guard','filter',{text: val('g_text')},'g_out')">
+          Проверить
+        </button>
+        <pre id="g_out">–</pre>
+      </div>
+      <div class="card">
+        <h3>Generator</h3>
+        <input id="gen_topic" placeholder="Тема (например, веломаршруты)" />
+        <button
+          type="button"
+          onclick="call('generator','generate',{topic: val('gen_topic')},'gen_out')"
+        >
+          Сгенерировать
+        </button>
+        <pre id="gen_out">–</pre>
+      </div>
+      <div class="card">
+        <h3>Judge</h3>
+        <textarea id="j_idea" placeholder="Идея для оценки"></textarea>
+        <button type="button" onclick="call('judge','score',{idea: val('j_idea')},'j_out')">
+          Оценить
+        </button>
+        <pre id="j_out">–</pre>
+      </div>
+      <div class="card">
+        <h3>Designer</h3>
+        <input id="d_h" placeholder="Заголовок" />
+        <input id="d_s" placeholder="Подзаголовок" />
+        <input id="d_c" placeholder="CTA" />
+        <button
+          type="button"
+          onclick="call('designer','rewrite',{heading:val('d_h'), sub:val('d_s'), cta:val('d_c')},'d_out')"
+        >
+          Переписать
+        </button>
+        <pre id="d_out">–</pre>
+      </div>
+      <div class="card">
+        <h3>Researcher</h3>
+        <input id="r_q" placeholder="Запрос (тема исследования)" />
+        <button type="button" onclick="call('researcher','research',{query: val('r_q')},'r_out')">
+          Исследовать
+        </button>
+        <pre id="r_out">–</pre>
+      </div>
+      <div class="card">
+        <h3>Manager (оркестр)</h3>
+        <input id="m_topic" placeholder="Тема (например, веломаршруты)" />
+        <button
+          type="button"
+          onclick="call('manager','orchestrate',{topic: val('m_topic')},'m_out')"
+        >
+          Запустить пайплайн
+        </button>
+        <pre id="m_out">–</pre>
+      </div>
     </div>
-
-    <div class="card">
-      <h3>Generator</h3>
-      <input id="gen_topic" placeholder="Тема (например, веломаршруты)" />
-      <button onclick="call('generator','generate',{topic: val('gen_topic')},'gen_out')">
-        Сгенерировать
-      </button>
-      <pre id="gen_out">–</pre>
-    </div>
-
-    <div class="card">
-      <h3>Judge</h3>
-      <textarea id="j_idea" placeholder="Идея для оценки"></textarea>
-      <button onclick="call('judge','score',{idea: val('j_idea')},'j_out')">Оценить</button>
-      <pre id="j_out">–</pre>
-    </div>
-
-    <div class="card">
-      <h3>Designer</h3>
-      <input id="d_h" placeholder="Заголовок" />
-      <input id="d_s" placeholder="Подзаголовок" />
-      <input id="d_c" placeholder="CTA" />
-      <button
-        onclick="call('designer','rewrite',{heading:val('d_h'), sub:val('d_s'), cta:val('d_c')},'d_out')"
-      >
-        Переписать
-      </button>
-      <pre id="d_out">–</pre>
-    </div>
-
-    <div class="card">
-      <h3>Researcher</h3>
-      <input id="r_q" placeholder="Запрос (тема исследования)" />
-      <button onclick="call('researcher','research',{query: val('r_q')},'r_out')">
-        Исследовать
-      </button>
-      <pre id="r_out">–</pre>
-    </div>
-
-    <div class="card">
-      <h3>Manager (оркестр)</h3>
-      <input id="m_topic" placeholder="Тема (например, веломаршруты)" />
-      <button onclick="call('manager','orchestrate',{topic: val('m_topic')},'m_out')">
-        Запустить пайплайн
-      </button>
-      <pre id="m_out">–</pre>
-    </div>
-  </div>
-
-  <script>
-    const post = (url, data) =>
-      fetch(url, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data),
-      }).then((r) => r.text().then((t) => ({ s: r.status, t })));
-    const val = (id) => document.getElementById(id).value.trim();
-    function call(agent, action, payload, outId) {
-      const out = document.getElementById(outId);
-      out.textContent = '…';
-      post('/.netlify/functions/agents', { agent, action, payload })
-        .then(({ s, t }) => {
-          try {
-            const j = JSON.parse(t);
-            out.textContent = JSON.stringify(j, null, 2);
-          } catch {
-            out.textContent = 'HTTP ' + s + '\\n' + t;
-          }
-        })
-        .catch((e) => (out.textContent = 'ERR ' + e.message));
-    }
-  </script>
+    <script>
+      const post = (url, data) =>
+        fetch(url, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data),
+        }).then((r) => r.text().then((t) => ({ s: r.status, t })));
+      const val = (id) => document.getElementById(id).value.trim();
+      function call(agent, action, payload, outId) {
+        const out = document.getElementById(outId);
+        out.textContent = '…';
+        post('/.netlify/functions/agents', { agent, action, payload })
+          .then(({ s, t }) => {
+            try {
+              const j = JSON.parse(t);
+              out.textContent = JSON.stringify(j, null, 2);
+            } catch {
+              out.textContent = 'HTTP ' + s + '\n' + t;
+            }
+          })
+          .catch((e) => (out.textContent = 'ERR ' + e.message));
+      }
+    </script>
+  </body>
 </html>

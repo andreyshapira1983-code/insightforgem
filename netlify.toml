@@ -2,7 +2,6 @@
   directory = "netlify/functions"
 
 [[headers]]
-  # Apply security headers to all routes at the CDN edge.
   for = "/*"
   [headers.values]
     Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://cdn-icons-png.flaticon.com; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'"
