@@ -1,7 +1,7 @@
 // netlify/functions/score.js
 const OPENAI_API = 'https://api.openai.com/v1';
-const MODEL_CHAT = 'gpt-4o';                 // стабильнее, чем 'gpt-4o-mini'
-const MODEL_EMB  = 'text-embedding-3-small'; // для оценки "оригинальности"
+const MODEL_CHAT = 'gpt-4o';
+const MODEL_EMB  = 'text-embedding-3-small';
 
 function clamp(n,a,b){ return Math.max(a, Math.min(b, n)); }
 function cosine(a,b){ let dot=0,na=0,nb=0; for(let i=0;i<a.length;i++){const x=a[i],y=b[i]; dot+=x*y; na+=x*x; nb+=y*y;} return dot/(Math.sqrt(na)*Math.sqrt(nb)); }
@@ -21,12 +21,12 @@ exports.handler = async (event) => {
   try {
     if (event.httpMethod !== 'POST') return { statusCode:405, body:'Use POST' };
 
-    // Берём ЛЮБОЙ из твоих ключей (судя по Netlify-скрину)
+    // Берём любой из твоих ключей
     const apiKey =
       process.env.OPENAI_KEY_EVAL   ||
       process.env.OPENAI_API_KEY    ||
-      process.env.OPEN_API_KEY      ||  // у тебя такой есть
-      process.env.OPENAI_KEY_GEN    ||  // и этот тоже есть
+      process.env.OPEN_API_KEY      ||
+      process.env.OPENAI_KEY_GEN    ||
       process.env.OPENAI_KEY_DESIGN ||
       process.env.OPENAI_KEY_RESEARCH ||
       process.env.OPENAI_KEY_GUARD;
@@ -39,14 +39,14 @@ exports.handler = async (event) => {
     const historyTexts = Array.isArray(body.historyTexts) ? body.historyTexts.slice(0,20) : [];
     if (!idea) return { statusCode:400, body: JSON.stringify({ error:'Provide `idea` string' }) };
 
-    // 1) Оригинальность
+    // 1) оригинальность
     const inputs = [idea, ...historyTexts];
     const emb = await openai('embeddings', { model: MODEL_EMB, input: inputs }, apiKey);
     const ideaEmb = emb.data[0].embedding;
     let maxSim = 0; for (const d of emb.data.slice(1)) maxSim = Math.max(maxSim, cosine(ideaEmb, d.embedding));
     const originality = Math.round((1 - maxSim) * 100);
 
-    // 2) Остальные саб-оценки
+    // 2) остальные саб-оценки
     const system = [
       'You are a strict product evaluator.',
       'Return ONLY valid JSON with keys: viability, impact, evidence, clarity_risk (0..100 each),',
@@ -63,7 +63,7 @@ exports.handler = async (event) => {
 
     let txt = chat.choices?.[0]?.message?.content || '{}';
     const m = txt.match(/\{[\s\S]*\}$/); if (m) txt = m[0];
-    let a = {}; try{ a = JSON.parse(txt); } catch { a = {}; }
+    let a={}; try{ a=JSON.parse(txt); }catch{ a={}; }
 
     const V = clamp(parseInt(a.viability ?? 50),0,100);
     const I = clamp(parseInt(a.impact ?? 50),0,100);
