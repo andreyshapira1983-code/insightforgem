@@ -13,13 +13,13 @@ export async function handler() {
   const stats = {
     ideas_total: 42,
     users_online: 7,
-    idea_of_the_day: 'Solar Powered Delivery Drones'
+    idea_of_the_day: 'Solar Powered Delivery Drones',
   };
   return {
     statusCode: 200,
     headers: {
-      'Access-Control-Allow-Origin': ALLOWED_ORIGIN
+      'Access-Control-Allow-Origin': ALLOWED_ORIGIN,
     },
-    body: JSON.stringify(stats)
+    body: JSON.stringify(stats),
   };
 }

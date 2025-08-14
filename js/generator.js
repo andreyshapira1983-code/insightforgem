@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', function () {
       alert('Please enter an idea to generate.');
       return;
     }
-    // Enforce client‑side throttling: only allow a new generation every 10 seconds.
+    // Enforce client‑side throttling: only allow a new generation every 10 seconds.
     const now = Date.now();
     const remaining = lastGenerateTime + 10000 - now;
     if (remaining > 0) {
@@ -59,14 +59,15 @@ document.addEventListener('DOMContentLoaded', function () {
       messages: [
         {
           role: 'system',
-          content: 'You are an expert business analyst. Given a business idea, you evaluate its viability on a scale of 0–100 and provide a brief verdict, recommendations, risks, next steps and patentability advice in a structured format. Format your response with labels like "Score", "Verdict", "Recommendations", "Risks", "Next Steps" and "Patentability" separated by new lines.'
+          content:
+            'You are an expert business analyst. Given a business idea, you evaluate its viability on a scale of 0–100 and provide a brief verdict, recommendations, risks, next steps and patentability advice in a structured format. Format your response with labels like "Score", "Verdict", "Recommendations", "Risks", "Next Steps" and "Patentability" separated by new lines.',
         },
         {
           role: 'user',
-          content: idea
-        }
+          content: idea,
+        },
       ],
-      temperature: 0.7
+      temperature: 0.7,
     };
     let score = null;
     let details = null;
@@ -74,7 +75,7 @@ document.addEventListener('DOMContentLoaded', function () {
       const response = await fetch('/.netlify/functions/openai', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
+        body: JSON.stringify(payload),
       });
       if (!response.ok) {
         throw new Error('AI service returned an error');
@@ -82,10 +83,18 @@ document.addEventListener('DOMContentLoaded', function () {
       const data = await response.json();
       // Attempt to parse the response.  We expect the assistant to
       // return content in a structure with labelled lines.
-      const content = data && data.choices && data.choices[0] && data.choices[0].message && data.choices[0].message.content;
+      const content =
+        data &&
+        data.choices &&
+        data.choices[0] &&
+        data.choices[0].message &&
+        data.choices[0].message.content;
       if (typeof content === 'string' && content.trim().length > 0) {
         details = {};
-        const lines = content.split(/\n/).map(l => l.trim()).filter(Boolean);
+        const lines = content
+          .split(/\n/)
+          .map((l) => l.trim())
+          .filter(Boolean);
         lines.forEach(function (line) {
           const lower = line.toLowerCase();
           if (lower.startsWith('score')) {
@@ -127,7 +136,7 @@ document.addEventListener('DOMContentLoaded', function () {
         recommendations: 'Focus on user engagement and consider scalable business models.',
         risks: 'Potential competition, market saturation and regulatory hurdles.',
         nextSteps: 'Refine your value proposition, conduct market validation and prepare a pitch.',
-        patentability: 'Consult a qualified patent attorney to explore protection strategies.'
+        patentability: 'Consult a qualified patent attorney to explore protection strategies.',
       };
     }
     // Update progress circle and text
@@ -151,7 +160,7 @@ document.addEventListener('DOMContentLoaded', function () {
       score: score,
       details: details,
       visibility: 'private',
-      lang: lang
+      lang: lang,
     };
     // Render the full analysis to the page
     if (analysisContainer) {
@@ -161,7 +170,7 @@ document.addEventListener('DOMContentLoaded', function () {
         recommendations: 'Recommendations',
         risks: 'Risks',
         nextSteps: 'Next Steps',
-        patentability: 'Patentability'
+        patentability: 'Patentability',
       };
       for (const key in sections) {
         const title = sections[key];
@@ -189,22 +198,24 @@ document.addEventListener('DOMContentLoaded', function () {
     fetch('/.netlify/functions/ideas', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(currentResult)
-    }).then(res => {
-      if (!res.ok) throw new Error('Failed to save idea');
-      alert('Your idea has been saved to My Ideas!');
-    }).catch(err => {
-      console.error(err);
-      // Fallback: save in localStorage to avoid losing the idea
-      try {
-        const existing = JSON.parse(localStorage.getItem('starGalaxyIdeas') || '[]');
-        existing.push(currentResult);
-        localStorage.setItem('starGalaxyIdeas', JSON.stringify(existing));
-        alert('Saved locally because the server is unavailable.');
-      } catch(e) {
-        alert('Failed to save the idea.');
-      }
-    });
+      body: JSON.stringify(currentResult),
+    })
+      .then((res) => {
+        if (!res.ok) throw new Error('Failed to save idea');
+        alert('Your idea has been saved to My Ideas!');
+      })
+      .catch((err) => {
+        console.error(err);
+        // Fallback: save in localStorage to avoid losing the idea
+        try {
+          const existing = JSON.parse(localStorage.getItem('starGalaxyIdeas') || '[]');
+          existing.push(currentResult);
+          localStorage.setItem('starGalaxyIdeas', JSON.stringify(existing));
+          alert('Saved locally because the server is unavailable.');
+        } catch (e) {
+          alert('Failed to save the idea.');
+        }
+      });
     // Clear UI state
     currentResult = null;
     ideaInput.value = '';

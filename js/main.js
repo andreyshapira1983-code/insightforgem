@@ -29,7 +29,7 @@ document.addEventListener('DOMContentLoaded', function () {
       facebook: 'F',
       github: 'GH',
       apple: 'A',
-      email: 'U'
+      email: 'U',
     };
     const userName = nameMap[provider] || 'U';
     const authState = { provider, userName };

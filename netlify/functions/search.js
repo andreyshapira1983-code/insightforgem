@@ -20,9 +20,9 @@ export async function handler(event) {
       headers: {
         'Access-Control-Allow-Origin': ALLOWED_ORIGIN,
         'Access-Control-Allow-Methods': 'GET,OPTIONS',
-        'Access-Control-Allow-Headers': 'Content-Type'
+        'Access-Control-Allow-Headers': 'Content-Type',
       },
-      body: ''
+      body: '',
     };
   }
 
@@ -30,7 +30,7 @@ export async function handler(event) {
   if (event.httpMethod !== 'GET') {
     return {
       statusCode: 405,
-      body: JSON.stringify({ error: 'Method not allowed' })
+      body: JSON.stringify({ error: 'Method not allowed' }),
     };
   }
 
@@ -40,7 +40,7 @@ export async function handler(event) {
     return {
       statusCode: 400,
       headers: { 'Access-Control-Allow-Origin': ALLOWED_ORIGIN },
-      body: JSON.stringify({ error: 'Missing query parameter' })
+      body: JSON.stringify({ error: 'Missing query parameter' }),
     };
   }
 
@@ -53,7 +53,7 @@ export async function handler(event) {
     return {
       statusCode: 200,
       headers: { 'Access-Control-Allow-Origin': ALLOWED_ORIGIN },
-      body: JSON.stringify({ results: [] })
+      body: JSON.stringify({ results: [] }),
     };
   }
 
@@ -76,22 +76,22 @@ export async function handler(event) {
     const data = await response.json();
     // Normalize output to { results: [ { title, description, link } ] }
     const results = Array.isArray(data.results)
-      ? data.results.map(item => ({
+      ? data.results.map((item) => ({
           title: item.title || '',
           description: item.description || '',
-          link: item.link || '#'
+          link: item.link || '#',
         }))
       : [];
     return {
       statusCode: 200,
       headers: { 'Access-Control-Allow-Origin': ALLOWED_ORIGIN },
-      body: JSON.stringify({ results })
+      body: JSON.stringify({ results }),
     };
   } catch (err) {
     return {
       statusCode: 500,
       headers: { 'Access-Control-Allow-Origin': ALLOWED_ORIGIN },
-      body: JSON.stringify({ error: err.message })
+      body: JSON.stringify({ error: err.message }),
     };
   }
 }

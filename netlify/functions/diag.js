@@ -13,7 +13,7 @@ exports.handler = async () => {
     headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': ALLOWED_ORIGIN },
     body: JSON.stringify({
       foundEnvNames: detectedKeyNames(),
-      roundRobinSample: rr
-    })
+      roundRobinSample: rr,
+    }),
   };
 };

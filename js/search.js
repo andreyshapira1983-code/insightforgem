@@ -18,21 +18,96 @@ document.addEventListener('DOMContentLoaded', function () {
   // sure to update this array accordingly.
   const staticData = [
     // Trending items
-    { type: 'Trend', title: 'Clean Energy Solutions', description: 'Innovations in renewable energy, storage, and sustainable infrastructure are gaining momentum.', link: 'trending.html' },
-    { type: 'Trend', title: 'Health Tech Wearables', description: 'Smart devices for monitoring health metrics are becoming ubiquitous and increasingly sophisticated.', link: 'trending.html' },
-    { type: 'Trend', title: 'Remote Collaboration Platforms', description: 'Next‑generation tools that enable distributed teams to work together seamlessly.', link: 'trending.html' },
-    { type: 'Trend', title: 'AI‑Assisted Creativity', description: 'Applications that help artists, writers and designers co‑create with artificial intelligence.', link: 'trending.html' },
+    {
+      type: 'Trend',
+      title: 'Clean Energy Solutions',
+      description:
+        'Innovations in renewable energy, storage, and sustainable infrastructure are gaining momentum.',
+      link: 'trending.html',
+    },
+    {
+      type: 'Trend',
+      title: 'Health Tech Wearables',
+      description:
+        'Smart devices for monitoring health metrics are becoming ubiquitous and increasingly sophisticated.',
+      link: 'trending.html',
+    },
+    {
+      type: 'Trend',
+      title: 'Remote Collaboration Platforms',
+      description:
+        'Next‑generation tools that enable distributed teams to work together seamlessly.',
+      link: 'trending.html',
+    },
+    {
+      type: 'Trend',
+      title: 'AI‑Assisted Creativity',
+      description:
+        'Applications that help artists, writers and designers co‑create with artificial intelligence.',
+      link: 'trending.html',
+    },
     // Additional trending topics for a richer search dataset
-    { type: 'Trend', title: 'Green Transportation', description: 'Electric and hydrogen vehicles reducing carbon footprint in cities and logistics.', link: 'trending.html' },
-    { type: 'Trend', title: 'Blockchain for Supply Chains', description: 'Distributed ledgers improving transparency and traceability in global trade.', link: 'trending.html' },
-    { type: 'Trend', title: 'Biotech Startups', description: 'Breakthroughs in CRISPR, gene therapy and personalized medicine.', link: 'trending.html' },
-    { type: 'Trend', title: 'Space Tourism', description: 'Commercial ventures opening the final frontier to private citizens.', link: 'trending.html' },
+    {
+      type: 'Trend',
+      title: 'Green Transportation',
+      description:
+        'Electric and hydrogen vehicles reducing carbon footprint in cities and logistics.',
+      link: 'trending.html',
+    },
+    {
+      type: 'Trend',
+      title: 'Blockchain for Supply Chains',
+      description: 'Distributed ledgers improving transparency and traceability in global trade.',
+      link: 'trending.html',
+    },
+    {
+      type: 'Trend',
+      title: 'Biotech Startups',
+      description: 'Breakthroughs in CRISPR, gene therapy and personalized medicine.',
+      link: 'trending.html',
+    },
+    {
+      type: 'Trend',
+      title: 'Space Tourism',
+      description: 'Commercial ventures opening the final frontier to private citizens.',
+      link: 'trending.html',
+    },
     // Resources
-    { type: 'Resource', title: 'USPTO Patent Search', description: 'US patent database search.', link: 'https://www.uspto.gov/patents/search', external: true },
-    { type: 'Resource', title: 'WIPO PATENTSCOPE', description: 'International patent search.', link: 'https://patentscope.wipo.int', external: true },
-    { type: 'Resource', title: 'Lean Canvas Template', description: 'Structure your idea on one page.', link: 'https://leanstack.com/leancanvas', external: true },
-    { type: 'Resource', title: 'Pitch Deck Guide', description: 'Resources from Y Combinator.', link: 'https://www.ycombinator.com/library', external: true },
-    { type: 'Resource', title: 'OpenAI API', description: 'Build AI‑powered features.', link: 'https://platform.openai.com/docs', external: true }
+    {
+      type: 'Resource',
+      title: 'USPTO Patent Search',
+      description: 'US patent database search.',
+      link: 'https://www.uspto.gov/patents/search',
+      external: true,
+    },
+    {
+      type: 'Resource',
+      title: 'WIPO PATENTSCOPE',
+      description: 'International patent search.',
+      link: 'https://patentscope.wipo.int',
+      external: true,
+    },
+    {
+      type: 'Resource',
+      title: 'Lean Canvas Template',
+      description: 'Structure your idea on one page.',
+      link: 'https://leanstack.com/leancanvas',
+      external: true,
+    },
+    {
+      type: 'Resource',
+      title: 'Pitch Deck Guide',
+      description: 'Resources from Y Combinator.',
+      link: 'https://www.ycombinator.com/library',
+      external: true,
+    },
+    {
+      type: 'Resource',
+      title: 'OpenAI API',
+      description: 'Build AI‑powered features.',
+      link: 'https://platform.openai.com/docs',
+      external: true,
+    },
   ];
 
   // Load ideas from the in‑memory cache.  Ideas are no longer stored
@@ -49,7 +124,7 @@ document.addEventListener('DOMContentLoaded', function () {
         title: displayTitle,
         description: '',
         link: 'idea_detail.html?id=' + ideaObj.id,
-        external: false
+        external: false,
       };
     });
   }
@@ -129,7 +204,7 @@ document.addEventListener('DOMContentLoaded', function () {
           title: item.title || '',
           description: item.description || '',
           link: item.link || '#',
-          external: true
+          external: true,
         };
       });
     } catch (err) {

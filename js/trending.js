@@ -9,15 +9,21 @@ document.addEventListener('DOMContentLoaded', function () {
   function applyFilters() {
     const query = searchInput ? searchInput.value.trim().toLowerCase() : '';
     const selectedCategories = Array.from(filterCheckboxes)
-      .filter(function (cb) { return cb.checked; })
-      .map(function (cb) { return cb.value; });
+      .filter(function (cb) {
+        return cb.checked;
+      })
+      .map(function (cb) {
+        return cb.value;
+      });
     items.forEach(function (item) {
       const textContent = item.textContent.toLowerCase();
       const categories = item.dataset.categories ? item.dataset.categories.split(',') : [];
       const matchesQuery = !query || textContent.includes(query);
-      const matchesCategory = selectedCategories.length === 0 || categories.some(function (cat) {
-        return selectedCategories.includes(cat);
-      });
+      const matchesCategory =
+        selectedCategories.length === 0 ||
+        categories.some(function (cat) {
+          return selectedCategories.includes(cat);
+        });
       if (matchesQuery && matchesCategory) {
         item.style.display = '';
       } else {

@@ -98,13 +98,11 @@ document.addEventListener('DOMContentLoaded', async function () {
     console.warn('Failed to load ideas from server:', err);
   }
   // If no ideas were returned, attempt to read from localStorage
-  let loadedFromLocal = false;
   if (!ideas || ideas.length === 0) {
     try {
       const localIdeas = JSON.parse(localStorage.getItem('starGalaxyIdeas') || '[]');
       if (Array.isArray(localIdeas) && localIdeas.length > 0) {
         ideas = localIdeas;
-        loadedFromLocal = true;
       }
     } catch (e) {
       // If parsing fails, leave ideas empty
@@ -140,7 +138,7 @@ document.addEventListener('DOMContentLoaded', async function () {
     private: { title: 'Private Ideas', list: [] },
     link: { title: 'Shared via link', list: [] },
     shared: { title: 'Shared via link', list: [] },
-    public: { title: 'Public Ideas', list: [] }
+    public: { title: 'Public Ideas', list: [] },
   };
   ideas.forEach(function (idea) {
     const vis = idea.visibility || 'private';
@@ -163,9 +161,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 
     // Truncate long ideas for the card title
     const truncated =
-      idea.idea && idea.idea.length > 100
-        ? idea.idea.slice(0, 100) + '…'
-        : idea.idea;
+      idea.idea && idea.idea.length > 100 ? idea.idea.slice(0, 100) + '…' : idea.idea;
 
     // Title element
     const titleEl = document.createElement('h3');
@@ -184,7 +180,7 @@ document.addEventListener('DOMContentLoaded', async function () {
       private: '🔒',
       link: '🔗',
       shared: '🔗',
-      public: '🌍'
+      public: '🌍',
     };
     visBadge.className = 'idea-badge visibility-badge vis-badge-' + visType;
     visBadge.textContent = visIcons[visType] || '';
@@ -219,8 +215,8 @@ document.addEventListener('DOMContentLoaded', async function () {
       fetch('/ideas/' + idea.id, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ visibility: newVal })
-      }).catch(function(err) {
+        body: JSON.stringify({ visibility: newVal }),
+      }).catch(function (err) {
         console.error('Failed to update idea visibility on server:', err);
       });
     });

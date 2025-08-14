@@ -14,17 +14,17 @@ document.addEventListener('DOMContentLoaded', function () {
   // Current channel (defaults to public)
   let currentChannel = 'public';
 
-      // In‑memory chat storage keyed by channel.  Messages are no longer
-      // persisted in localStorage.
-      window.starGalaxyChatStorage = window.starGalaxyChatStorage || {};
+  // In‑memory chat storage keyed by channel.  Messages are no longer
+  // persisted in localStorage.
+  window.starGalaxyChatStorage = window.starGalaxyChatStorage || {};
 
-      function loadMessages(channel) {
-        return window.starGalaxyChatStorage[channel] || [];
-      }
+  function loadMessages(channel) {
+    return window.starGalaxyChatStorage[channel] || [];
+  }
 
-      function saveMessages(channel, msgs) {
-        window.starGalaxyChatStorage[channel] = msgs;
-      }
+  function saveMessages(channel, msgs) {
+    window.starGalaxyChatStorage[channel] = msgs;
+  }
 
   // Render the list of messages for the current channel
   function renderMessages() {
@@ -34,7 +34,10 @@ document.addEventListener('DOMContentLoaded', function () {
     msgs.forEach(function (msg) {
       const div = document.createElement('div');
       div.className = 'chat-message';
-      const timeStr = new Date(msg.time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      const timeStr = new Date(msg.time).toLocaleTimeString([], {
+        hour: '2-digit',
+        minute: '2-digit',
+      });
       const senderSpan = document.createElement('span');
       senderSpan.className = 'sender';
       senderSpan.textContent = msg.user;
@@ -62,10 +65,10 @@ document.addEventListener('DOMContentLoaded', function () {
   function sendMessage() {
     const text = chatInput.value.trim();
     if (!text) return;
-         // Use the in‑memory auth state to derive a user name.  If the
-         // user is not authenticated, default to 'Guest'.
-         const authData = window.starGalaxyAuthState;
-         const userName = authData ? authData.provider.toUpperCase() : 'Guest';
+    // Use the in‑memory auth state to derive a user name.  If the
+    // user is not authenticated, default to 'Guest'.
+    const authData = window.starGalaxyAuthState;
+    const userName = authData ? authData.provider.toUpperCase() : 'Guest';
     const msgs = loadMessages(currentChannel);
     msgs.push({ user: userName, text: text, time: Date.now() });
     saveMessages(currentChannel, msgs);
@@ -128,10 +131,7 @@ document.addEventListener('DOMContentLoaded', function () {
   function renderPinned() {
     if (!pinnedList) return;
     pinnedList.innerHTML = '';
-    const pinned = [
-      'Welcome to the community!',
-      'Check out the resources page for helpful links.'
-    ];
+    const pinned = ['Welcome to the community!', 'Check out the resources page for helpful links.'];
     pinned.forEach(function (txt) {
       const li = document.createElement('li');
       li.textContent = txt;

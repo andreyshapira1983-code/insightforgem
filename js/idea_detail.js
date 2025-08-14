@@ -17,7 +17,9 @@ document.addEventListener('DOMContentLoaded', function () {
   } catch (e) {
     ideas = [];
   }
-  const idea = ideas.find(function (item) { return String(item.id) === String(id); });
+  const idea = ideas.find(function (item) {
+    return String(item.id) === String(id);
+  });
   if (!idea) {
     container.textContent = 'Idea not found.';
     return;
@@ -55,7 +57,9 @@ document.addEventListener('DOMContentLoaded', function () {
     idea.visibility = newVal;
     // Persist change to local storage
     var all = JSON.parse(localStorage.getItem('starGalaxyIdeas')) || [];
-    var idx = all.findIndex(function (it) { return String(it.id) === String(id); });
+    var idx = all.findIndex(function (it) {
+      return String(it.id) === String(id);
+    });
     if (idx >= 0) {
       all[idx].visibility = newVal;
       localStorage.setItem('starGalaxyIdeas', JSON.stringify(all));
@@ -90,7 +94,9 @@ document.addEventListener('DOMContentLoaded', function () {
     try {
       document.execCommand('copy');
       copyBtn.textContent = 'Copied!';
-      setTimeout(function () { copyBtn.textContent = 'Copy Link'; }, 2000);
+      setTimeout(function () {
+        copyBtn.textContent = 'Copy Link';
+      }, 2000);
     } catch (err) {
       // fallback
     }

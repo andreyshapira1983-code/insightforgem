@@ -146,7 +146,7 @@
   flex-direction: column;
 }
 
-.search-modal input[type="text"] {
+.search-modal input[type='text'] {
   padding: 10px 14px;
   border: 1px solid var(--border);
   border-radius: 8px;
@@ -193,8 +193,8 @@
  * settings ensure that touch targets are at least 24×24 CSS pixels.
  */
 button,
-input[type="button"],
-input[type="submit"],
+input[type='button'],
+input[type='submit'],
 .mobile-menu-toggle,
 .theme-toggle,
 .search-toggle,
@@ -275,7 +275,8 @@ input[type="submit"],
   grid-template-columns: 1fr 2fr 1fr;
   gap: 24px;
 }
-.left-rail, .right-rail {
+.left-rail,
+.right-rail {
   background: var(--panel);
   border: 1px solid var(--border);
   border-radius: 12px;
@@ -283,7 +284,8 @@ input[type="submit"],
   max-height: 80vh;
   overflow-y: auto;
 }
-.left-rail h2, .right-rail h2 {
+.left-rail h2,
+.right-rail h2 {
   margin-top: 0;
   font-size: 20px;
   margin-bottom: 12px;
@@ -308,7 +310,8 @@ input[type="submit"],
   .home-layout {
     grid-template-columns: 1fr;
   }
-  .left-rail, .right-rail {
+  .left-rail,
+  .right-rail {
     display: none;
   }
 }
@@ -394,19 +397,22 @@ input[type="submit"],
 #chat-send:hover {
   opacity: 0.9;
 }
-.members-list, .pinned-list {
+.members-list,
+.pinned-list {
   list-style: none;
   padding: 0;
   margin: 0;
 }
-.members-list li, .pinned-list li {
+.members-list li,
+.pinned-list li {
   margin-bottom: 6px;
 }
 @media (max-width: 900px) {
   .community-layout {
     grid-template-columns: 1fr;
   }
-  .channels, .chat-info {
+  .channels,
+  .chat-info {
     display: none;
   }
 }
@@ -432,7 +438,7 @@ input[type="submit"],
   padding: 4px 6px;
   font-size: 12px;
 }
-.idea-share input[type="text"] {
+.idea-share input[type='text'] {
   background: var(--card);
   color: var(--text);
   border: 1px solid var(--border);
@@ -488,7 +494,7 @@ input[type="submit"],
 }
 
 .user-menu a:hover {
-  background: rgba(255,255,255,0.1);
+  background: rgba(255, 255, 255, 0.1);
 }
 
 /*
@@ -538,7 +544,7 @@ body.light {
   gap: 12px;
 }
 
-.trending-search-bar input[type="text"] {
+.trending-search-bar input[type='text'] {
   padding: 10px 14px;
   border: 1px solid var(--border);
   border-radius: 8px;
@@ -570,8 +576,8 @@ body.light {
  * with the primary colour and displays a check mark.  The same styles are
  * applied to both trending and resource filters.
  */
-.trend-filter input[type="checkbox"],
-.resource-filter input[type="checkbox"] {
+.trend-filter input[type='checkbox'],
+.resource-filter input[type='checkbox'] {
   appearance: none;
   width: 16px;
   height: 16px;
@@ -583,14 +589,14 @@ body.light {
   display: inline-block;
 }
 
-.trend-filter input[type="checkbox"]:checked,
-.resource-filter input[type="checkbox"]:checked {
+.trend-filter input[type='checkbox']:checked,
+.resource-filter input[type='checkbox']:checked {
   background-color: var(--primary);
   border-color: var(--primary);
 }
 
-.trend-filter input[type="checkbox"]:checked::after,
-.resource-filter input[type="checkbox"]:checked::after {
+.trend-filter input[type='checkbox']:checked::after,
+.resource-filter input[type='checkbox']:checked::after {
   content: '';
   position: absolute;
   top: 2px;
@@ -926,7 +932,8 @@ body.light {
  * there is little content on a page the footer will still sit near the
  * bottom thanks to flexbox in the page containers.
  */
-html, body {
+html,
+body {
   min-height: 100vh !important;
   padding-bottom: 0 !important;
 }
@@ -943,7 +950,18 @@ html, body {
   height: 20px;
   background: linear-gradient(135deg, var(--primary), var(--accent));
   /* Draw an 8‑pointed star using clip-path */
-  clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+  clip-path: polygon(
+    50% 0%,
+    61% 35%,
+    98% 35%,
+    68% 57%,
+    79% 91%,
+    50% 70%,
+    21% 91%,
+    32% 57%,
+    2% 35%,
+    39% 35%
+  );
 }
 
 /* Active navigation link highlighting */

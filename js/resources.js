@@ -10,7 +10,13 @@ document.addEventListener('DOMContentLoaded', function () {
 
   function applyFilters() {
     const query = searchInput ? searchInput.value.trim().toLowerCase() : '';
-    const selected = Array.from(filterCheckboxes).filter(function (cb) { return cb.checked; }).map(function (cb) { return cb.value; });
+    const selected = Array.from(filterCheckboxes)
+      .filter(function (cb) {
+        return cb.checked;
+      })
+      .map(function (cb) {
+        return cb.value;
+      });
     items.forEach(function (item) {
       const text = (item.dataset.text || item.textContent).toLowerCase();
       const category = item.dataset.category || '';

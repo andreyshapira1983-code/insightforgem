@@ -1,6 +1,6 @@
 // config.js
 //
-// This file defines global configuration values for the Star Galaxy
+// This file defines global configuration values for the Star Galaxy
 // website.  By declaring properties on the global `window` object, the
 // rest of the front‑end code can reference API keys and endpoints
 // without hard coding secrets into the source.  When deploying the
