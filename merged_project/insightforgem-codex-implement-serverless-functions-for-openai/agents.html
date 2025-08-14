@@ -1,8 +1,8 @@
 <!doctype html>
 <html lang="ru">
   <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta charset="utf-8" >
+    <meta name="viewport" content="width=device-width, initial-scale=1" >
     <title>Multi-Agents · DEMO</title>
     <style>
       body {
@@ -64,18 +64,15 @@
       <div class="card">
         <h3>Guard</h3>
         <textarea id="g_text" placeholder="Текст для проверки"></textarea>
-        <button type="button" onclick="call('guard','filter',{text: val('g_text')},'g_out')">
+        <button id="g_btn" type="button">
           Проверить
         </button>
         <pre id="g_out">–</pre>
       </div>
       <div class="card">
         <h3>Generator</h3>
-        <input id="gen_topic" placeholder="Тема (например, веломаршруты)" />
-        <button
-          type="button"
-          onclick="call('generator','generate',{topic: val('gen_topic')},'gen_out')"
-        >
+        <input type="text" id="gen_topic" placeholder="Тема (например, веломаршруты)" >
+        <button id="gen_btn" type="button">
           Сгенерировать
         </button>
         <pre id="gen_out">–</pre>
@@ -83,19 +80,19 @@
       <div class="card">
         <h3>Judge</h3>
         <textarea id="j_idea" placeholder="Идея для оценки"></textarea>
-        <button type="button" onclick="call('judge','score',{idea: val('j_idea')},'j_out')">
+        <button id="j_btn" type="button">
           Оценить
         </button>
         <pre id="j_out">–</pre>
       </div>
       <div class="card">
         <h3>Designer</h3>
-        <input id="d_h" placeholder="Заголовок" />
-        <input id="d_s" placeholder="Подзаголовок" />
-        <input id="d_c" placeholder="CTA" />
+        <input type="text" id="d_h" placeholder="Заголовок" >
+        <input type="text" id="d_s" placeholder="Подзаголовок" >
+        <input type="text" id="d_c" placeholder="CTA" >
         <button
           type="button"
-          onclick="call('designer','rewrite',{heading:val('d_h'), sub:val('d_s'), cta:val('d_c')},'d_out')"
+          id="d_btn"
         >
           Переписать
         </button>
@@ -103,18 +100,18 @@
       </div>
       <div class="card">
         <h3>Researcher</h3>
-        <input id="r_q" placeholder="Запрос (тема исследования)" />
-        <button type="button" onclick="call('researcher','research',{query: val('r_q')},'r_out')">
+        <input type="text" id="r_q" placeholder="Запрос (тема исследования)" >
+        <button id="r_btn" type="button">
           Исследовать
         </button>
         <pre id="r_out">–</pre>
       </div>
       <div class="card">
         <h3>Manager (оркестр)</h3>
-        <input id="m_topic" placeholder="Тема (например, веломаршруты)" />
+        <input type="text" id="m_topic" placeholder="Тема (например, веломаршруты)" >
         <button
           type="button"
-          onclick="call('manager','orchestrate',{topic: val('m_topic')},'m_out')"
+          id="m_btn"
         >
           Запустить пайплайн
         </button>
@@ -122,6 +119,7 @@
       </div>
     </div>
     <script>
+      const AGENTS_ENDPOINT = '/.netlify/functions/agents';
       const post = (url, data) =>
         fetch(url, {
           method: 'POST',
@@ -129,10 +127,35 @@
           body: JSON.stringify(data),
         }).then((r) => r.text().then((t) => ({ s: r.status, t })));
       const val = (id) => document.getElementById(id).value.trim();
+
+      document.getElementById('g_btn').addEventListener('click', () =>
+        call('guard', 'filter', { text: val('g_text') }, 'g_out')
+      );
+      document.getElementById('gen_btn').addEventListener('click', () =>
+        call('generator', 'generate', { topic: val('gen_topic') }, 'gen_out')
+      );
+      document.getElementById('j_btn').addEventListener('click', () =>
+        call('judge', 'score', { idea: val('j_idea') }, 'j_out')
+      );
+      document.getElementById('d_btn').addEventListener('click', () =>
+        call(
+          'designer',
+          'rewrite',
+          { heading: val('d_h'), sub: val('d_s'), cta: val('d_c') },
+          'd_out'
+        )
+      );
+      document.getElementById('r_btn').addEventListener('click', () =>
+        call('researcher', 'research', { query: val('r_q') }, 'r_out')
+      );
+      document.getElementById('m_btn').addEventListener('click', () =>
+        call('manager', 'orchestrate', { topic: val('m_topic') }, 'm_out')
+      );
+
       function call(agent, action, payload, outId) {
         const out = document.getElementById(outId);
         out.textContent = '…';
-        post('/.netlify/functions/agents', { agent, action, payload })
+        post(AGENTS_ENDPOINT, { agent, action, payload })
           .then(({ s, t }) => {
             try {
               const j = JSON.parse(t);
