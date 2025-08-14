@@ -55,7 +55,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // Prepare the OpenAI API payload.  We instruct the model to
     // evaluate the business idea and return a structured analysis.
     const payload = {
-      model: 'gpt-4o-mini',
+      model: 'gpt-4o',
       messages: [
         {
           role: 'system',
