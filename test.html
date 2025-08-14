@@ -27,7 +27,7 @@
         document.getElementById('score').textContent = 'Оценка: не получена';
       }
       document.getElementById('debug').textContent =
-        'HTTP ' + res.status + '\\n' +
+        'HTTP ' + res.status + '\n' +
         (res.json ? JSON.stringify(res.json, null, 2) : res.text);
     };
   </script>
