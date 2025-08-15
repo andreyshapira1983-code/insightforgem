@@ -74,7 +74,7 @@ document.addEventListener('DOMContentLoaded', function () {
       const response = await fetch('/.netlify/functions/openai', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
+        body: JSON.stringify({ purpose: 'gen', ...payload })
       });
       if (!response.ok) {
         throw new Error('AI service returned an error');
