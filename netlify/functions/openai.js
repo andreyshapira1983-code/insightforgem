@@ -1,78 +1,64 @@
-// POST /.netlify/functions/openai -> { score, details, raw }
-// Модель: gpt-4o (4.0). Вход: { idea: "..." } ИЛИ { messages: [...] }.
+// netlify/functions/openai.mjs
+import fetch from 'node-fetch';
 
-export const handler = async (event) => {
-  const cors = {
-    "Access-Control-Allow-Origin": process.env.ALLOWED_ORIGIN || "*",
-    "Access-Control-Allow-Methods": "POST,OPTIONS",
-    "Access-Control-Allow-Headers": "content-type",
-  };
-  if (event.httpMethod === "OPTIONS") return { statusCode: 204, headers: cors };
-  if (event.httpMethod !== "POST")
-    return { statusCode: 405, headers: cors, body: JSON.stringify({ error: "Method not allowed" }) };
+const roleKeyMap = {
+  gen: 'OPENAI_KEY_GEN',
+  admin: 'OPENAI_KEY_ADMIN',
+  design: 'OPENAI_KEY_DESIGN',
+  guard: 'OPENAI_KEY_GUARD',
+  research: 'OPENAI_KEY_RESEARCH',
+  support: 'OPENAI_KEY_SUPPORT',
+};
 
-  // ---- body
-  let body = {};
-  try { body = JSON.parse(event.body || "{}"); }
-  catch { return { statusCode: 400, headers: cors, body: JSON.stringify({ error: "Bad JSON" }) }; }
+const FALLBACK_KEY_NAME = process.env.FALLBACK_KEY_NAME || 'OPENAI_API_KEY';
 
-  // ---- ключ по роли gen
-  const role = body.role || "gen";
-  const roles = JSON.parse(process.env.ROLES_JSON || '{"gen":["OPENAI_KEY_GEN"]}');
-  const allowFallback = String(process.env.ALLOW_FALLBACK || "false").toLowerCase() === "true";
-  const fallbackKeyName = process.env.FALLBACK_KEY_NAME || "OPENAI_API_KEY";
-  const names = Array.isArray(roles[role]) ? roles[role] : [];
-  let keyName;
-  for (const n of names) if (process.env[n]) { keyName = n; break; }
-  if (!keyName && allowFallback && process.env[fallbackKeyName]) keyName = fallbackKeyName;
-  if (!keyName) return { statusCode: 503, headers: cors, body: JSON.stringify({ error: `No API key for role ${role}` }) };
-  const apiKey = process.env[keyName];
-
-  // ---- модель 4.0
-  const model = "gpt-4o";
-
-  // ---- messages или idea -> messages
-  let messages = body.messages;
-  if (!messages && typeof body.idea === "string" && body.idea.trim()) {
-    messages = [
-      { role: "system", content:
-        "You are an expert analyst. Reply as plain text. First line: 'Score: <0..100>'. Then lines: 'Verdict:', 'Recommendations:', 'Risks:', 'Next Steps:', 'Patentability:'." },
-      { role: "user", content: body.idea.trim() }
-    ];
+function getOpenAIKey(role) {
+  const envKey = roleKeyMap[role] || FALLBACK_KEY_NAME;
+  let key = process.env[envKey];
+  if (!key && (process.env.ALLOW_FALLBACK === '1' || process.env.ALLOW_FALLBACK === 'true')) {
+    key = process.env[FALLBACK_KEY_NAME];
   }
-  if (!Array.isArray(messages) || messages.length === 0)
-    return { statusCode: 400, headers: cors, body: JSON.stringify({ error: "Provide 'idea' or 'messages'." }) };
+  return key;
+}
 
-  // ---- вызов OpenAI
+export async function handler(event) {
+  const allowed = process.env.ALLOWED_ORIGIN || '*';
+  const cors = {
+    'Access-Control-Allow-Origin': allowed,
+    'Access-Control-Allow-Methods': 'POST, OPTIONS',
+    'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+  };
+  if (event.httpMethod === 'OPTIONS') {
+    return { statusCode: 204, headers: cors, body: '' };
+  }
+
+  const role = (event.queryStringParameters || {}).role;
+  const key = getOpenAIKey(role);
+  if (!key) {
+    return {
+      statusCode: (process.env.ALLOW_FALLBACK === '1' || process.env.ALLOW_FALLBACK === 'true') ? 503 : 401,
+      headers: { 'Content-Type': 'application/json', ...cors },
+      body: JSON.stringify({ error: 'No OpenAI key assigned for this role' }),
+    };
+  }
+
+  let body = {};
+  try { body = JSON.parse(event.body || '{}'); }
+  catch { return { statusCode: 400, headers: { 'Content-Type': 'application/json', ...cors }, body: JSON.stringify({ error: 'Bad request body' }) }; }
+
   try {
-    const resp = await fetch("https://api.openai.com/v1/chat/completions", {
-      method: "POST",
-      headers: { "authorization": `Bearer ${apiKey}`, "content-type": "application/json" },
-      body: JSON.stringify({ model, messages, temperature: typeof body.temperature === "number" ? body.temperature : 0.7 })
+    const resp = await fetch('https://api.openai.com/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Authorization': 'Bearer ' + key,    // <-- важная правка
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(body),
     });
 
-    const text = await resp.text();
-    if (!resp.ok) {
-      return { statusCode: resp.status, headers: cors, body: JSON.stringify({ error: "Upstream", detail: text.slice(0,800) }) };
-    }
-    const data = JSON.parse(text);
-    const content = data?.choices?.[0]?.message?.content || "";
-
-    // ---- парсинг
-    const lines = String(content).split(/\n/).map(l=>l.trim()).filter(Boolean);
-    let score = 0; const details = {};
-    for (const line of lines) {
-      const lower = line.toLowerCase();
-      if (!score && lower.startsWith("score")) { const m = line.match(/(\d{1,3})/); if (m) score = Math.max(0, Math.min(100, parseInt(m[1],10))); }
-      else if (lower.startsWith("verdict")) details.verdict = line.split(":").slice(1).join(":").trim();
-      else if (lower.startsWith("recommendations")) details.recommendations = line.split(":").slice(1).join(":").trim();
-      else if (lower.startsWith("risks")) details.risks = line.split(":").slice(1).join(":").trim();
-      else if (lower.startsWith("next")) details.nextSteps = line.split(":").slice(1).join(":").trim();
-      else if (lower.startsWith("patent")) details.patentability = line.split(":").slice(1).join(":").trim();
-    }
-
-    return { statusCode: 200, headers: { ...cors, "content-type": "application/json" }, body: JSON.stringify({ score, details, raw: content }) };
-  } catch (e) {
-    return { statusCode: 500, headers: cors, body: JSON.stringify({ error: "Function error", message: String(e) }) };
+    const txt = await resp.text(); // отдаём как есть (JSON-строка с ответом OpenAI)
+    return { statusCode: resp.status, headers: { 'Content-Type': 'application/json', ...cors }, body: txt };
+  } catch {
+    return { statusCode: 503, headers: { 'Content-Type': 'application/json', ...cors }, body: JSON.stringify({ error: 'Upstream error' }) };
   }
-};
+}
