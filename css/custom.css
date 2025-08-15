@@ -975,3 +975,15 @@ body {
   --primary: #a88afc;
   --accent: #3dc9e8;
 }
+
+/* Chat page layout */
+.chat-layout {
+  display: grid;
+  gap: 20px;
+  grid-template-columns: 200px 1fr 200px;
+}
+@media (max-width: 700px) {
+  .chat-layout {
+    grid-template-columns: 1fr;
+  }
+}

@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Community Chat — Star Galaxy</title>
+    <title>Idea Generator — Star Galaxy</title>
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
     <link rel="stylesheet" href="css/styles.css" />
     <link rel="stylesheet" href="css/global-fixes.css" />
@@ -16,11 +16,11 @@
       <button id="mobile-menu-toggle" class="mobile-menu-toggle" aria-label="Open menu">☰</button>
       <nav class="nav">
         <a href="index.html">Home</a>
-        <a href="generator.html">Generator</a>
+        <a href="generator.html" aria-current="page">Generator</a>
         <a href="ideas.html">My Ideas</a>
         <a href="trending.html">Trending</a>
         <a href="resources.html">Resources</a>
-        <a href="community.html" aria-current="page">Community</a>
+        <a href="community.html">Community</a>
         <a href="legal/terms.html">Legal</a>
       </nav>
       <div class="header-actions">
@@ -31,31 +31,17 @@
       </div>
     </header>
     <div id="nav-overlay" class="nav-overlay"></div>
-    <main class="community-main">
-      <div class="chat-layout">
-        <aside class="chat-info">
-          <ul id="channel-list" class="channel-list">
-            <li class="channel-item active" data-channel="public">#public</li>
-            <li class="channel-item" data-channel="ideas">#ideas</li>
-            <li class="channel-item" data-channel="help">#help</li>
-            <li class="channel-item" data-channel="announcements">#announcements</li>
-          </ul>
-        </aside>
-        <section class="community-chat">
-          <h2 id="channel-title">#public</h2>
-          <div id="chat-messages" class="chat-messages" role="log" aria-live="polite"></div>
-          <div class="chat-input-container">
-            <input id="chat-input" type="text" placeholder="Type a message" />
-            <button id="chat-send">Send</button>
-          </div>
-        </section>
-        <aside class="chat-info">
-          <h3>Online</h3>
-          <ul id="members-online"></ul>
-          <h3>Pinned</h3>
-          <ul id="pinned-items"></ul>
-        </aside>
+    <main class="generator-main">
+      <h1>Idea Generator</h1>
+      <textarea id="idea-input" rows="6" placeholder="Describe your idea..."></textarea>
+      <div class="generator-actions">
+        <button id="generate-button" class="cosmic-button">Generate</button>
+        <button id="save-button" class="cosmic-button" style="display:none">Save</button>
       </div>
+      <div id="progress-container" style="display:none">
+        <span id="score-text">0%</span>
+      </div>
+      <div id="analysis-results" style="display:none"></div>
     </main>
     <footer id="site-legal" class="legal-footer-center">
       <a href="legal/disclaimer.html">Disclaimer</a>
@@ -86,8 +72,11 @@
         </div>
       </div>
     </div>
-    <script src="js/community.js"></script>
+    <script src="js/galaxy-bg.js"></script>
     <script src="js/theme.js"></script>
+    <script src="js/config.js"></script>
+    <script src="js/main.js" defer></script>
+    <script src="js/generator.js"></script>
     <script src="js/navigation.js"></script>
     <script src="js/search.js"></script>
   </body>

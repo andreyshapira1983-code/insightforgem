@@ -8,6 +8,6 @@
     "format": "node -e \"console.log('format skipped (no deps)')\"",
     "format:check": "node -e \"console.log('format:check skipped (no deps)')\"",
     "lint": "node -e \"console.log('lint skipped (no deps)')\"",
-    "test": "node tests/diag.test.js && node tests/fix-spaces.test.js"
+    "test": "node tests/diag.test.js && node tests/fix-spaces.test.js && node tests/functions.test.js"
   }
 }
