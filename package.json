@@ -1,0 +1,13 @@
+{
+  "name": "insightforgem",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "engines": { "node": ">=18" },
+  "scripts": {
+    "format": "node -e \"console.log('format skipped (no deps)')\"",
+    "format:check": "node -e \"console.log('format:check skipped (no deps)')\"",
+    "lint": "node -e \"console.log('lint skipped (no deps)')\"",
+    "test": "node tests/diag.test.js && node tests/fix-spaces.test.js && node tests/functions.test.js"
+  }
+}
