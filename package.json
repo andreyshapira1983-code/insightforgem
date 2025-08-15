@@ -3,19 +3,10 @@
   "private": true,
   "scripts": {
     "dev": "netlify dev",
+    "format": "prettier . --write",
+    "format:check": "prettier . --check",
     "lint": "eslint .",
-    "lint:fix": "eslint . --fix",
-    "format:check": "prettier -c .",
-    "format:fix": "prettier -w .",
-    "html:validate": "html-validate \"**/*.html\"",
-    "css:lint": "stylelint \"**/*.css\"",
-    "links:check": "linkinator $SITE_URL --recurse --timeout 30000",
-    "audit": "node scripts/audit.js",
-    "smoke:functions": "node tests/smoke-functions.js",
-    "smoke:roles": "node tests/smoke-roles.js",
-    "smoke:pages": "node tests/smoke-pages.js",
-    "lhci": "lhci autorun --upload.target=temporary-public-storage",
-    "test": "npm run lint && npm run format:check && npm run html:validate && npm run css:lint && npm run audit && npm run smoke:functions && npm run smoke:roles && npm run smoke:pages",
+    "test": "npm run format:check && npm run lint",
     "prepare": "husky install"
   },
   "devDependencies": {

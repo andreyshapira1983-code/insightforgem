@@ -1,4 +1,4 @@
-const ROLES = ['admin', 'design', 'gen', 'guard', 'research', 'support'];
+const ROLES = ["admin", "design", "gen", "guard", "research", "support"];
 
 function collect(role) {
   const base = `OPENAI_KEY_${role.toUpperCase()}`;
