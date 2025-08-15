@@ -1,5 +1,7 @@
 const CENTRAL = ['OPENAI_API_KEY', 'OPEN_API_KEY', 'OPENAI_KEY', 'OPEN_KEY'];
-const PREFIX = 'OPENAI_KEY_';
+// Environment variables prefixed with OPENAI_API_KEY_ map keys to roles.
+// For example, OPENAI_API_KEY_ADMIN will be used when role="admin".
+const PREFIX = 'OPENAI_API_KEY_';
 let rr = 0;
 
 function collect(env = process.env) {
@@ -19,7 +21,11 @@ function roleMap(env = process.env) {
 
 function pickKey({ role } = {}, env = process.env) {
   const by = roleMap(env);
-  if (role && by[role.toLowerCase()]) return by[role.toLowerCase()];
+  if (role) {
+    const key = by[role.toLowerCase()];
+    if (!key) throw new Error(`No OpenAI key for role: ${role}`);
+    return key;
+  }
   const all = collect(env);
   if (!all.length) throw new Error('No OpenAI keys found');
   const k = all[rr % all.length];
