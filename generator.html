@@ -1,0 +1,82 @@
+// FINAL (2025-08-15). Генератор показывает только %, сохраняет и редиректит.
+// Требуются элементы на странице: #idea-input, #generate-button, #save-button,
+// #progress-container (.progress-circle внутри) и #score-text.
+
+(function () {
+  const endpoint = '/.netlify/functions/openai';
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const ideaInput = document.getElementById('idea-input');
+    const genBtn = document.getElementById('generate-button');
+    const saveBtn = document.getElementById('save-button');
+    const progress = document.getElementById('progress-container');
+    const scoreText = document.getElementById('score-text');
+    const ring = document.querySelector('.progress-circle');
+
+    let current = null;
+    let lastTime = 0;
+
+    function setScore(val) {
+      const s = Math.max(0, Math.min(100, Number(val) || 0));
+      if (scoreText) scoreText.textContent = s + '%';
+      if (ring) {
+        const deg = Math.round((s / 100) * 360);
+        ring.style.background = `conic-gradient(var(--primary) ${deg}deg, var(--border) ${deg}deg)`;
+      }
+    }
+
+    async function callAI(idea) {
+      const res = await fetch(endpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ idea })
+      });
+      const txt = await res.text();
+      if (!res.ok) throw new Error(`Ошибка ${res.status}: ${txt.slice(0,200)}`);
+      try { return JSON.parse(txt); } catch { throw new Error('Неверный JSON из бэкенда'); }
+    }
+
+    genBtn?.addEventListener('click', async () => {
+      const idea = (ideaInput?.value || '').trim();
+      if (!idea) { alert('Введите идею.'); return; }
+
+      const now = Date.now();
+      if (now - lastTime < 10_000) { alert('Подождите пару секунд перед новой генерацией.'); return; }
+      lastTime = now;
+
+      if (progress) progress.style.display = 'flex';
+      if (saveBtn) saveBtn.style.display = 'none';
+      if (genBtn) genBtn.disabled = true;
+      setScore(0);
+
+      try {
+        const data = await callAI(idea); // {score, details}
+        setScore(data.score);
+        current = {
+          id: String(Date.now()),
+          idea,
+          score: data.score,
+          details: data.details || {},
+          visibility: 'private',
+          lang: (navigator.languages && navigator.languages[0]) || navigator.language || 'ru'
+        };
+        if (saveBtn) saveBtn.style.display = 'inline-block';
+      } catch (e) {
+        alert(e.message || 'Не удалось получить ответ от ИИ.');
+        current = null;
+      } finally {
+        if (genBtn) genBtn.disabled = false;
+      }
+    });
+
+    saveBtn?.addEventListener('click', () => {
+      if (!current) return;
+      try {
+        const list = JSON.parse(localStorage.getItem('starGalaxyIdeas') || '[]');
+        list.push(current);
+        localStorage.setItem('starGalaxyIdeas', JSON.stringify(list));
+      } catch {}
+      location.href = 'idea_detail.html?id=' + encodeURIComponent(current.id);
+    });
+  });
+})();
