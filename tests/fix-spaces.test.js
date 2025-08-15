@@ -3,6 +3,7 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import { execFile } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
+import { run } from './test-utils.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const exec = (cmd, args, opts={}) => new Promise((resolve, reject) => {
@@ -11,16 +12,6 @@ const exec = (cmd, args, opts={}) => new Promise((resolve, reject) => {
     resolve({stdout, stderr});
   });
 });
-
-const run = async (name, fn) => {
-  try {
-    await fn();
-    console.log('\u2713', name);
-  } catch (e) {
-    console.error('\u2717', name, e);
-    process.exitCode = 1;
-  }
-};
 
 const tmpDir = path.join(__dirname, 'tmp');
 await fs.mkdir(tmpDir, { recursive: true });

@@ -1,18 +1,9 @@
 // Запуск: npm test  (использует встроенный node + assert, без зависимостей)
 import assert from "node:assert/strict";
+import { run } from "./test-utils.js";
 
 // Загружаем модуль один раз: handler читает process.env во время вызова
 const { handler } = await import("../netlify/functions/diag.js");
-
-const run = async (name, fn) => {
-  try {
-    await fn();
-    console.log("\u2713", name);
-  } catch (e) {
-    console.error("\u2717", name, e);
-    process.exitCode = 1;
-  }
-};
 
 await run("returns 200 when role key present", async () => {
   process.env.ROLES_JSON = '{"gen":["OPENAI_KEY_GEN"]}';
