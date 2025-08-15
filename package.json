@@ -3,11 +3,14 @@
   "version": "0.0.0",
   "private": true,
   "type": "module",
-  "engines": { "node": ">=18" },
+  "engines": {
+    "node": ">=18"
+  },
   "scripts": {
     "format": "node -e \"console.log('format skipped (no deps)')\"",
     "format:check": "node -e \"console.log('format:check skipped (no deps)')\"",
     "lint": "node -e \"console.log('lint skipped (no deps)')\"",
-    "test": "node tests/diag.test.js"
+    "test": "node tests/diag.test.js",
+    "autofix": "node scripts/autofix.js"
   }
 }
