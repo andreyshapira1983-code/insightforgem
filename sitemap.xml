@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url><loc>https://insightforgem.netlify.app/</loc></url>
+  <url><loc>https://insightforgem.netlify.app/ideas.html</loc></url>
+  <url><loc>https://insightforgem.netlify.app/trending.html</loc></url>
+  <url><loc>https://insightforgem.netlify.app/resources.html</loc></url>
+  <url><loc>https://insightforgem.netlify.app/idea_detail.html</loc></url>
   <url><loc>https://insightforgem.netlify.app/legal/disclaimer.html</loc></url>
   <url><loc>https://insightforgem.netlify.app/legal/terms.html</loc></url>
   <url><loc>https://insightforgem.netlify.app/legal/privacy.html</loc></url>
+  <url><loc>https://insightforgem.netlify.app/legal/auth.html</loc></url>
 </urlset>
