@@ -1,31 +1,54 @@
-import { pickKey, listByRole } from "./openai-keys.js";
+// ESM Netlify Function: GET /.netlify/functions/diag?role=gen
+export const handler = async (event) => {
+  try {
+    const params = new URLSearchParams(event?.rawQuery || "");
+    const role = params.get("role") || "gen";
 
-export async function handler(event) {
-  const headers = {
-    "Access-Control-Allow-Origin": process.env.ALLOWED_ORIGIN || "",
-    "Access-Control-Allow-Methods": "GET",
-    "Access-Control-Allow-Headers": "content-type",
-  };
+    const roles = JSON.parse(
+      process.env.ROLES_JSON ||
+        '{"admin":[],"design":[],"gen":["OPENAI_KEY_GEN"],"guard":[],"research":[],"support":[]}'
+    );
 
-  if (event.httpMethod === "OPTIONS") {
-    return { statusCode: 204, headers };
+    const allowFallback = String(process.env.ALLOW_FALLBACK || "false").toLowerCase() === "true";
+    const fallbackKeyName = process.env.FALLBACK_KEY_NAME || "OPENAI_API_KEY";
+
+    const names = Array.isArray(roles[role]) ? roles[role] : [];
+    const tried = [];
+    let picked;
+
+    for (const name of names) {
+      tried.push(name);
+      if (process.env[name]) {
+        picked = name;
+        break;
+      }
+    }
+
+    if (!picked && allowFallback) {
+      tried.push(fallbackKeyName);
+      if (process.env[fallbackKeyName]) picked = fallbackKeyName;
+    }
+
+    const body = {
+      roles,
+      role,
+      tried,
+      allowFallback,
+      fallbackKeyName,
+      ok: Boolean(picked),
+      now: new Date().toISOString()
+    };
+
+    return {
+      statusCode: picked ? 200 : 503,
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify(body)
+    };
+  } catch (err) {
+    return {
+      statusCode: 500,
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ ok: false, error: String(err) })
+    };
   }
-
-  const params = new URLSearchParams(event.rawQuery || "");
-  const role = params.get("role");
-  const tried = role ? pickKey({ role }) : null;
-
-  const body = {
-    roles: listByRole(),
-    allowFallback: process.env.ALLOW_FALLBACK === "true",
-    fallbackKeyName:
-      process.env.ALLOW_FALLBACK === "true"
-        ? process.env.FALLBACK_KEY_NAME || null
-        : null,
-    role: role || null,
-    tried,
-    now: new Date().toISOString(),
-  };
-
-  return { statusCode: 200, headers, body: JSON.stringify(body) };
-}
+};
