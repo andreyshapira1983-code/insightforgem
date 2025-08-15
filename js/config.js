@@ -19,9 +19,8 @@
 // custom configuration or `.env` file.
 window.SEARCH_API_ENDPOINT = '/.netlify/functions/search';
 
-// Although the front‑end no longer needs the API key directly (the
-// serverless function will use the OPEN_API_KEY environment
-// variable), we leave this property defined so that build tools or
-// scripts can inject a value if necessary.  It should remain
-// undefined or empty for Netlify deployments.
-window.OPEN_API_KEY = '';
+// The API key for the external search provider is never exposed in the
+// browser.  The Netlify serverless function referenced above reads the
+// necessary credentials from environment variables and performs the
+// authenticated request on behalf of the client.
+

@@ -93,25 +93,17 @@ document.addEventListener('DOMContentLoaded', function () {
 
   // Fetch additional results from a remote search API.  This function
   // returns a Promise that resolves to an array of result objects in
-  // the same shape as our local search dataset.  If either the
-  // endpoint or API key is not configured, or the network request
-  // fails, it resolves to an empty array.  See config.js for
-  // definitions of `window.SEARCH_API_ENDPOINT` and `window.OPEN_API_KEY`.
+  // the same shape as our local search dataset.  Authentication is
+  // handled entirely on the server via the Netlify proxy, so no API key
+  // is ever sent from the browser.  If the endpoint is not configured or
+  // the network request fails, an empty array is returned.
   async function fetchExternalResults(query) {
     const endpoint = (window.SEARCH_API_ENDPOINT || '').trim();
-    const apiKey = (window.OPEN_API_KEY || '').trim();
     if (!endpoint) {
       return [];
     }
     try {
-      // Build the query string.  If an API key is provided in the
-      // global configuration, append it to the request; otherwise
-      // assume the back end will handle authentication (e.g. via
-      // Netlify serverless function).
-      let url = `${endpoint}?query=${encodeURIComponent(query)}`;
-      if (apiKey) {
-        url += `&api_key=${encodeURIComponent(apiKey)}`;
-      }
+      const url = `${endpoint}?query=${encodeURIComponent(query)}`;
       const response = await fetch(url);
       if (!response.ok) {
         return [];
