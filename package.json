@@ -1,20 +1,18 @@
 {
-  "name": "star-galaxy-autopilot",
+  "name": "insightforgem",
+  "private": true,
   "version": "1.0.0",
-  "description": "Star Galaxy site with Netlify Functions autopilot (RBAC + schedules + blobs)",
-  "main": "netlify/functions/command.js",
+  "description": "Star Galaxy static site + Netlify Functions",
   "scripts": {
+    "build": "echo \"Static site — no build step\"",
     "dev": "netlify dev",
-    "build": "echo 'No build step'",
     "start": "netlify dev"
   },
-  "dependencies": {
-    "@netlify/functions": "^2.8.1",
-    "@netlify/blobs": "^6.5.0",
-    "node-fetch": "^3.3.2"
-  },
   "engines": {
-    "node": ">=18"
+    "node": ">=18.0.0"
   },
-  "type": "module"
+  "type": "commonjs",
+  "dependencies": {
+    "@netlify/blobs": "^7.3.0"
+  }
 }
