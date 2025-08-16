@@ -1,21 +1,49 @@
+# ===== БИЛД И ФУНКЦИИ =====
+[build]
+  publish   = "."                  # статика из корня репо (index.html и др.)
+  functions = "netlify/functions"  # серверные функции здесь
+
+  [build.environment]
+    NODE_VERSION = "20"            # можно оставить как есть, 20-й LTS
+
 [functions]
-  node_bundler = "esbuild"
+  node_bundler  = "esbuild"
+  included_files = []              # при необходимости сюда добавим файлы
 
-[build.environment]
-  NODE_VERSION = "18"
+# ===== КРАСИВЫЕ URL ДЛЯ СТРАНИЦ =====
+# /generator -> /generator.html
+[[redirects]]
+  from = "/generator"
+  to   = "/generator.html"
+  status = 200
+  force  = true
 
-# Не секретные настройки по контекстам деплоя
-[context.production.environment]
-  ROLES_JSON = '{"admin":[],"design":[],"gen":["OPENAI_KEY_GEN"],"guard":[],"research":[],"support":[]}'
-  ALLOW_FALLBACK = "false"
-  FALLBACK_KEY_NAME = "OPENAI_API_KEY"
+# /community -> /community.html
+[[redirects]]
+  from = "/community"
+  to   = "/community.html"
+  status = 200
+  force  = true
 
-[context.deploy-preview.environment]
-  ROLES_JSON = '{"gen":["OPENAI_KEY_GEN"],"research":["OPENAI_KEY_RESEARCH"],"support":["OPENAI_KEY_SUPPORT"],"design":[],"admin":[],"guard":[]}'
-  ALLOW_FALLBACK = "true"
-  FALLBACK_KEY_NAME = "OPENAI_API_KEY"
+# /api/<name> -> /.netlify/functions/<name>
+[[redirects]]
+  from = "/api/:name"
+  to   = "/.netlify/functions/:name"
+  status = 200
+  force  = true
 
-[context.branch-deploy.environment]
-  ROLES_JSON = '{"gen":["OPENAI_KEY_GEN"],"research":[],"support":[],"design":[],"admin":[],"guard":[]}'
-  ALLOW_FALLBACK = "true"
-  FALLBACK_KEY_NAME = "OPENAI_API_KEY"
+# ===== БАЗОВЫЕ ЗАГОЛОВКИ БЕЗОПАСНОСТИ (НЕ ЛОМАЮТ, REPORT-ONLY) =====
+[[headers]]
+  for = "/*"
+  [headers.values]
+    # Пока только отчёт (ничего не блокирует). Когда всё ок — можно включить боевой CSP.
+    Content-Security-Policy-Report-Only = "default-src 'self'; img-src 'self' data: https:; script-src 'self'; style-src 'self' 'unsafe-inline'; font-src 'self' data:; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'"
+    Strict-Transport-Security          = "max-age=31536000; includeSubDomains; preload"
+    X-Frame-Options                    = "DENY"
+    X-Content-Type-Options             = "nosniff"
+    Referrer-Policy                    = "no-referrer"
+    Permissions-Policy                 = "camera=(), microphone=(), geolocation=()"
+    Cache-Control                       = "no-store"
+    Cross-Origin-Opener-Policy         = "same-origin"
+    Cross-Origin-Resource-Policy       = "same-origin"
+    Cross-Origin-Embedder-Policy       = "require-corp"
