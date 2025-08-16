@@ -1,72 +1,213 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Admin Console</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Admin • Star Galaxy</title>
   <style>
-    body{margin:0;background:#0b0f19;color:#e6e9f0;font-family:Arial,system-ui,sans-serif}
-    .wrap{max-width:960px;margin:0 auto;padding:24px}
-    h1{margin:0 0 12px;font-size:22px}
-    .panel{background:#141a2b;border:1px solid rgba(255,255,255,.08);border-radius:10px;margin:14px 0;padding:14px}
-    label{display:block;margin:8px 0 4px;font-size:13px;opacity:.9}
-    input,button{font:inherit}
-    input[type=text]{width:100%;padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,.15);background:#0e1627;color:#e6e9f0}
-    .row{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
-    button{background:#2e3b55;border:1px solid rgba(255,255,255,.12);color:#fff;padding:10px 14px;border-radius:8px;cursor:pointer}
-    button:hover{background:#3b4a6b}
-    .muted{opacity:.8;font-size:12px}
-    pre{white-space:pre-wrap;background:#0e1627;border:1px solid rgba(255,255,255,.1);padding:12px;border-radius:8px;max-height:420px;overflow:auto}
+    :root{
+      --bg:#0b0f1a; --panel:#12192b; --muted:#9fb3c8; --txt:#e8eef6; --accent:#7b5cff;
+      --ok:#2ecc71; --warn:#f39c12; --err:#e74c3c;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0; font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+      color:var(--txt); background:radial-gradient(1200px 600px at 50% -200px,#1b2544 0%,#0b0f1a 55%,#050912 100%);
+      min-height:100svh; padding:24px;
+    }
+    .wrap{max-width:980px; margin:0 auto;}
+    header{display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:16px;}
+    h1{margin:0; font-size:22px; letter-spacing:.2px}
+    .card{background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.08); border-radius:16px; padding:16px; backdrop-filter: blur(10px);}
+    .row{display:grid; grid-template-columns:1.1fr .9fr; gap:16px; margin-bottom:16px}
+    label{font-size:13px; color:var(--muted)}
+    input[type="password"], input[type="text"]{
+      width:100%; padding:10px 12px; border-radius:10px; border:1px solid rgba(255,255,255,.12);
+      background:#0f1628; color:var(--txt); outline:none;
+    }
+    .btns{display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px}
+    button{
+      padding:10px 14px; border-radius:12px; border:1px solid rgba(255,255,255,.12);
+      background:#0f1628; color:var(--txt); cursor:pointer; font-weight:600;
+      transition:transform .06s ease, background .15s ease, border-color .15s ease;
+    }
+    button:hover{background:#141f35; border-color:rgba(255,255,255,.18)}
+    button:active{transform:translateY(1px)}
+    .primary{background:var(--accent); border-color:transparent;}
+    .primary:hover{filter:brightness(1.05)}
+    .muted{color:var(--muted); font-size:13px}
+    pre{margin:0; white-space:pre-wrap; word-break:break-word; font-family:ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size:13px; color:#d8eeff;}
+    .badge{display:inline-flex; align-items:center; gap:8px; font-size:12px; padding:6px 10px; border-radius:999px; background:#0f1628; border:1px solid rgba(255,255,255,.1)}
+    .dot{width:8px;height:8px;border-radius:50%}
+    .ok{background:var(--ok)} .warn{background:var(--warn)} .err{background:var(--err)}
+    footer{margin-top:18px; text-align:center; font-size:12px; color:var(--muted)}
+    @media (max-width:900px){ .row{grid-template-columns:1fr}}
   </style>
 </head>
 <body>
   <div class="wrap">
-    <h1>Admin Console</h1>
+    <header>
+      <h1>Панель администратора</h1>
+      <div class="badge"><span id="statusDot" class="dot warn"></span><span id="statusText">Токен не сохранён</span></div>
+    </header>
 
-    <div class="panel">
-      <label for="token">X-Admin-Token</label>
-      <input id="token" type="text" placeholder="вставь админ-ключ" />
-      <div class="row">
-        <button onclick="Admin.saveToken()">Сохранить токен</button>
-        <span class="muted">хранится в localStorage только у тебя</span>
+    <div class="row">
+      <div class="card">
+        <div style="display:grid; gap:8px;">
+          <label for="token">X-Admin-Token</label>
+          <input id="token" type="password" placeholder="Вставь секретный токен из Netlify (X_ADMIN_TOKEN)" />
+          <div style="display:flex; gap:8px; flex-wrap:wrap; margin-top:6px;">
+            <button id="saveToken" class="primary">Сохранить токен</button>
+            <button id="clearToken">Очистить токен</button>
+            <span class="muted">Токен хранится локально в браузере (localStorage).</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div style="display:grid; gap:8px;">
+          <label for="hook">SITE_BUILD_HOOK_URL (только чтение)</label>
+          <input id="hook" type="text" readonly placeholder="Заполняется из переменной окружения на сервере" />
+          <div class="muted">Этот URL берётся из переменной <b>SITE_BUILD_HOOK_URL</b> внутри серверной функции.</div>
+        </div>
       </div>
     </div>
 
-    <div class="panel">
-      <h2 style="margin:0 0 8px">Фон</h2>
-      <label for="bgUrl">URL фона (необязательно, иначе возьмёт следующий из пула)</label>
-      <input id="bgUrl" type="text" placeholder="/assets/bg/nebula-2.jpg или https://..." />
-      <div class="row">
-        <button onclick="Admin.updateBackground()">Обновить фон</button>
+    <div class="card" style="margin-bottom:16px;">
+      <div class="btns">
+        <button id="btnBg">Обновить фон</button>
+        <button id="btnBuild">Обновить сайт</button>
+        <button id="btnWeekly">Недельный отчёт</button>
+        <button id="btnNews">Загрузить новости</button>
       </div>
     </div>
 
-    <div class="panel">
-      <h2 style="margin:0 0 8px">Пересборка сайта</h2>
-      <label for="reason">Причина (optional)</label>
-      <input id="reason" type="text" placeholder="manual from admin"/>
-      <div class="row" style="align-items:center">
-        <button onclick="Admin.refreshSite(false)">Обновить сайт</button>
-        <button onclick="Admin.refreshSite(true)">Обновить + очистить кэш</button>
-        <span class="muted">нужен SITE_BUILD_HOOK_URL в ENV</span>
-      </div>
+    <div class="card">
+      <label>Ответ</label>
+      <pre id="out">—</pre>
     </div>
 
-    <div class="panel">
-      <h2 style="margin:0 0 8px">Отчёты и новости</h2>
-      <div class="row">
-        <button onclick="Admin.weeklyReport()">Недельный отчёт</button>
-        <button onclick="Admin.newsPull()">Загрузить новости</button>
-      </div>
-    </div>
-
-    <div class="panel">
-      <h2 style="margin:0 0 8px">Ответ</h2>
-      <pre id="out">⏳ здесь будет вывод JSON</pre>
-    </div>
+    <footer>© 2025 Star Galaxy • Admin tools</footer>
   </div>
 
-  <script src="/js/admin.js" defer></script>
+<script>
+(() => {
+  const els = {
+    token: document.getElementById('token'),
+    save: document.getElementById('saveToken'),
+    clear: document.getElementById('clearToken'),
+    out: document.getElementById('out'),
+    statusDot: document.getElementById('statusDot'),
+    statusText: document.getElementById('statusText'),
+    hook: document.getElementById('hook'),
+    btnBg: document.getElementById('btnBg'),
+    btnBuild: document.getElementById('btnBuild'),
+    btnWeekly: document.getElementById('btnWeekly'),
+    btnNews: document.getElementById('btnNews'),
+  };
+
+  const KEY = 'xadmin_token';
+
+  function setStatus(ok, msg){
+    els.statusDot.className = 'dot ' + (ok ? 'ok' : 'warn');
+    els.statusText.textContent = msg;
+  }
+
+  function loadToken(){
+    const t = localStorage.getItem(KEY) || '';
+    els.token.value = t;
+    setStatus(!!t, t ? 'Токен сохранён' : 'Токен не сохранён');
+    return t;
+  }
+
+  function saveToken(){
+    localStorage.setItem(KEY, els.token.value.trim());
+    loadToken();
+    log({info:'Токен сохранён (localStorage)'});
+  }
+
+  function clearToken(){
+    localStorage.removeItem(KEY);
+    loadToken();
+    log({info:'Токен удалён'});
+  }
+
+  function log(obj){
+    try { els.out.textContent = typeof obj === 'string' ? obj : JSON.stringify(obj, null, 2); }
+    catch(e){ els.out.textContent = String(obj); }
+  }
+
+  // Маленькая вспомогательная функция запроса
+  async function call(path, opts = {}){
+    const token = localStorage.getItem(KEY) || '';
+    const headers = Object.assign(
+      { 'Content-Type':'application/json' },
+      token ? { 'x-admin-token': token } : {}
+    );
+
+    const res = await fetch(path, {
+      method: opts.method || 'POST',
+      headers,
+      body: opts.body ? JSON.stringify(opts.body) : undefined
+    });
+
+    let data;
+    const txt = await res.text();
+    try { data = JSON.parse(txt); } catch { data = txt; }
+
+    if (!res.ok) throw { status: res.status, data };
+    return data;
+  }
+
+  // Получить из функции хук (если реализовано на сервере)
+  async function loadHook(){
+    // Не обязательно. Если у тебя нет такой функции — можно убрать этот вызов.
+    try{
+      const data = await call('/.netlify/functions/diag', { method:'GET' });
+      if (data && data.siteBuildHookUrl) els.hook.value = data.siteBuildHookUrl;
+      else els.hook.value = '(нет данных — это не ошибка)';
+    }catch(e){
+      els.hook.value = '(нет функции /diag — это нормально)';
+    }
+  }
+
+  // Обработчики кнопок
+  els.btnBg.onclick = async () => {
+    try{
+      const data = await call('/.netlify/functions/updateBackground');
+      log(data);
+    }catch(e){ log(e); }
+  };
+
+  els.btnBuild.onclick = async () => {
+    try{
+      const data = await call('/.netlify/functions/refreshSite');
+      log(data);
+    }catch(e){ log(e); }
+  };
+
+  els.btnWeekly.onclick = async () => {
+    try{
+      const data = await call('/.netlify/functions/weeklyReport');
+      log(data);
+    }catch(e){ log(e); }
+  };
+
+  els.btnNews.onclick = async () => {
+    try{
+      const data = await call('/.netlify/functions/newsPull');
+      log(data);
+    }catch(e){ log(e); }
+  };
+
+  els.save.onclick = saveToken;
+  els.clear.onclick = clearToken;
+
+  // init
+  loadToken();
+  loadHook();
+})();
+</script>
 </body>
 </html>
 
