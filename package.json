@@ -1,17 +1,20 @@
 {
-  "name": "star-galaxy",
+  "name": "star-galaxy-autopilot",
   "version": "1.0.0",
-  "private": true,
-  "description": "Star Galaxy project with Netlify Functions and Admin panel",
-  "type": "module",
-  "engines": {
-    "node": ">=18"
-  },
+  "description": "Star Galaxy site with Netlify Functions autopilot (RBAC + schedules + blobs)",
+  "main": "netlify/functions/command.js",
   "scripts": {
-    "build": "echo 'No build step needed'",
+    "dev": "netlify dev",
+    "build": "echo 'No build step'",
     "start": "netlify dev"
   },
   "dependencies": {
-    "@netlify/blobs": "^6.3.0"
-  }
+    "@netlify/functions": "^2.8.1",
+    "@netlify/blobs": "^6.5.0",
+    "node-fetch": "^3.3.2"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "type": "module"
 }
