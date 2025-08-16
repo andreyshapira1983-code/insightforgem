@@ -1,49 +1,81 @@
-# ===== БИЛД И ФУНКЦИИ =====
-[build]
-  publish   = "."                  # статика из корня репо (index.html и др.)
-  functions = "netlify/functions"  # серверные функции здесь
+#############################
+# netlify.toml  (полный)
+#############################
 
-  [build.environment]
-    NODE_VERSION = "20"            # можно оставить как есть, 20-й LTS
+[build]
+  functions = "netlify/functions"
+  publish   = "."            # если у тебя фронт в корне; поменяй при необходимости
+  # command не нужен (статический сайт)
+  # command = "npm run build"
 
 [functions]
-  node_bundler  = "esbuild"
-  included_files = []              # при необходимости сюда добавим файлы
+  node_bundler = "esbuild"   # нормальный бандлер для функций
 
-# ===== КРАСИВЫЕ URL ДЛЯ СТРАНИЦ =====
-# /generator -> /generator.html
+# ===== Редиректы, как в твоих требованиях =====
 [[redirects]]
   from = "/generator"
   to   = "/generator.html"
   status = 200
-  force  = true
 
-# /community -> /community.html
 [[redirects]]
   from = "/community"
   to   = "/community.html"
   status = 200
-  force  = true
 
-# /api/<name> -> /.netlify/functions/<name>
 [[redirects]]
   from = "/api/:name"
   to   = "/.netlify/functions/:name"
   status = 200
   force  = true
 
-# ===== БАЗОВЫЕ ЗАГОЛОВКИ БЕЗОПАСНОСТИ (НЕ ЛОМАЮТ, REPORT-ONLY) =====
+# (опционально) Короткий путь на админку
+[[redirects]]
+  from = "/admin"
+  to   = "/admin.html"
+  status = 200
+
+# ===== Заголовки безопасности =====
+# Включаем CSP (Report-Only), HSTS и пр. — как ты указывал
 [[headers]]
   for = "/*"
   [headers.values]
-    # Пока только отчёт (ничего не блокирует). Когда всё ок — можно включить боевой CSP.
-    Content-Security-Policy-Report-Only = "default-src 'self'; img-src 'self' data: https:; script-src 'self'; style-src 'self' 'unsafe-inline'; font-src 'self' data:; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'"
-    Strict-Transport-Security          = "max-age=31536000; includeSubDomains; preload"
-    X-Frame-Options                    = "DENY"
-    X-Content-Type-Options             = "nosniff"
-    Referrer-Policy                    = "no-referrer"
-    Permissions-Policy                 = "camera=(), microphone=(), geolocation=()"
-    Cache-Control                       = "no-store"
-    Cross-Origin-Opener-Policy         = "same-origin"
-    Cross-Origin-Resource-Policy       = "same-origin"
-    Cross-Origin-Embedder-Policy       = "require-corp"
+    # CSP в режиме отчетов (ничего не ломаем, смотрим, что блокировалось)
+    Content-Security-Policy-Report-Only = """
+      default-src 'self';
+      frame-ancestors 'none';
+      base-uri 'self';
+      connect-src 'self' https: data:;
+      img-src 'self' https: data: blob:;
+      script-src 'self';
+      style-src 'self' 'unsafe-inline';
+      font-src 'self' https: data:;
+      object-src 'none';
+      upgrade-insecure-requests;
+    """
+    # Жесткие заголовки
+    Strict-Transport-Security = "max-age=63072000; includeSubDomains; preload"
+    X-Content-Type-Options    = "nosniff"
+    X-Frame-Options           = "DENY"
+    Referrer-Policy           = "strict-origin-when-cross-origin"
+    Permissions-Policy        = "geolocation=(), camera=(), microphone=(), payment=()"
+
+# ===== Автопилот: Scheduled Functions (UTC) =====
+# Ночной сторож: проверка здоровья + автофикс
+[[scheduled.functions]]
+  name = "sched_health"
+  cron = "0 3 * * *"
+
+# Еженедельный отчёт (понедельник)
+[[scheduled.functions]]
+  name = "sched_weekly_report"
+  cron = "0 4 * * MON"
+
+# Новости каждые 6 часов
+[[scheduled.functions]]
+  name = "sched_news"
+  cron = "0 */6 * * *"
+
+# Бэкап Blobs (опционально) — воскресенье
+[[scheduled.functions]]
+  name = "sched_backup"
+  cron = "30 4 * * SUN"
