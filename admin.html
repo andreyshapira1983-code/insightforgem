@@ -1,121 +1,72 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Админ-консоль — Star Galaxy</title>
-  <link rel="stylesheet" href="css/security.css">
-
-  <!-- Подключаем Font Awesome для иконок -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Admin Console</title>
   <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #0b0f19;
-      color: #fff;
-    }
-    header {
-      background: #141a2b;
-      padding: 15px;
-      text-align: center;
-      font-size: 1.2rem;
-      border-bottom: 1px solid #222;
-    }
-    .container {
-      max-width: 900px;
-      margin: 30px auto;
-      padding: 20px;
-    }
-    h1 {
-      text-align: center;
-      margin-bottom: 30px;
-    }
-    .panel {
-      background: #1a2136;
-      padding: 20px;
-      margin-bottom: 20px;
-      border-radius: 8px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.5);
-    }
-    .panel h2 {
-      margin-top: 0;
-      font-size: 1.2rem;
-      margin-bottom: 15px;
-      color: #66ccff;
-    }
-    button {
-      background: #2e3b55;
-      color: #fff;
-      border: none;
-      padding: 10px 15px;
-      margin: 5px;
-      border-radius: 5px;
-      cursor: pointer;
-      font-size: 0.95rem;
-      transition: background 0.3s;
-    }
-    button:hover {
-      background: #3f4f72;
-    }
-    footer {
-      text-align: center;
-      padding: 15px;
-      background: #141a2b;
-      margin-top: 30px;
-      font-size: 0.9rem;
-      color: #aaa;
-    }
+    body{margin:0;background:#0b0f19;color:#e6e9f0;font-family:Arial,system-ui,sans-serif}
+    .wrap{max-width:960px;margin:0 auto;padding:24px}
+    h1{margin:0 0 12px;font-size:22px}
+    .panel{background:#141a2b;border:1px solid rgba(255,255,255,.08);border-radius:10px;margin:14px 0;padding:14px}
+    label{display:block;margin:8px 0 4px;font-size:13px;opacity:.9}
+    input,button{font:inherit}
+    input[type=text]{width:100%;padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,.15);background:#0e1627;color:#e6e9f0}
+    .row{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
+    button{background:#2e3b55;border:1px solid rgba(255,255,255,.12);color:#fff;padding:10px 14px;border-radius:8px;cursor:pointer}
+    button:hover{background:#3b4a6b}
+    .muted{opacity:.8;font-size:12px}
+    pre{white-space:pre-wrap;background:#0e1627;border:1px solid rgba(255,255,255,.1);padding:12px;border-radius:8px;max-height:420px;overflow:auto}
   </style>
 </head>
 <body>
-  <header>
-    ⚙️ Админ-консоль — Star Galaxy
-  </header>
+  <div class="wrap">
+    <h1>Admin Console</h1>
 
-  <div class="container">
-    <h1>Панель управления</h1>
-
-    <!-- Управление обновлениями -->
     <div class="panel">
-      <h2><i class="fa-solid fa-sync"></i> Обновления сайта</h2>
-      <button onclick="demoAction('Фон обновлён')">Обновить фон</button>
-      <button onclick="demoAction('Все страницы обновлены')">Обновить все страницы</button>
+      <label for="token">X-Admin-Token</label>
+      <input id="token" type="text" placeholder="вставь админ-ключ" />
+      <div class="row">
+        <button onclick="Admin.saveToken()">Сохранить токен</button>
+        <span class="muted">хранится в localStorage только у тебя</span>
+      </div>
     </div>
 
-    <!-- Автопилот -->
     <div class="panel">
-      <h2><i class="fa-solid fa-robot"></i> Автопилот</h2>
-      <button onclick="demoAction('Автопилот включён')">Включить автопилот</button>
-      <button onclick="demoAction('Автопилот выключен')">Выключить автопилот</button>
+      <h2 style="margin:0 0 8px">Фон</h2>
+      <label for="bgUrl">URL фона (необязательно, иначе возьмёт следующий из пула)</label>
+      <input id="bgUrl" type="text" placeholder="/assets/bg/nebula-2.jpg или https://..." />
+      <div class="row">
+        <button onclick="Admin.updateBackground()">Обновить фон</button>
+      </div>
     </div>
 
-    <!-- Отчёты -->
     <div class="panel">
-      <h2><i class="fa-solid fa-chart-line"></i> Отчёты</h2>
-      <button onclick="demoAction('Собран еженедельный отчёт')">Собрать отчёт</button>
-      <button onclick="demoAction('Отчёты отправлены администратору')">Отправить админ-отчёт</button>
+      <h2 style="margin:0 0 8px">Пересборка сайта</h2>
+      <label for="reason">Причина (optional)</label>
+      <input id="reason" type="text" placeholder="manual from admin"/>
+      <div class="row" style="align-items:center">
+        <button onclick="Admin.refreshSite(false)">Обновить сайт</button>
+        <button onclick="Admin.refreshSite(true)">Обновить + очистить кэш</button>
+        <span class="muted">нужен SITE_BUILD_HOOK_URL в ENV</span>
+      </div>
     </div>
 
-    <!-- Ключи -->
     <div class="panel">
-      <h2><i class="fa-solid fa-key"></i> Ключи доступа</h2>
-      <button onclick="demoAction('Админ-ключ активирован')">Активировать ключ администратора</button>
-      <button onclick="demoAction('Ключи пользователей синхронизированы')">Синхронизировать все ключи</button>
+      <h2 style="margin:0 0 8px">Отчёты и новости</h2>
+      <div class="row">
+        <button onclick="Admin.weeklyReport()">Недельный отчёт</button>
+        <button onclick="Admin.newsPull()">Загрузить новости</button>
+      </div>
     </div>
 
+    <div class="panel">
+      <h2 style="margin:0 0 8px">Ответ</h2>
+      <pre id="out">⏳ здесь будет вывод JSON</pre>
+    </div>
   </div>
 
-  <footer>
-    © 2025 Star Galaxy · Admin Panel
-  </footer>
-
-  <script>
-    // Временно демо-функция: показывает алерты вместо реальной логики
-    function demoAction(message) {
-      alert("✅ " + message);
-    }
-  </script>
+  <script src="/js/admin.js" defer></script>
 </body>
 </html>
+
