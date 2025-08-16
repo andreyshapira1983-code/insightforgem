@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Звёздная Галактика — Home</title>
+<style>
+  :root { --wrapW:1180px; --pad:24px; }
+  * { box-sizing:border-box; }
+  body{
+    margin:0; color:#e6e9f0;
+    font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+    overflow-x:hidden;
+  }
+  a{ color:inherit; text-decoration:none }
+  a:hover{ text-decoration:underline }
+
+  /* ==== ЖИВОЙ ФОН (та же OIP.jpg, без JS) ==== */
+  .bg-space{
+    position:fixed; inset:0; z-index:-3;
+    background:url("OIP.jpg") center / cover no-repeat;
+    animation:space-kenburns 60s ease-in-out infinite alternate;
+    transform-origin:center;
+  }
+  .stars{ position:fixed; inset:0; z-index:-2; pointer-events:none; }
+  .stars::before,.stars::after{
+    content:""; position:absolute; inset:-2000px;
+    background:
+      radial-gradient(2px 2px at 20% 30%, #ffffff 70%, transparent 71%) repeat,
+      radial-gradient(1px 1px at 70% 80%, #bcd1ff 70%, transparent 71%) repeat;
+    background-size:500px 500px, 700px 700px;
+    opacity:.24; animation:drift 180s linear infinite;
+  }
+  .stars::after{ opacity:.16; animation-duration:240s; }
+  @keyframes space-kenburns{
+    0%{ transform:scale(1.00); background-position:50% 50% }
+    50%{ transform:scale(1.06); background-position:48% 52% }
+    100%{ transform:scale(1.10); background-position:52% 48% }
+  }
+  @keyframes drift{ from{transform:translate3d(0,0,0)} to{transform:translate3d(-1000px,600px,0)} }
+  @media (prefers-reduced-motion:reduce){
+    .bg-space{ animation:none } .stars::before,.stars::after{ animation:none }
+  }
+  .veil{ position:fixed; inset:0; z-index:-1;
+    background:linear-gradient(180deg, rgba(5,10,20,.72),
+                                       rgba(5,10,20,.55) 40%,
+                                       rgba(5,10,20,.75)); }
+
+  /* ===== каркас как у тебя на Netlify ===== */
+  .wrap{ max-width:var(--wrapW); margin:0 auto; padding:16px var(--pad); }
+  header{ display:flex; align-items:center; justify-content:space-between; gap:12px; padding:8px 0; }
+  .brand{ display:flex; align-items:center; gap:10px; font-weight:800; letter-spacing:.3px }
+  .logo{ width:18px; height:18px; border-radius:50%;
+         background:conic-gradient(#7b5cff,#4dd0e1,#b6a8ff,#7b5cff);
+         box-shadow:0 0 10px rgba(123,92,255,.6) }
+  nav{ display:flex; gap:18px; opacity:.95 }
+  .auth a{ display:inline-block; padding:8px 12px; border-radius:999px;
+           border:1px solid rgba(255,255,255,.14); background:rgba(255,255,255,.06) }
+
+  .hero{ padding:36px 0 10px }
+  .hero-inner{ display:grid; grid-template-columns:1.1fr .9fr; gap:24px; align-items:center }
+  h1{
+    margin:0 0 12px; font-size:48px; line-height:1.1;
+    background:linear-gradient(90deg,#b6a8ff 0%,#7b5cff 35%,#4dd0e1 100%);
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+  }
+  .lead{ margin:0; opacity:.92 }
+  .actions{ margin-top:18px; display:flex; gap:12px }
+  .btn{ padding:12px 18px; border-radius:999px; font-weight:700;
+        border:1px solid rgba(255,255,255,.14); background:rgba(255,255,255,.06) }
+  .btn.primary{ background:#7b5cff; border:none; color:#fff }
+
+  /* Визуал справа (карточки A–D) */
+  .visual{ position:relative; height:340px; border-radius:20px; border:1px solid rgba(255,255,255,.08);
+           background:rgba(10,14,24,.35); backdrop-filter:blur(8px);
+           display:flex; align-items:center; justify-content:center; overflow:hidden }
+  .device{ width:90%; height:82%; border-radius:14px; background:#0f1b32; border:1px solid rgba(255,255,255,.1);
+           box-shadow:0 10px 34px rgba(0,0,0,.45); display:grid; grid-template-rows:36px 1fr; overflow:hidden }
+  .bar{ display:flex; gap:6px; align-items:center; padding:8px 10px; background:rgba(255,255,255,.06) }
+  .dot{ width:10px; height:10px; border-radius:50%; background:#7b5cff; opacity:.9 }
+  .screen{ padding:16px }
+  .g2{ display:grid; grid-template-columns:1fr 1fr; gap:14px }
+  .mini{ border:1px solid rgba(255,255,255,.15); border-radius:12px; padding:14px }
+  .mini h3{ margin:0 0 6px; font-size:15px }
+  .mini p{ margin:0; font-size:13px; opacity:.86 }
+
+  /* Нижняя сетка: слева статистика, центр 4 фичи, справа новости */
+  .grid3{ display:grid; grid-template-columns:280px 1fr 280px; gap:16px; align-items:start; margin-top:12px }
+  .card{ background:rgba(10,14,24,.45); border:1px solid rgba(255,255,255,.1); backdrop-filter:blur(10px);
+         border-radius:16px; padding:16px; box-shadow:0 2px 10px rgba(0,0,0,.25) }
+  .card h2{ margin:0 0 10px; font-size:16px }
+  .muted{ opacity:.85; font-size:14px }
+  .features{ display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:14px }
+  .feature{ background:transparent; border:1px solid rgba(123,92,255,.28); border-radius:16px; padding:16px;
+            transition:transform .2s, border-color .2s }
+  .feature:hover{ transform:translateY(-1px); border-color:rgba(123,92,255,.5) }
+
+  footer{ text-align:center; padding:22px var(--pad); opacity:.9 }
+
+  /* ===== modal Вход (без JS, через :target) ===== */
+  .modal{ position:fixed; inset:0; display:none; align-items:center; justify-content:center;
+          background:rgba(0,0,0,.55); z-index:50; }
+  .modal:target{ display:flex }
+  .sheet{ width:min(520px,92%); background:rgba(10,14,24,.98); border:1px solid rgba(255,255,255,.1);
+          border-radius:16px; padding:20px }
+  .sheet h3{ margin:0 0 12px }
+  .row{ display:grid; grid-template-columns:1fr 1fr; gap:10px }
+  .chip{ display:flex; align-items:center; justify-content:center; gap:10px;
+         padding:12px 14px; border-radius:12px; background:#0f1b32;
+         border:1px solid rgba(255,255,255,.12); text-align:center }
+  .chip svg{ width:18px; height:18px }
+  .closex{ display:inline-block; margin-left:auto; padding:6px 10px; border-radius:8px; background:rgba(255,255,255,.08) }
+
+  /* Тост «Выход» */
+  #logout{ position:fixed; left:50%; transform:translateX(-50%); bottom:30px;
+           display:none; padding:10px 14px; background:#111a2d; border:1px solid rgba(255,255,255,.12);
+           border-radius:10px; z-index:60 }
+  #logout:target{ display:block }
+
+  @media (max-width:1080px){
+    .hero-inner{ grid-template-columns:1fr }
+    .grid3{ grid-template-columns:1fr }
+    .features{ grid-template-columns:repeat(2,1fr) }
+  }
+</style>
+</head>
+<body>
+  <!-- ФОН -->
+  <div class="bg-space" aria-hidden="true"></div>
+  <div class="stars" aria-hidden="true"></div>
+  <div class="veil" aria-hidden="true"></div>
+
+  <div class="wrap">
+    <!-- ШАПКА (как у тебя) -->
+    <header>
+      <div class="brand"><span class="logo" aria-hidden="true"></span><span>Звёздная Галактика</span></div>
+      <nav aria-label="Навигация">
+        <a href="index.html">Дом</a>
+        <a href="generator.html">Генератор</a>
+        <a href="ideas.html">Мои идеи</a>
+        <a href="community.html">Сообщество</a>
+      </nav>
+      <div class="auth">
+        <a href="#login">Вход</a>
+        <a href="#logout">Выход</a>
+      </div>
+    </header>
+
+    <!-- HERO -->
+    <section class="hero" aria-label="Hero">
+      <div class="hero-inner">
+        <div>
+          <h1>Добро пожаловать в Звёздную Галактику</h1>
+          <p class="lead">Находите и совершенствуйте бизнес-идеи с помощью ИИ и активного сообщества новаторов.</p>
+          <div class="actions">
+            <a class="btn primary" href="generator.html">Попробуйте генератор</a>
+            <a class="btn" href="ideas.html">Мои идеи</a>
+          </div>
+        </div>
+        <div class="visual" aria-hidden="true">
+          <div class="device">
+            <div class="bar">
+              <span class="dot"></span><span class="dot" style="background:#4dd0e1"></span><span class="dot" style="background:#b6a8ff"></span>
+            </div>
+            <div class="screen">
+              <div class="g2">
+                <div class="mini"><h3>Идея A</h3><p>Score: 82%</p></div>
+                <div class="mini"><h3>Идея B</h3><p>Score: 67%</p></div>
+                <div class="mini"><h3>Идея C</h3><p>Score: 74%</p></div>
+                <div class="mini"><h3>Идея D</h3><p>Score: 90%</p></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- НИЖНИЕ БЛОКИ -->
+    <section class="grid3" aria-label="Основной контент">
+      <aside class="card" aria-labelledby="stats"><h2 id="stats">📊 Статистика</h2>
+        <p class="muted">Всего идей: скоро появится</p>
+        <p class="muted">Пользователи онлайн: скоро появится</p>
+        <p class="muted">Идея дня: скоро появится</p>
+      </aside>
+
+      <main>
+        <div class="features">
+          <div class="feature"><h3>✨ Генератор идей</h3><p>Оценка потенциала в процентах. Подробности — в «Мои идеи».</p></div>
+          <div class="feature"><h3>🤝 Сообщество</h3><p>Обсуждения и апвоты помогают отобрать лучшие концепты.</p></div>
+          <div class="feature"><h3>📚 Мои идеи</h3><p>Хранение, сравнение и детальные разборы после сохранения.</p></div>
+          <div class="feature"><h3>🔔 Обновления</h3><p>Лента новостей и статистика платформы — всегда под рукой.</p></div>
+        </div>
+      </main>
+
+      <aside class="card" aria-labelledby="news"><h2 id="news">📰 Последние новости</h2>
+        <p class="muted">Пока новостей нет. <a href="#">Обновить</a></p>
+      </aside>
+    </section>
+
+    <!-- ФУТЕР -->
+    <footer role="contentinfo">
+      © 2025 Star Galaxy • <a href="legal/disclaimer.html">Disclaimer</a> •
+      <a href="legal/terms.html">Terms</a> • <a href="legal/privacy.html">Privacy</a>
+    </footer>
+  </div>
+
+  <!-- МОДАЛКА ВХОДА (с иконками) -->
+  <div id="login" class="modal" aria-modal="true" role="dialog" aria-labelledby="loginTitle">
+    <div class="sheet">
+      <div style="display:flex; align-items:center; gap:10px">
+        <h3 id="loginTitle" style="margin:0">Войти через</h3>
+        <a class="closex" href="#">Закрыть</a>
+      </div>
+      <div class="row" style="margin-top:12px">
+        <a class="chip" href="#">
+          <!-- Google -->
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#EA4335" d="M12 10.2v3.9h5.4c-.2 1.3-1.6 3.8-5.4 3.8-3.3 0-6-2.7-6-6s2.7-6 6-6c1.9 0 3.1.8 3.8 1.5l2.6-2.5C16.8 3 14.6 2 12 2 6.9 2 2.8 6.1 2.8 11.2S6.9 20.4 12 20.4c7 0 8.7-4.9 8.2-7.9H12z"/></svg>
+          Google
+        </a>
+        <a class="chip" href="#">
+          <!-- GitHub -->
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#fff" d="M12 .5a12 12 0 0 0-3.8 23.4c.6.1.8-.3.8-.6v-2c-3.3.7-4-1.4-4-1.4-.6-1.3-1.5-1.6-1.5-1.6-1.2-.9 0-.9 0-.9 1.3.1 2 1.3 2 1.3 1.1 2 2.9 1.4 3.6 1.1.1-.8.4-1.4.7-1.7-2.6-.3-5.4-1.3-5.4-6a4.7 4.7 0 0 1 1.2-3.2 4.3 4.3 0 0 1 .1-3.1s1-.3 3.3 1.2a11.3 11.3 0 0 1 6 0c2.3-1.5 3.3-1.2 3.3-1.2.3.8.3 2 .1 3a4.7 4.7 0 0 1 1.2 3.2c0 4.7-2.8 5.7-5.4 6 .4.3.7 1 .7 2.1v3.1c0 .3.2.7.8.6A12 12 0 0 0 12 .5z"/></svg>
+          GitHub
+        </a>
+        <a class="chip" href="#">
+          <!-- Email -->
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#fff" d="M20 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2zm0 4-8 5-8-5V6l8 5 8-5v2z"/></svg>
+          Email
+        </a>
+        <a class="chip" href="#">
+          <!-- Guest -->
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#fff" d="M12 12a5 5 0 1 0-5-5 5 5 0 0 0 5 5zm0 2c-4.4 0-8 2.2-8 5v1h16v-1c0-2.8-3.6-5-8-5z"/></svg>
+          Гостевой доступ
+        </a>
+      </div>
+      <p class="muted" style="margin-top:12px">Сейчас демо-модалка. Позже подключим реальную авторизацию.</p>
+    </div>
+  </div>
+
+  <!-- Тост «Выход» -->
+  <div id="logout">Вы вышли (демо). <a href="#" style="margin-left:8px">Закрыть</a></div>
+</body>
+</html>
