@@ -1,82 +1,46 @@
-// /netlify/functions/updateBackground.js
-// Обновляет фон сайта и пишет его в Netlify Blobs: app-state/config.json
-// Защищено заголовком X-Admin-Token (значение в переменной окружения X_ADMIN_TOKEN)
+// netlify/functions/updateBackground.js
+import { Blobs } from '@netlify/blobs'
 
-export async function handler(event) {
+export const handler = async (event) => {
+  // простейшая проверка админ-токена из заголовка
+  const hdr = event.headers['x-admin-token'] || event.headers['X-Admin-Token'] || ''
+  const need = process.env.X_ADMIN_TOKEN || ''
+  if (!need || hdr !== need) {
+    return resp(401, { ok: false, error: 'unauthorized' })
+  }
+
   try {
-    // --- авторизация по админ-ключу ---
-    const token = event.headers["x-admin-token"] || event.headers["X-Admin-Token"];
-    if (!token || token !== process.env.X_ADMIN_TOKEN) {
-      return json(401, { ok: false, error: "unauthorized" });
+    // --- инициализация Blobs ---
+    const client = new Blobs({
+      // Если Blobs включены в Labs — всё заведётся и без этого,
+      // но оставляем параметры на случай отсутствия Labs.
+      siteID: process.env.NETLIFY_SITE_ID,
+      token: process.env.NETLIFY_AUTH_TOKEN
+    })
+
+    // Здесь просто сохраняем "версию фона" и дату. 
+    // (При желании можно хранить тут URL/настройки фона.)
+    const key = 'background/meta.json'
+    const payload = {
+      version: Date.now(),
+      updatedAt: new Date().toISOString(),
+      note: 'Background updated from admin panel'
     }
 
-    // --- читаем тело запроса (можно передать конкретный URL фона) ---
-    let payload = {};
-    if (event.httpMethod === "POST" && event.body) {
-      try { payload = JSON.parse(event.body); } catch {}
-    }
+    await client.set(key, JSON.stringify(payload), {
+      contentType: 'application/json'
+    })
 
-    // пул на случай, если не передали явный url
-    const POOL = [
-      "/assets/bg/nebula-1.jpg",
-      "/assets/bg/nebula-2.jpg",
-      "/assets/bg/nebula-3.jpg"
-    ];
-
-    // подключаем Blobs (динамический import — работает на Netlify)
-    const { getStore } = await import("@netlify/blobs");
-    const store = getStore({ name: "app-state" });
-
-    // читаем текущий конфиг
-    const currentRaw = await store.get("config.json");
-    const cfg = currentRaw ? JSON.parse(currentRaw) : {};
-
-    // решаем, какой фон ставить
-    let nextUrl = (payload && typeof payload.url === "string" && payload.url.trim()) ? payload.url.trim() : null;
-    if (!nextUrl) {
-      // крутим по кругу, если url не задан
-      const idx = Number(cfg.ui?.bgIndex ?? -1);
-      const next = (idx + 1) % POOL.length;
-      nextUrl = POOL[next];
-      cfg.ui = { ...(cfg.ui || {}), bgIndex: next };
-    }
-
-    // простая проверка доступности (HEAD)
-    const absolute = toAbsolute(nextUrl);
-    try {
-      const headRes = await fetch(absolute, { method: "HEAD" });
-      if (!headRes.ok) throw new Error(`HEAD ${absolute} → ${headRes.status}`);
-    } catch (e) {
-      // если картинка недоступна — не заливаем битое
-      return json(400, { ok: false, error: `background not reachable: ${absolute}` });
-    }
-
-    // пишем новый фон в конфиг
-    cfg.ui = { ...(cfg.ui || {}), backgroundUrl: nextUrl, updatedAt: new Date().toISOString() };
-    await store.set("config.json", JSON.stringify(cfg));
-
-    return json(200, { ok: true, backgroundUrl: nextUrl, cfg });
-  } catch (e) {
-    return json(500, { ok: false, error: e.message || "internal_error" });
+    return resp(200, { ok: true, updated: payload })
+  } catch (err) {
+    return resp(500, { ok: false, error: String(err && err.message || err) })
   }
 }
 
-function json(status, data) {
+function resp(status, body) {
   return {
     statusCode: status,
-    headers: { "content-type": "application/json; charset=utf-8" },
-    body: JSON.stringify(data)
-  };
-}
-
-// Делает абсолютный URL из относительного (для HEAD-проверки)
-function toAbsolute(url) {
-  try {
-    // если уже абсолютный
-    new URL(url);
-    return url;
-  } catch {}
-  // относительный → домен берём из ENV (Netlify его задаёт), иначе / привяжется у клиента
-  const base = process.env.URL || "";
-  return base ? new URL(url, base).href : url;
+    headers: { 'content-type': 'application/json; charset=utf-8' },
+    body: JSON.stringify(body, null, 2)
+  }
 }
