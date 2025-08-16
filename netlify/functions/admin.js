@@ -52,7 +52,6 @@ exports.handler = async (event) => {
         const { envName, val } = pickKey(r);
         out[r] = { env: envName, present: !!val, mask: mask(val) };
       }
-      // и фолбэк
       out.fallback = { env: FALLBACK, present: !!process.env[FALLBACK], mask: mask(process.env[FALLBACK]) };
       return json(200, { ok: true, roles: out, allowFallback: process.env.ALLOW_FALLBACK === '1' });
     }
@@ -73,7 +72,6 @@ exports.handler = async (event) => {
       if (!val) return json(process.env.ALLOW_FALLBACK === '1' ? 503 : 401, { ok: false, error: 'No key for role' });
       if (!live) return json(200, { ok: true, dryRun: true }); // без трат
 
-      // Лёгкий живой вызов в OpenAI (без зависимостей, используем встроенный fetch)
       const body = {
         model: 'gpt-4o-mini',
         messages: [
@@ -93,17 +91,14 @@ exports.handler = async (event) => {
         body: JSON.stringify(body),
       });
 
-      if (!r.ok) {
-        return json(r.status, { ok: false, error: 'OpenAI error', status: r.status });
-      }
+      if (!r.ok) return json(r.status, { ok: false, error: 'OpenAI error', status: r.status });
       const data = await r.json();
       const text = data.choices?.[0]?.message?.content ?? '';
       return json(200, { ok: true, reply: text });
     }
 
     return json(400, { ok: false, error: 'Unknown cmd' });
-  } catch (e) {
+  } catch {
     return json(500, { ok: false, error: 'Internal error' });
   }
 };
-
