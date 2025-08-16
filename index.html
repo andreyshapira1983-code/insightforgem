@@ -1,126 +1,129 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Звёздная Галактика — Home</title>
 
-  <!-- Шрифты и иконки -->
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet" />
-  <!-- Font Awesome (только для иконок в модалке входа) -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+  <!-- Font Awesome (иконки для модалки входа) -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" integrity="sha512-4oV3f6v1qX0Yl7A1D7r8j9O1hQ2aHqzJ0l1w3N7l2xJ0sN4rZZD1iR3Qb8SxwI8v5e6y0w9mU0dD8uUp1m2GQw==" crossorigin="anonymous" referrerpolicy="no-referrer"/>
 
   <style>
-    /* ====== БАЗА ====== */
-    :root { --footer-h: 72px; }
-    * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-      color: #e6e9f0;
-      background: #070a13 url("OIP.jpg") center / cover no-repeat fixed;
-      overflow-x: hidden;
-      padding-bottom: var(--footer-h); /* чтобы фиксированный футер не перекрывал контент */
+    :root{
+      --glass: rgba(255,255,255,.08);
+      --glass-2: rgba(255,255,255,.06);
+      --ink: #e8ebf3;
+      --ink-2: #bfc7d9;
+      --brand-1:#b6a8ff;
+      --brand-2:#7b5cff;
+      --brand-3:#4dd0e1;
     }
-    a { color: inherit; text-decoration: none; }
-
-    /* затемнение для читаемости текста на ярком фоне */
-    .page-tint { position: fixed; inset: 0; background: rgba(5,9,18,.45); pointer-events: none; z-index: 0; }
-
-    .wrap { position: relative; z-index: 1; max-width: 1180px; margin: 0 auto; padding: 24px; }
-
-    /* ====== ХЕДЕР ====== */
-    header { display:flex; align-items:center; justify-content:space-between; padding: 12px 0; }
-    .brand { display:flex; align-items:center; gap:10px; font-weight:800; letter-spacing:.2px; }
-    .brand .dot { width:10px; height:10px; border-radius:50%; background:#b6a8ff; box-shadow:0 0 10px #b6a8ff; }
-    nav { display:flex; gap:18px; align-items:center; }
-    nav a { opacity:.9; }
-    .auth { display:flex; gap:10px; }
-    .chip { padding:6px 12px; border-radius:999px; background: rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.12); }
-
-    /* ====== HERO ====== */
-    .hero { padding: 40px 0 0; }
-    .hero-inner { display:grid; grid-template-columns: 1.1fr .9fr; gap: 24px; align-items: center; }
-    h1 {
-      margin: 0 0 12px; font-size: 48px; line-height: 1.1;
-      background: linear-gradient(90deg, #c8bfff 0%, #8a76ff 35%, #7cc6ff 100%);
-      -webkit-background-clip: text; background-clip: text; color: transparent;
-      text-shadow: 0 2px 12px rgba(0,0,0,.35);
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      color:var(--ink);
+      font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+      background:#0b0f1c url("./OIP.jpg") center/cover no-repeat fixed;
+      /* без фиксации футера — никаких отступов снизу не добавляем */
     }
-    .lead { margin: 0; opacity: .92; }
-    .actions { margin-top: 20px; display: flex; gap: 12px; flex-wrap:wrap; }
-    .btn { padding: 12px 18px; border-radius: 999px; font-weight: 700; text-decoration: none; display: inline-flex; align-items:center; gap:10px; transition: opacity .12s ease; }
-    .btn.primary { background:#7b5cff; color:#fff; }
-    .btn.primary:hover { opacity: .95; }
-    .btn.ghost { background: rgba(255,255,255,.08); color:#dff7fb; border:1px solid rgba(77,208,225,.35); }
-    .btn.ghost:hover { opacity: .9; }
 
-    /* Визуал справа (макап) */
-    .visual { position: relative; height: 280px; border-radius: 20px; border:1px solid rgba(255,255,255,.08); background: rgba(10,16,28,.55);
-      backdrop-filter: blur(4px); display:flex; align-items:center; justify-content:center; overflow:hidden; box-shadow: 0 8px 30px rgba(0,0,0,.45); }
-    .device { position: relative; width: 86%; height: 72%; border-radius: 14px; background: #0f1b32; border:1px solid rgba(255,255,255,.08);
-      display:grid; grid-template-rows: 36px 1fr; overflow:hidden; box-shadow: 0 10px 30px rgba(0,0,0,.4); }
-    .bar { display:flex; gap:6px; align-items:center; padding: 8px 10px; background: rgba(255,255,255,.06); }
-    .dot { width:10px; height:10px; border-radius:50%; background:#7b5cff; opacity:.8; }
-    .dot:nth-child(2){ background:#4dd0e1; }
-    .dot:nth-child(3){ background:#b6a8ff; }
-    .screen { padding:14px; font-size:14px; opacity:.95; }
-    .mini-card { border:1px solid rgba(255,255,255,.12); border-radius:12px; padding:12px; background:rgba(10,16,28,.6); }
+    a{color:inherit;text-decoration:none}
+    a:hover{text-decoration:underline}
 
-    .columns { margin-top: 24px; display:grid; grid-template-columns: 1fr; gap: 16px; }
-    .grid { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 14px; }
-    .card { background: rgba(10,16,28,.6); border: 1px solid rgba(255,255,255,.1); border-radius: 16px; padding: 16px; backdrop-filter: blur(6px); box-shadow: 0 2px 10px rgba(0,0,0,.25); }
-    .card h3{ margin:0 0 8px; }
+    /* контейнер */
+    .wrap{max-width:1200px;margin:0 auto;padding:24px 24px 0}
 
-    /* ====== ФУТЕР ====== */
-    footer { position: fixed; left: 50%; transform: translateX(-50%); bottom: 10px; height: calc(var(--footer-h) - 20px); width: min(860px, 92%);
-      display: flex; align-items: center; justify-content: center; gap: 16px; flex-wrap: wrap;
-      background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.12); backdrop-filter: blur(8px); border-radius: 999px; padding: 10px 18px; font-size: 14px; z-index: 2; }
-    footer a { text-decoration: none; opacity: .9; }
-    footer a:hover { text-decoration: underline; }
-    .sep { opacity: .35; }
+    /* header */
+    header{display:flex;align-items:center;justify-content:space-between;padding:8px 0}
+    .brand{display:flex;align-items:center;gap:10px;font-weight:700;opacity:.95}
+    .brand .dot{width:10px;height:10px;border-radius:50%;background:linear-gradient(180deg,#7b5cff,#4dd0e1)}
+    nav{display:flex;gap:20px;align-items:center;opacity:.92}
+    .auth{display:flex;gap:10px;align-items:center}
+    .chip{padding:6px 12px;border-radius:999px;border:1px solid rgba(255,255,255,.18);background:rgba(0,0,0,.18)}
+    .chip:hover{background:rgba(0,0,0,.28)}
 
-    /* ====== МОДАЛКА ВХОДА (ТОЛЬКО ИКОНКИ ДОБАВЛЕНЫ) ====== */
-    .modal-backdrop {
-      position: fixed; inset: 0; background: rgba(0,0,0,.55); display:none; align-items:center; justify-content:center; z-index: 20;
+    /* hero */
+    .hero{padding:56px 0 0}
+    .hero-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:24px;align-items:center}
+    h1{
+      margin:0 0 12px;
+      font-size:56px;line-height:1.1;
+      background:linear-gradient(90deg,var(--brand-1),var(--brand-2) 40%,var(--brand-3));
+      -webkit-background-clip:text;background-clip:text;color:transparent;
     }
-    .modal { width: min(560px, 92%); background: #0f1b32; color:#e6e9f0; border:1px solid rgba(255,255,255,.12); border-radius: 16px; box-shadow: 0 20px 60px rgba(0,0,0,.6); }
-    .modal header { padding:16px 18px; border-bottom:1px solid rgba(255,255,255,.08); display:flex; align-items:center; justify-content:space-between; }
-    .modal header h4 { margin:0; font-size:18px; }
-    .modal .close { background:transparent; border:none; color:#fff; opacity:.8; cursor:pointer; font-size:14px; padding:6px 10px; border-radius:8px; }
-    .modal .close:hover { background:rgba(255,255,255,.08); }
-    .modal .content { padding:16px 18px 20px; }
-    .login-grid { display:grid; grid-template-columns: 1fr 1fr; gap:12px; margin-top:6px; }
-    .login-btn {
-      display:flex; align-items:center; justify-content:center; gap:10px;
-      border:1px solid rgba(255,255,255,.14); border-radius:10px; padding:12px 10px;
-      background:#0b1a2b; color:#e6e9f0; font-weight:600; cursor:pointer;
-    }
-    .login-btn:hover { background:#10233a; }
-    .login-btn i { margin-right: 6px; } /* небольшой отступ между иконкой и текстом */
+    .lead{margin:0 0 18px;opacity:.9}
+    .actions{display:flex;gap:12px}
+    .btn{display:inline-block;padding:12px 18px;border-radius:999px;font-weight:700}
+    .btn.primary{background:var(--brand-2);color:#fff}
+    .btn.primary:hover{opacity:.95}
+    .btn.ghost{border:1px solid rgba(77,208,225,.35);color:#dff7fb;background:transparent}
+    .btn.ghost:hover{opacity:.9}
 
-    @media (max-width: 1080px) {
-      .hero-inner { grid-template-columns: 1fr; }
-      .grid { grid-template-columns: 1fr 1fr; }
-      footer { width: 96%; }
+    /* правый «девайс» */
+    .device-wrap{position:relative;border-radius:22px;background:rgba(0,0,0,.25);
+      border:1px solid rgba(255,255,255,.1);box-shadow:0 20px 60px rgba(0,0,0,.45);padding:24px}
+    .device{background:#0e1931;border:1px solid rgba(255,255,255,.08);border-radius:16px;overflow:hidden}
+    .device .bar{display:flex;gap:6px;padding:10px;background:rgba(255,255,255,.06)}
+    .bar .dot{width:10px;height:10px;border-radius:50%;background:#7b5cff;opacity:.9}
+    .bar .dot:nth-child(2){background:#4dd0e1}
+    .bar .dot:nth-child(3){background:#b6a8ff}
+    .device .screen{padding:16px}
+    .ideas-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+    .idea-card{border:1px solid rgba(255,255,255,.12);border-radius:12px;padding:16px;background:rgba(255,255,255,.02)}
+    .idea-card h4{margin:0 0 8px}
+
+    /* нижний блок: статистика/фичи/новости */
+    .lower{margin-top:28px}
+    .tiles{display:grid;grid-template-columns:repeat(5,1fr);gap:14px}
+    .tile{background:var(--glass-2);border:1px solid rgba(255,255,255,.12);border-radius:16px;padding:18px;backdrop-filter:blur(6px)}
+    .tile h3{margin:0 0 8px;font-size:16px}
+    .tile p{margin:0;opacity:.88;font-size:14px}
+
+    /* новости — шире */
+    .tile.news{grid-column:span 2}
+
+    /* футер — ОБЫЧНЫЙ, НЕ FIXED */
+    footer{margin:28px 0 24px;text-align:center;font-size:14px;opacity:.95}
+    footer .sep{opacity:.5;margin:0 10px}
+
+    /* модалка входа */
+    .modal-backdrop{
+      position:fixed;inset:0;background:rgba(4,8,16,.6);backdrop-filter:blur(4px);
+      display:none;align-items:center;justify-content:center;z-index:50;
     }
-    @media (max-width: 700px) {
-      .grid { grid-template-columns: 1fr; }
-      h1 { font-size: 40px; }
+    .modal{width:min(560px,92%);background:#0f1b32;color:#e6e9f0;border:1px solid rgba(255,255,255,.15);
+      border-radius:16px;box-shadow:0 20px 80px rgba(0,0,0,.6);padding:18px 18px 12px}
+    .modal h2{margin:6px 0 12px;font-size:20px}
+    .providers{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .prov{display:flex;align-items:center;gap:10px;justify-content:center;
+      padding:12px;border-radius:10px;background:#0b162a;border:1px solid rgba(255,255,255,.12)}
+    .prov i{font-size:16px}
+    .hint{margin:12px 0 0;opacity:.8;font-size:13px}
+    .close-row{display:flex;justify-content:flex-end;margin-bottom:6px}
+    .close-btn{border:1px solid rgba(255,255,255,.18);background:transparent;border-radius:8px;color:#e6e9f0;padding:6px 10px}
+    .close-btn:hover{background:rgba(255,255,255,.06)}
+    .modal-backdrop.show{display:flex}
+
+    /* адаптив */
+    @media (max-width:1080px){
+      .hero-grid{grid-template-columns:1fr}
+      .tiles{grid-template-columns:1fr 1fr}
+      .tile.news{grid-column:span 2}
+    }
+    @media (max-width:640px){
+      h1{font-size:38px}
+      .providers{grid-template-columns:1fr}
+      .tiles{grid-template-columns:1fr}
+      .tile.news{grid-column:span 1}
     }
   </style>
 </head>
-
 <body>
-  <div class="page-tint" aria-hidden="true"></div>
-
   <div class="wrap">
-    <!-- ====== HEADER ====== -->
     <header>
       <div class="brand">
-        <span class="dot"></span>
+        <span class="dot" aria-hidden="true"></span>
         <span>Звёздная Галактика</span>
       </div>
       <nav>
@@ -130,14 +133,13 @@
         <a href="community.html">Сообщество</a>
       </nav>
       <div class="auth">
-        <a href="#login" class="chip js-open-login">Вход</a>
-        <a href="#" class="chip">Выход</a>
+        <a class="chip" href="#login">Вход</a>
+        <a class="chip" href="#logout">Выход</a>
       </div>
     </header>
 
-    <!-- ====== HERO ====== -->
-    <section class="hero" aria-label="Верхняя часть">
-      <div class="hero-inner">
+    <section class="hero">
+      <div class="hero-grid">
         <div>
           <h1>Добро пожаловать в Звёздную Галактику</h1>
           <p class="lead">Находите и совершенствуйте бизнес-идеи с помощью ИИ и активного сообщества новаторов.</p>
@@ -147,127 +149,93 @@
           </div>
         </div>
 
-        <!-- Правый макет (как было) -->
-        <aside class="visual" aria-hidden="true">
+        <div class="device-wrap" aria-hidden="true">
           <div class="device">
             <div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
             <div class="screen">
-              <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
-                <div class="mini-card"><strong>Идея A</strong><br><span style="opacity:.8">Score: 82%</span></div>
-                <div class="mini-card"><strong>Идея B</strong><br><span style="opacity:.8">Score: 67%</span></div>
-                <div class="mini-card"><strong>Идея C</strong><br><span style="opacity:.8">Score: 74%</span></div>
-                <div class="mini-card"><strong>Идея D</strong><br><span style="opacity:.8">Score: 90%</span></div>
+              <div class="ideas-grid">
+                <div class="idea-card"><h4>Идея A</h4><div>Score: 82%</div></div>
+                <div class="idea-card"><h4>Идея B</h4><div>Score: 67%</div></div>
+                <div class="idea-card"><h4>Идея C</h4><div>Score: 74%</div></div>
+                <div class="idea-card"><h4>Идея D</h4><div>Score: 90%</div></div>
               </div>
             </div>
           </div>
-        </aside>
+        </div>
       </div>
 
-      <!-- Низ герой-секции: карточки -->
-      <div class="columns">
-        <div class="grid">
-          <section class="card" aria-labelledby="stats-title">
-            <h3 id="stats-title">📊 Статистика</h3>
+      <div class="lower">
+        <div class="tiles">
+          <div class="tile">
+            <h3>📊 Статистика</h3>
             <p>Всего идей: скоро появится</p>
             <p>Пользователи онлайн: скоро появится</p>
             <p>Идея дня: скоро появится</p>
-          </section>
-
-          <section class="card" aria-labelledby="gen-title">
-            <h3 id="gen-title">✨ Генератор идей</h3>
+          </div>
+          <div class="tile">
+            <h3>✨ Генератор идей</h3>
             <p>Оценка потенциала в процентах. Подробности — в «Мои идеи».</p>
-          </section>
-
-          <section class="card" aria-labelledby="comm-title">
-            <h3 id="comm-title">🤝 Сообщество</h3>
+          </div>
+          <div class="tile">
+            <h3>🤝 Сообщество</h3>
             <p>Обсуждения и апвоты помогают отобрать лучшие концепты.</p>
-          </section>
-
-          <section class="card" aria-labelledby="my-title">
-            <h3 id="my-title">📚 Мои идеи</h3>
+          </div>
+          <div class="tile">
+            <h3>📚 Мои идеи</h3>
             <p>Хранение, сравнение и детальные разборы после сохранения.</p>
-          </section>
+          </div>
+          <div class="tile news">
+            <h3>📰 Последние новости</h3>
+            <p>Пока новостей нет. Обновить</p>
+          </div>
         </div>
-
-        <aside class="card" aria-labelledby="news-title">
-          <h3 id="news-title">📰 Последние новости</h3>
-          <p>Пока новостей нет. <a href="#">Обновить</a></p>
-        </aside>
       </div>
     </section>
+
+    <footer>
+      <span>© 2025 Star Galaxy</span>
+      <span class="sep">•</span><a href="legal/disclaimer.html">Disclaimer</a>
+      <span class="sep">•</span><a href="legal/terms.html">Terms</a>
+      <span class="sep">•</span><a href="legal/privacy.html">Privacy</a>
+    </footer>
   </div>
 
-  <!-- ====== FOOTER (фиксированный) ====== -->
-  <footer role="contentinfo">
-    <span>© 2025 Star Galaxy</span>
-    <span class="sep">•</span>
-    <a href="#">Disclaimer</a>
-    <span class="sep">•</span>
-    <a href="#">Terms</a>
-    <span class="sep">•</span>
-    <a href="#">Privacy</a>
-  </footer>
-
-  <!-- ====== МОДАЛКА ВХОДА (иконки через Font Awesome) ====== -->
-  <div class="modal-backdrop" id="loginModal" aria-hidden="true">
-    <div class="modal" role="dialog" aria-labelledby="loginTitle" aria-modal="true">
-      <header>
-        <h4 id="loginTitle">Войти через</h4>
-        <button class="close js-close-login" aria-label="Закрыть">Закрыть</button>
-      </header>
-      <div class="content">
-        <div class="login-grid">
-          <button class="login-btn google" aria-label="Войти через Google">
-            <i class="fab fa-google" aria-hidden="true"></i>
-            <span>Google</span>
-          </button>
-
-          <button class="login-btn github" aria-label="Войти через GitHub">
-            <i class="fab fa-github" aria-hidden="true"></i>
-            <span>GitHub</span>
-          </button>
-
-          <button class="login-btn email" aria-label="Войти по Email">
-            <i class="fas fa-envelope" aria-hidden="true"></i>
-            <span>Email</span>
-          </button>
-
-          <button class="login-btn guest" aria-label="Гостевой доступ">
-            <i class="fas fa-user" aria-hidden="true"></i>
-            <span>Гостевой доступ</span>
-          </button>
-        </div>
-        <p style="margin-top:12px; opacity:.8">Сейчас демо-модалка. Позже подключим реальную авторизацию.</p>
+  <!-- Модалка входа -->
+  <div id="modal-login" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="login-title">
+    <div class="modal">
+      <div class="close-row"><button class="close-btn" id="login-close" type="button">Закрыть</button></div>
+      <h2 id="login-title">Войти через</h2>
+      <div class="providers">
+        <a class="prov" href="#demo-login-google"><i class="fa-brands fa-google"></i> Google</a>
+        <a class="prov" href="#demo-login-github"><i class="fa-brands fa-github"></i> GitHub</a>
+        <a class="prov" href="#demo-login-email"><i class="fa-solid fa-envelope"></i> Email</a>
+        <a class="prov" href="#demo-login-guest"><i class="fa-solid fa-user"></i> Гостевой доступ</a>
       </div>
+      <p class="hint">Сейчас демо-модалка. Позже подключим реальную авторизацию.</p>
     </div>
   </div>
 
   <script>
-    // ====== только логика модалки входа ======
-    const modal = document.getElementById('loginModal');
-    const openers = document.querySelectorAll('.js-open-login');
-    const closer = document.querySelector('.js-close-login');
+    // Простейший роутинг для открытия/закрытия модалки по якорю
+    const modal = document.getElementById('modal-login');
+    const closeBtn = document.getElementById('login-close');
 
-    function openLogin() {
-      modal.style.display = 'flex';
-      modal.setAttribute('aria-hidden','false');
-      history.replaceState(null,'', '#login');
+    function syncModalWithHash(){
+      if (location.hash === '#login'){
+        modal.classList.add('show');
+      } else {
+        modal.classList.remove('show');
+      }
     }
-    function closeLogin() {
-      modal.style.display = 'none';
-      modal.setAttribute('aria-hidden','true');
-      if (location.hash === '#login') history.replaceState(null,'', location.pathname);
-    }
-
-    openers.forEach(btn => btn.addEventListener('click', e => {
-      e.preventDefault();
-      openLogin();
-    }));
-    closer.addEventListener('click', closeLogin);
-    modal.addEventListener('click', (e) => { if (e.target === modal) closeLogin(); });
-
-    // Открывать, если пришли по #login
-    if (location.hash === '#login') { openLogin(); }
+    window.addEventListener('hashchange', syncModalWithHash);
+    window.addEventListener('DOMContentLoaded', syncModalWithHash);
+    closeBtn.addEventListener('click', () => { history.pushState('', document.title, location.pathname + location.search); syncModalWithHash(); });
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal){
+        history.pushState('', document.title, location.pathname + location.search);
+        syncModalWithHash();
+      }
+    });
   </script>
 </body>
 </html>
