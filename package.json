@@ -1,13 +1,17 @@
 {
-  "name": "insightforgem",
-  "version": "0.0.0",
+  "name": "star-galaxy",
+  "version": "1.0.0",
   "private": true,
+  "description": "Star Galaxy project with Netlify Functions and Admin panel",
   "type": "module",
-  "engines": { "node": ">=18" },
+  "engines": {
+    "node": ">=18"
+  },
   "scripts": {
-    "format": "node -e \"console.log('format skipped (no deps)')\"",
-    "format:check": "node -e \"console.log('format:check skipped (no deps)')\"",
-    "lint": "node -e \"console.log('lint skipped (no deps)')\"",
-    "test": "node tests/diag.test.js && node tests/fix-spaces.test.js && node tests/functions.test.js"
+    "build": "echo 'No build step needed'",
+    "start": "netlify dev"
+  },
+  "dependencies": {
+    "@netlify/blobs": "^6.3.0"
   }
 }
