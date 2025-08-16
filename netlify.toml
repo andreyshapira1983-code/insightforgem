@@ -1,81 +1,59 @@
-#############################
-# netlify.toml  (полный)
-#############################
-
+# ===== Build =====
 [build]
+  publish   = "."
   functions = "netlify/functions"
-  publish   = "."            # если у тебя фронт в корне; поменяй при необходимости
-  # command не нужен (статический сайт)
-  # command = "npm run build"
 
+# Узлы сборки функций
 [functions]
-  node_bundler = "esbuild"   # нормальный бандлер для функций
+  node_bundler = "esbuild"
+  external_node_modules = ["@netlify/blobs"]
 
-# ===== Редиректы, как в твоих требованиях =====
-[[redirects]]
-  from = "/generator"
-  to   = "/generator.html"
-  status = 200
-
-[[redirects]]
-  from = "/community"
-  to   = "/community.html"
-  status = 200
-
-[[redirects]]
-  from = "/api/:name"
-  to   = "/.netlify/functions/:name"
-  status = 200
-  force  = true
-
-# (опционально) Короткий путь на админку
-[[redirects]]
-  from = "/admin"
-  to   = "/admin.html"
-  status = 200
-
-# ===== Заголовки безопасности =====
-# Включаем CSP (Report-Only), HSTS и пр. — как ты указывал
+# ===== Глобальные security-заголовки =====
 [[headers]]
   for = "/*"
   [headers.values]
-    # CSP в режиме отчетов (ничего не ломаем, смотрим, что блокировалось)
-    Content-Security-Policy-Report-Only = """
-      default-src 'self';
-      frame-ancestors 'none';
-      base-uri 'self';
-      connect-src 'self' https: data:;
-      img-src 'self' https: data: blob:;
-      script-src 'self';
-      style-src 'self' 'unsafe-inline';
-      font-src 'self' https: data:;
-      object-src 'none';
-      upgrade-insecure-requests;
-    """
-    # Жесткие заголовки
     Strict-Transport-Security = "max-age=63072000; includeSubDomains; preload"
     X-Content-Type-Options    = "nosniff"
-    X-Frame-Options           = "DENY"
+    X-Frame-Options           = "SAMEORIGIN"
     Referrer-Policy           = "strict-origin-when-cross-origin"
-    Permissions-Policy        = "geolocation=(), camera=(), microphone=(), payment=()"
+    Permissions-Policy        = "accelerometer=(), ambient-light-sensor=(), autoplay=(), camera=(), display-capture=(), encrypted-media=(), fullscreen=*, geolocation=(), gyroscope=(), magnetometer=(), microphone=(), midi=(), payment=(), picture-in-picture=*, speaker=(), usb=(), vr=()"
+    Cross-Origin-Resource-Policy = "same-site"
+    X-Robots-Tag              = "all"
 
-# ===== Автопилот: Scheduled Functions (UTC) =====
-# Ночной сторож: проверка здоровья + автофикс
-[[scheduled.functions]]
-  name = "sched_health"
-  cron = "0 3 * * *"
+    # !!! CSP в режиме применения (не report-only)
+    # НИЧЕГО с CDN не грузим — шрифты/иконки держим локально.
+    # Разрешены только: свой домен, функции, Netlify API и изображения Unsplash.
+    Content-Security-Policy = "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data: https://images.unsplash.com; font-src 'self'; connect-src 'self' https://api.netlify.com /.netlify/functions; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests"
 
-# Еженедельный отчёт (понедельник)
-[[scheduled.functions]]
-  name = "sched_weekly_report"
-  cron = "0 4 * * MON"
+# ===== Кеширование статики (1 год, immutable) =====
+[[headers]]
+  for = "/css/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
 
-# Новости каждые 6 часов
-[[scheduled.functions]]
-  name = "sched_news"
-  cron = "0 */6 * * *"
+[[headers]]
+  for = "/js/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
 
-# Бэкап Blobs (опционально) — воскресенье
-[[scheduled.functions]]
-  name = "sched_backup"
-  cron = "30 4 * * SUN"
+[[headers]]
+  for = "/webfonts/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/vendor/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+# HTML — без кеша (чтобы видеть обновления сразу)
+[[headers]]
+  for = "/*.html"
+  [headers.values]
+    Cache-Control = "no-cache, no-store, must-revalidate"
+
+# Пример: редирект на главную для 404 (необязательно)
+# [[redirects]]
+#   from = "/*"
+#   to   = "/index.html"
+#   status = 200
