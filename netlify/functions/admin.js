@@ -21,7 +21,6 @@ function pickKey(role) {
   const tried = [];
   const envName = ROLE_ENV[role] || FALLBACK;
   tried.push(envName);
-
   let val = process.env[envName];
   if (!val && process.env.ALLOW_FALLBACK === '1' && envName !== FALLBACK) {
     tried.push(FALLBACK);
@@ -31,11 +30,17 @@ function pickKey(role) {
 }
 
 function json(statusCode, body) {
-  return {
-    statusCode,
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(body),
-  };
+  return { statusCode, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) };
+}
+
+// простая проверка токена: либо заголовок X-Admin-Token, либо ?token=
+function authorized(event) {
+  const token = process.env.ADMIN_TOKEN;
+  if (!token) return false;
+  const h = event.headers || {};
+  const header = h['x-admin-token'] || h['X-Admin-Token'];
+  const qs = event.queryStringParameters || {};
+  return header === token || qs.token === token;
 }
 
 exports.handler = async (event) => {
@@ -45,15 +50,21 @@ exports.handler = async (event) => {
     const role = (qs.role || 'gen').toLowerCase();
     const live = qs.live === '1';
 
+    // health можно оставить публичным, но без масок
     if (cmd === 'health') {
       const roles = Object.keys(ROLE_ENV);
       const out = {};
       for (const r of roles) {
         const { envName, val } = pickKey(r);
-        out[r] = { env: envName, present: !!val, mask: mask(val) };
+        out[r] = { env: envName, present: !!val }; // <— БЕЗ mask
       }
-      out.fallback = { env: FALLBACK, present: !!process.env[FALLBACK], mask: mask(process.env[FALLBACK]) };
+      out.fallback = { env: FALLBACK, present: !!process.env[FALLBACK] };
       return json(200, { ok: true, roles: out, allowFallback: process.env.ALLOW_FALLBACK === '1' });
+    }
+
+    // всё остальное — только с токеном
+    if (!authorized(event)) {
+      return json(403, { ok: false, error: 'Forbidden' });
     }
 
     if (cmd === 'diag') {
@@ -61,7 +72,7 @@ exports.handler = async (event) => {
       return json(200, {
         ok: !!val,
         role,
-        tried,
+        tried, // имена переменных показывать можно
         tried_masked: tried.map((e) => mask(process.env[e])),
         allowFallback: process.env.ALLOW_FALLBACK === '1',
       });
@@ -70,7 +81,7 @@ exports.handler = async (event) => {
     if (cmd === 'ping') {
       const { val } = pickKey(role);
       if (!val) return json(process.env.ALLOW_FALLBACK === '1' ? 503 : 401, { ok: false, error: 'No key for role' });
-      if (!live) return json(200, { ok: true, dryRun: true }); // без трат
+      if (!live) return json(200, { ok: true, dryRun: true });
 
       const body = {
         model: 'gpt-4o-mini',
@@ -84,10 +95,7 @@ exports.handler = async (event) => {
 
       const r = await fetch('https://api.openai.com/v1/chat/completions', {
         method: 'POST',
-        headers: {
-          Authorization: `Bearer ${val}`,
-          'Content-Type': 'application/json',
-        },
+        headers: { Authorization: `Bearer ${val}`, 'Content-Type': 'application/json' },
         body: JSON.stringify(body),
       });
 
